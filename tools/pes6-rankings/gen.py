@@ -385,7 +385,7 @@ for p in proc:
         byteam_d[p['team']].append(p)
 
 # All players from WORKED site teams only (for skill rankings)
-SITE_TEAMS = {'Arsenal', 'Ajax', 'Feyenoord', 'PSV Eindhoven', 'Real Madrid', 'Inter', 'Milan', 'Juventus', 'Fiorentina', 'Genoa'}
+SITE_TEAMS = {'Arsenal', 'Ajax', 'Feyenoord', 'PSV Eindhoven', 'Real Madrid', 'Inter', 'Milan', 'Juventus', 'Fiorentina', 'Genoa', 'Lazio'}
 all_site_players = sorted([p.copy() for p in proc if p['team'] in SITE_TEAMS], key=lambda x: x['ovr'], reverse=True)
 byteam = []
 for t, ps in byteam_d.items():
