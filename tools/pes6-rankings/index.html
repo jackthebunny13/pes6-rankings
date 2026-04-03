@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project PES6</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(90deg, #0f3460 0%, #533483 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .header h1 { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .header p { opacity: 0.8; margin-top: 5px; }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .tab:hover { background: rgba(255,255,255,0.2); }
+        .tab.active {
+            background: linear-gradient(90deg, #e94560, #533483);
+            box-shadow: 0 4px 15px rgba(233,69,96,0.4);
+        }
+        .content { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .section { display: none; }
+        .section.active { display: block; }
+        
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .ranking-table th {
+            background: rgba(83, 52, 131, 0.5);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .ranking-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .ranking-table tr:hover { background: rgba(255,255,255,0.1); }
+        .rank { font-weight: bold; font-size: 1.2em; width: 50px; }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .player-name { font-weight: 600; font-size: 1.1em; }
+        .team-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }
+        .pos-badge {
+            background: rgba(233,69,96,0.3);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .score { font-weight: bold; font-size: 1.3em; color: #4ecca3; }
+        .ovr {
+            font-weight: bold;
+            font-size: 1.4em;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 50px;
+            display: inline-block;
+        }
+        .ovr-elite { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
+        .ovr-world { background: linear-gradient(135deg, #4ecca3, #45b7d1); color: #000; }
+        .ovr-great { background: linear-gradient(135deg, #45b7d1, #667eea); color: #fff; }
+        .ovr-good { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        .ovr-average { background: rgba(255,255,255,0.2); color: #fff; }
+        
+        /* Football Pitch */
+        .team-display { max-width: 700px; margin: 0 auto; }
+        .pitch {
+            background: linear-gradient(to bottom, #2d5a27 0%, #3d7a37 50%, #2d5a27 100%);
+            border-radius: 15px;
+            padding: 15px 10px;
+            position: relative;
+            min-height: 380px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        .pitch::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+        }
+        .pitch::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+        .pitch-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .pitch-row.strikers { margin-top: 5px; }
+        .pitch-row.cam { margin-bottom: 20px; position: relative; z-index: 1; }
+        .pitch-row.cdm { margin-bottom: 20px; position: relative; z-index: 2; }
+        .pitch-row.midfield { margin-bottom: 25px; position: relative; z-index: 2; }
+        .pitch-row.defense { margin-bottom: 20px; }
+        .pitch-row.gk { margin-bottom: 5px; }
+        .player-spot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            min-width: 110px;
+        }
+        .player-spot .ovr {
+            font-size: 1em;
+            padding: 3px 8px;
+        }
+        .player-spot .pname {
+            font-size: 0.85em;
+            font-weight: 500;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
+        
+        /* Bench */
+        .bench-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .bench-section h4 {
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .bench-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .bench-player {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        /* Interactive Player Selector */
+        .player-spot {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        .player-spot:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.05);
+        }
+        .player-spot.selected {
+            border-color: #4ecca3;
+            background: rgba(78, 204, 163, 0.2);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(78, 204, 163, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(78, 204, 163, 0); }
+        }
+        .slot-label {
+            font-size: 0.65em;
+            opacity: 0.6;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .player-selector {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .player-selector h4 {
+            margin-bottom: 10px;
+        }
+        .player-selector.active {
+            background: rgba(78, 204, 163, 0.1);
+            border: 1px solid rgba(78, 204, 163, 0.3);
+        }
+        .selector-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        .selector-player {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+        }
+        .selector-player:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        .selector-player.in-lineup {
+            opacity: 0.5;
+        }
+        .selector-player.in-lineup:hover {
+            opacity: 1;
+            background: rgba(233, 69, 96, 0.2);
+        }
+        .selector-player.current {
+            background: rgba(78, 204, 163, 0.3);
+            opacity: 1;
+        }
+        .selector-player .sp-name {
+            flex: 1;
+        }
+        .selector-player .in-xi {
+            font-size: 0.8em;
+        }
+        .cancel-btn {
+            display: block;
+            margin: 15px auto 0;
+            padding: 8px 20px;
+            background: rgba(233, 69, 96, 0.3);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .cancel-btn:hover {
+            background: rgba(233, 69, 96, 0.5);
+        }
+        .nat-flag {
+            font-size: 1.1em;
+        }
+        /* Drag and Drop */
+        .dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        .drag-over {
+            background: rgba(78, 204, 163, 0.3) !important;
+            border: 2px dashed #4ecca3 !important;
+            transform: scale(1.05);
+        }
+        .selector-player[draggable="true"] {
+            cursor: grab;
+        }
+        .selector-player[draggable="true"]:active {
+            cursor: grabbing;
+        }
+        .player-spot[draggable="true"] {
+            cursor: grab;
+        }
+        .player-spot[draggable="true"] > * {
+            pointer-events: none;
+        }
+        /* Formation Actions */
+        .formation-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .export-btn {
+            background: linear-gradient(90deg, #4ecca3, #45b7d1);
+            color: #000;
+        }
+        .reset-btn {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        /* League Selector */
+        .league-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .league-btn {
+            font-size: 2em;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .league-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .league-btn.active {
+            border-color: #4ecca3;
+            background: rgba(78, 204, 163, 0.2);
+        }
+        /* Team Selector */
+        #team-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .team-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .team-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .team-btn.active {
+            background: linear-gradient(90deg, #e94560, #533483);
+        }
+        /* Player Tooltip */
+        .player-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 20, 40, 0.95);
+            border: 1px solid rgba(78, 204, 163, 0.5);
+            border-radius: 10px;
+            padding: 10px 12px;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            transition-delay: 0.5s;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .player-spot {
+            position: relative;
+        }
+        .player-spot:hover .player-tooltip {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: none;
+        }
+        .player-spot:hover {
+            z-index: 50;
+        }
+        .tooltip-header {
+            font-size: 1em;
+            margin-bottom: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 5px;
+        }
+        .tooltip-pos {
+            font-size: 0.8em;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+        .tooltip-foot {
+            font-size: 0.8em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        .tooltip-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 10px;
+            font-size: 0.75em;
+        }
+        .tooltip-stats span {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .selector-list.tribuna {
+            opacity: 0.7;
+        }
+        .tribuna-player {
+            background: rgba(255,255,255,0.04);
+        }
+        .stat-bar {
+            width: 50px; height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecca3, #45b7d1);
+            border-radius: 4px;
+        }
+        
+        .pos-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .pos-tab {
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+        .pos-tab:hover { background: rgba(255,255,255,0.2); }
+        .pos-tab.active { background: #e94560; }
+        .pos-tab .emoji { margin-right: 5px; }
+        .pos-tab .pos-code { font-weight: bold; }
+        .pos-tab .pos-name { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .team-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        .team-card:hover { transform: translateY(-5px); }
+        .team-card h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.2); }
+        .team-player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .team-player:last-child { border-bottom: none; }
+        
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        .search-box::placeholder { color: rgba(255,255,255,0.5); }
+        .search-box:focus { outline: none; background: rgba(255,255,255,0.15); }
+        
+        .pos-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #4ecca3;
+        }
+        .formula-box {
+            background: rgba(78, 204, 163, 0.1);
+            border-left: 4px solid #4ecca3;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+        .formula-desc {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .formula-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .formula-primary, .formula-secondary {
+            flex: 1;
+            min-width: 200px;
+        }
+        .formula-primary h4, .formula-secondary h4 {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+        .formula-primary h4 { color: #4ecca3; }
+        .formula-secondary h4 { color: #e94560; }
+        .formula-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .formula-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }
+        .formula-primary .formula-tag {
+            background: rgba(78, 204, 163, 0.2);
+            border: 1px solid rgba(78, 204, 163, 0.4);
+        }
+        .formula-secondary .formula-tag {
+            background: rgba(233, 69, 96, 0.15);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .ranking-table { font-size: 0.9em; }
+            .stat-bar { display: none; }
+            .pos-tab { padding: 8px 12px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Project PES6</h1>
+        <div style="font-size:0.7em;color:#555;margin-top:-8px;margin-bottom:8px;">Powered by Zio Tore</div>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab active" onclick="showSection('positions')">📋 Ranking Ruoli</button>
+        <button class="tab" onclick="showSection('team-rankings')">🏟️ Ranking Squadre</button>
+        <button class="tab" onclick="showSection('teams')">⚽ Squadre</button>
+        <button class="tab" onclick="showSection('skill-rankings')">🎯 Top 10 Skills</button>
+    </div>
+    
+    <div class="content">
+        <!-- By Position -->
+        <div id="positions" class="section active">
+            <div class="pos-tabs" id="pos-tabs"></div>
+            <div class="pos-title" id="pos-title"></div>
+            <div class="formula-box" id="formula-box"></div>
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Giocatore</th>
+                        <th>OVR</th>
+                        <th>Ruolo</th>
+                        <th>Naz</th>
+                        <th>Squadra</th>
+                    </tr>
+                </thead>
+                <tbody id="pos-body"></tbody>
+            </table>
+        </div>
+        
+        <!-- Team Rankings -->
+        <div id="team-rankings" class="section">
+            
+            <div id="team-rankings-filter" style="text-align:center;margin-bottom:16px;"></div>
+            <div id="team-rankings-content"></div>
+        </div>
+
+        <!-- Squadre -->
+        <div id="skill-rankings" class="section">
+            <div id="skill-filter" style="text-align:center;margin-bottom:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;"></div>
+            <div id="skill-rankings-content"></div>
+        </div>
+
+        <div id="teams" class="section">
+            
+            <div class="league-selector">
+                <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.5em;color:#fff;line-height:1;">Premier League</span> <span style="font-size:0.45em;color:#888;">1/18</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.5em;color:#fff;line-height:1;">Serie A</span> <span style="font-size:0.45em;color:#888;">5/20</span></button>
+                <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.5em;color:#fff;line-height:1;">Eredivisie</span> <span style="font-size:0.45em;color:#888;">3/3</span></button>
+                <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.5em;color:#fff;line-height:1;">LaLiga</span> <span style="font-size:0.45em;color:#888;">1/14</span></button>
+            </div>
+            <div id="team-selector"></div>
+            <div id="team-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        let data = {};
+        let currentPos = localStorage.getItem('pes_current_pos') || 'ALL';
+        
+        const posEmoji = {
+            'ALL': '🌟', 'GK': '🧤', 'CB': '🛡️', 'SB': '🏃', 'SW': '🎖️',
+            'WB': '↔️', 'DMF': '⚓', 'CMF': '🎯', 'SMF': '💨',
+            'AMF': '🎩', 'WF': '⚡', 'SS': '🔥', 'CF': '⚽'
+        };
+        
+        // Merged positions: CB+SW, SB+WB, SMF+WF
+        const posOrder = ['ALL', 'GK', 'CB', 'SB', 'CMF', 'SMF', 'AMF', 'CF'];
+        
+        // Position merges
+        const posMerge = {
+            'CB': ['CB', 'SW'],    // Difensori centrali
+            'SB': ['SB', 'WB'],    // Terzini
+            'CMF': ['CMF', 'DMF'], // Centrocampisti (merged)
+            'SMF': ['SMF', 'WF'],  // Esterni
+            'CF': ['CF', 'SS']     // Attaccanti (merged)
+        };
+        
+        const posMergeNames = {
+            'CB': 'Difensori Centrali (CB+SW)',
+            'SB': 'Terzini (SB+WB)',
+            'CMF': 'Centrocampisti (CM+DM)',
+            'SMF': 'Esterni (SMF+WF)',
+            'CF': 'Attaccanti (CF+SS)'
+        };
+        
+        fetch('data.json?v=' + Date.now())
+            .then(r => r.json())
+            .then(d => {
+                data = d;
+                buildRostersFromData(data);
+                resolveDefaultLineups();
+                // Init all formations now that rosters and lineups are ready
+                Object.keys(teamConfigs).forEach(function(t) {
+                    var prev = currentTeam;
+                    currentTeam = t;
+                    getFormation();
+                    currentTeam = prev;
+                });
+                renderPosTabs();
+                restoreTeam();
+                renderTeams();
+                restoreSection();
+            });
+        
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+            localStorage.setItem('pes_current_section', id);
+            if (id === 'positions') showPos('ALL');
+            if (id === 'team-rankings') renderTeamRankings();
+            if (id === 'skill-rankings') renderSkillRankings();
+        }
+
+        function getOvrClass(ovr) {
+            if (ovr >= 90) return 'ovr-elite';
+            if (ovr >= 85) return 'ovr-world';
+            if (ovr >= 80) return 'ovr-great';
+            if (ovr >= 75) return 'ovr-good';
+            return 'ovr-avg';
+        }
+
+        // === SKILL RANKINGS ===
+        let currentSkill = 'speed';
+        
+        const skillDefs = [
+            { key: 'speed', label: '⚡ Velocità', icon: '⚡' },
+            { key: 'acceleration', label: '💨 Accelerazione', icon: '💨' },
+            { key: 'dribble', label: '🎨 Dribbling', icon: '🎨' },
+            { key: 'dribble_speed', label: '🌀 Vel. Dribbling', icon: '🌀' },
+            { key: 'shot', label: '🎯 Tiro', icon: '🎯' },
+            { key: 'shot_power', label: '💥 Potenza Tiro', icon: '💥' },
+            { key: 'shot_technique', label: '🎳 Tecnica Tiro', icon: '🎳' },
+            { key: 'free_kick', label: '🥅 Punizioni', icon: '🥅' },
+            { key: 'swerve', label: '🔄 Effetto', icon: '🔄' },
+            { key: 'technique', label: '🎩 Tecnica', icon: '🎩' },
+            { key: 's_pass', label: '📐 Pass. Corto', icon: '📐' },
+            { key: 'l_pass', label: '🚀 Pass. Lungo', icon: '🚀' },
+            { key: 'defense', label: '🛡️ Difesa', icon: '🛡️' },
+            { key: 'heading', label: '🗣️ Testa', icon: '🗣️' },
+            { key: 'jump', label: '🦘 Elevazione', icon: '🦘' },
+            { key: 'stamina', label: '🫁 Resistenza', icon: '🫁' },
+            { key: 'agility', label: '🐆 Agilità', icon: '🐆' },
+            { key: 'response', label: '👁️ Reattività', icon: '👁️' },
+            { key: 'balance', label: '⚖️ Equilibrio', icon: '⚖️' },
+            { key: 'aggression', label: '😤 Aggressività', icon: '😤' },
+            { key: 'mentality', label: '🧠 Mentalità', icon: '🧠' },
+            { key: 'teamwork', label: '🤝 Gioco Squadra', icon: '🤝' },
+            { key: 'gk', label: '🧤 Parata', icon: '🧤' }
+        ];
+        
+        function setSkill(skill) {
+            currentSkill = skill;
+            renderSkillRankings();
+        }
+        
+        function renderSkillRankings() {
+            var filterDiv = document.getElementById('skill-filter');
+            var content = document.getElementById('skill-rankings-content');
+            
+            // Render skill buttons
+            var filterHtml = '';
+            skillDefs.forEach(function(s) {
+                filterHtml += '<button class="league-btn' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')" style="min-width:70px;padding:8px 10px;">' + s.icon + '<br><span style="font-size:0.5em;color:#fff;line-height:1.2;">' + s.label.replace(/^[^\s]+ /, '') + '</span></button>';
+            });
+            filterDiv.innerHTML = filterHtml;
+            
+            // Get all players from data.json
+            var allPlayers = data.all_players || data.overall || [];
+            var skillInfo = skillDefs.find(function(s) { return s.key === currentSkill; });
+            
+            // Sort by selected skill
+            var sorted = allPlayers.slice().sort(function(a, b) {
+                return (b[currentSkill] || 0) - (a[currentSkill] || 0);
+            });
+            
+            // Top 10
+            var top = sorted.slice(0, 10);
+            
+            var html = '<div style="max-width:600px;margin:0 auto;">';
+            html += '<h3 style="text-align:center;margin-bottom:16px;">' + skillInfo.label + ' — Top 10</h3>';
+            
+            top.forEach(function(p, idx) {
+                var medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '<span style="color:#888;">' + (idx+1) + '.</span>';
+                var val = p[currentSkill] || 0;
+                var ovrClass = val >= 90 ? '#e6c619' : val >= 85 ? '#4fc3f7' : val >= 80 ? '#81c784' : '#bbb';
+                
+                html += '<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:6px;border:1px solid rgba(255,255,255,0.05);">';
+                html += '<div style="font-size:1.3em;min-width:35px;text-align:center;">' + medal + '</div>';
+                html += '<div style="flex:1;">';
+                html += '<div style="font-weight:bold;">' + p.name + '</div>';
+                html += '<div style="font-size:0.8em;color:#888;">' + p.pos + ' • ' + (p.team || '') + ' • OVR ' + p.ovr + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:1.8em;font-weight:bold;color:' + ovrClass + ';">' + val + '</div>';
+                html += '</div>';
+            });
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+        
+        // === TEAM RANKINGS ===
+                let currentRankingFilter = 'all';
+        
+        function setRankingFilter(filter) {
+            currentRankingFilter = filter;
+            renderTeamRankings();
+        }
+        
+        function renderTeamRankings() {
+            var container = document.getElementById('team-rankings-content');
+            var filterDiv = document.getElementById('team-rankings-filter');
+            var teamData = [];
+            
+            // League info for flags
+            var teamLeague = {};
+            var teamLeagueKey = {};
+            Object.keys(leagues).forEach(function(lg) {
+                leagues[lg].teams.forEach(function(t) {
+                    teamLeague[t] = leagues[lg];
+                    teamLeagueKey[t] = lg;
+                });
+            });
+
+            // Render filter buttons
+            var leagueOrder = ['england', 'italy', 'netherlands', 'spain'];
+            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')" style="min-width:60px;">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            leagueOrder.forEach(function(lg) {
+                var l = leagues[lg];
+                if (!l) return;
+                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')" style="min-width:60px;">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
+            });
+            filterDiv.innerHTML = filterHtml;
+
+            Object.keys(teamConfigs).forEach(function(teamName) {
+                var cfg = teamConfigs[teamName];
+                var roster = cfg.roster;
+                
+                // Average OVR of full roster
+                var allOvrs = roster.map(function(p) { return p.ovr; });
+                var avgOvr = Math.round(allOvrs.reduce(function(a,b){return a+b;}, 0) / allOvrs.length);
+                
+                // Sort all by OVR
+                var sorted = roster.slice().sort(function(a,b){return b.ovr - a.ovr;});
+                var bestPlayer = sorted[0];
+                
+                teamData.push({
+                    name: teamName,
+                    title: cfg.title,
+                    subtitle: cfg.subtitle,
+                    captain: cfg.captain || '',
+                    roster: roster,
+                    sorted: sorted,
+                    avgOvr: avgOvr,
+                    bestPlayer: bestPlayer,
+                    flag: teamLeague[teamName] ? teamLeague[teamName].flag : '🏳️'
+                });
+            });
+            
+            // Filter by league
+            if (currentRankingFilter !== 'all') {
+                teamData = teamData.filter(function(t) {
+                    return teamLeagueKey[t.name] === currentRankingFilter;
+                });
+            }
+            
+            // Sort by avg OVR
+            teamData.sort(function(a,b){ return b.avgOvr - a.avgOvr; });
+            
+            var html = '<div style="max-width:800px;margin:0 auto;">';
+            teamData.forEach(function(team, idx) {
+                var medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx+1) + '.';
+                
+                html += '<div style="background:var(--card-bg);border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;border:1px solid rgba(255,255,255,0.05);">';
+                
+                // Rank + Flag
+                html += '<div style="font-size:1.8em;min-width:45px;text-align:center;">' + medal + '</div>';
+                
+                // Team info
+                html += '<div style="flex:1;">';
+                html += '<div style="font-size:1.2em;font-weight:bold;">' + team.title + '</div>';
+                html += '<div style="font-size:0.85em;color:#999;margin-top:2px;">' + team.subtitle + '</div>';
+                html += '<div style="font-size:0.8em;color:#777;margin-top:4px;">' + team.roster.length + ' giocatori • ⭐ ' + team.bestPlayer.name + ' (' + team.bestPlayer.ovr + ')' + (team.captain ? ' • <span style="color:#777;">Ⓒ ' + team.captain + '</span>' : '') + '</div>';
+                html += '</div>';
+                
+                // OVR Badge
+                var ovrClass = team.avgOvr >= 87 ? '#e6c619' : team.avgOvr >= 83 ? '#4fc3f7' : team.avgOvr >= 79 ? '#81c784' : '#bbb';
+                html += '<div style="text-align:center;">';
+                html += '<div style="font-size:2em;font-weight:bold;color:' + ovrClass + ';">' + team.avgOvr + '</div>';
+                html += '<div style="font-size:0.7em;color:#999;">OVR</div>';
+                html += '</div>';
+                
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+        
+        // Restore last section on load
+        function restoreSection() {
+            const saved = localStorage.getItem('pes_current_section');
+            if (saved && document.getElementById(saved)) {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById(saved).classList.add('active');
+                document.querySelectorAll('.tab').forEach(t => {
+                    if ((saved === 'positions' && t.textContent.includes('Per Ruolo')) ||
+                        (saved === 'teams' && t.textContent.includes('Squadre')) ||
+                        (saved === 'skill-rankings' && t.textContent.includes('Skills'))) {
+                        t.classList.add('active');
+                    }
+                });
+            }
+        }
+        
+        // Tab labels for merged positions
+        const posTabLabels = {
+            'ALL': 'Tutti',
+            'CB': 'CB/SW',
+            'SB': 'SB/WB',
+            'CMF': 'CM/DM',
+            'SMF': 'SMF/WF',
+            'CF': 'SS/CF'
+        };
+        
+        const posTabNames = {
+            'ALL': 'Tutti i Ruoli',
+            'CB': 'Difensori Centrali',
+            'SB': 'Terzini',
+            'CMF': 'Centrocampisti',
+            'SMF': 'Esterni',
+            'CF': 'Attaccanti'
+        };
+        
+        function renderPosTabs() {
+            const tabs = document.getElementById('pos-tabs');
+            tabs.innerHTML = posOrder.filter(pos => pos === 'ALL' || data.by_position[pos] || posMerge[pos]).map(pos => `
+                <button class="pos-tab ${pos === currentPos ? 'active' : ''}" onclick="showPos('${pos}')">
+                    <span class="pos-code">${posEmoji[pos]} ${posTabLabels[pos] || pos}</span>
+                    <span class="pos-name">${posTabNames[pos] || data.pos_names[pos] || ''}</span>
+                </button>
+            `).join('');
+            showPos(currentPos);
+        }
+        
+        function showPos(pos) {
+            currentPos = pos;
+            localStorage.setItem('pes_current_pos', pos);
+            document.querySelectorAll('.pos-tab').forEach(t => {
+                t.classList.toggle('active', t.textContent.includes(pos));
+            });
+            
+            const title = document.getElementById('pos-title');
+            const titleName = pos === 'ALL' ? 'Tutti' : (posMergeNames[pos] || data.pos_names[pos] || pos);
+            title.innerHTML = `${posEmoji[pos] || ''} ${titleName}`;
+            
+            // Show formula explanation with exact weights
+            const formulaBox = document.getElementById('formula-box');
+            const ovrFormulas = {
+                'GK': {
+                    desc: 'OVR = GK×45% + Response×25% + Jump×12% + Mentality×10% + Balance×5% + Team Work×3%',
+                    weights: [['Goal Keeping', 45], ['Response', 25], ['Jump', 12], ['Mentality', 10], ['Balance', 5], ['Team Work', 3]]
+                },
+                'CB': {
+                    desc: 'OVR = Defense×20% + Heading×12% + Balance×10% + Response×10% + Jump×8% + Stamina×8% + Speed×7% + Short Pass×7% + Aggression×6% + Mentality×6% + Team Work×6%',
+                    weights: [['Defense', 20], ['Heading', 12], ['Balance', 10], ['Response', 10], ['Jump', 8], ['Stamina', 8], ['Speed', 7], ['Short Pass', 7], ['Aggression', 6], ['Mentality', 6], ['Team Work', 6]]
+                },
+                'SB': {
+                    desc: 'OVR = Defense×15% + Speed×12% + Stamina×12% + Long Pass×10% + Acceleration×8% + Dribble×7% + Short Pass×7% + Balance×6% + Response×6% + Agility×5% + Mentality×6% + Team Work×6%',
+                    weights: [['Defense', 15], ['Speed', 12], ['Stamina', 12], ['Long Pass', 10], ['Acceleration', 8], ['Dribble', 7], ['Short Pass', 7], ['Balance', 6], ['Response', 6], ['Agility', 5], ['Mentality', 6], ['Team Work', 6]]
+                },
+                'CMF': {
+                    desc: 'OVR = Short Pass×20% + Defense×18% + Long Pass×15% + Stamina×12% + Mentality×12% + Attack×8% + Dribble×8% + Response×7%',
+                    weights: [['Short Pass', 20], ['Defense', 18], ['Long Pass', 15], ['Stamina', 12], ['Mentality', 12], ['Attack', 8], ['Dribble', 8], ['Response', 7]]
+                },
+                'SMF': {
+                    desc: 'Stessa formula di CMF — Short Pass×14% + Technique×12% + Stamina×10% + Dribble×8% + Long Pass×8% + Attack×7% + Speed×6% + Response×6% + Balance×5% + Shot×5% + Agility×5% + Mentality×5% + Team Work×9%',
+                    weights: [['Short Pass', 14], ['Technique', 12], ['Stamina', 10], ['Dribble', 8], ['Long Pass', 8], ['Attack', 7], ['Speed', 6], ['Response', 6], ['Balance', 5], ['Shot', 5], ['Agility', 5], ['Mentality', 5], ['Team Work', 9]]
+                },
+                'AMF': {
+                    desc: 'OVR = Short Pass×14% + Technique×12% + Dribble×10% + Attack×8% + Long Pass×8% + Shot×7% + Response×6% + Agility×6% + Shot Tech×5% + Swerve×5% + Speed×5% + Mentality×5% + Stamina×9%',
+                    weights: [['Short Pass', 14], ['Technique', 12], ['Dribble', 10], ['Attack', 8], ['Long Pass', 8], ['Shot', 7], ['Response', 6], ['Agility', 6], ['Shot Tech', 5], ['Swerve', 5], ['Speed', 5], ['Mentality', 5], ['Stamina', 9]]
+                },
+                'SS': {
+                    desc: 'OVR = Attack×12% + Shot×10% + Technique×10% + Dribble×8% + Short Pass×8% + Response×7% + Speed×7% + Shot Tech×6% + Agility×6% + Acceleration×5% + Heading×5% + Swerve×4% + Mentality×6% + Stamina×6%',
+                    weights: [['Attack', 12], ['Shot', 10], ['Technique', 10], ['Dribble', 8], ['Short Pass', 8], ['Response', 7], ['Speed', 7], ['Shot Tech', 6], ['Agility', 6], ['Acceleration', 5], ['Heading', 5], ['Swerve', 4], ['Mentality', 6], ['Stamina', 6]]
+                },
+                'CF': {
+                    desc: 'OVR = Attack×22% + Shot×18% + Heading×10% + Dribble×10% + Speed×10% + Shot Tech×8% + Shot Power×7% + Acceleration×5% + Short Pass×5% + Jump×5%',
+                    weights: [['Attack', 22], ['Shot', 18], ['Heading', 10], ['Dribble', 10], ['Speed', 10], ['Shot Tech', 8], ['Shot Power', 7], ['Acceleration', 5], ['Short Pass', 5], ['Jump', 5]]
+                }
+            };
+            const formula = ovrFormulas[pos];
+            if (formula) {
+                formulaBox.innerHTML = `
+                    <details>
+                        <summary style="cursor:pointer;color:#aaa;font-size:0.85em;margin-bottom:8px;">📐 Pesi Formula OVR</summary>
+                        <div class="formula-list">
+                            ${formula.weights.map(w => `<span class="formula-tag" style="opacity:${0.5 + w[1]/100}">${w[0]} <b>${w[1]}%</b></span>`).join('')}
+                        </div>
+                    </details>
+                `;
+            } else if (pos === 'ALL') {
+                formulaBox.innerHTML = '<p style="color:#666;font-size:0.85em;font-style:italic;">Seleziona un ruolo specifico per vedere l\'algoritmo OVR</p>';
+            } else {
+                formulaBox.innerHTML = '';
+            }
+            
+            const tbody = document.getElementById('pos-body');
+            
+            // Merge positions if applicable
+            let players = [];
+            const isAll = (pos === 'ALL');
+            const positions = isAll ? null : (posMerge[pos] || [pos]);
+            // Build player list from our team rosters (single source of truth for OVR)
+            // Map roster pos names to data pos names
+            const posRemap = {'DM':'DMF','CM':'CMF','SM':'SMF','AM':'AMF','WF':'WF','SS':'SS','CF':'CF','CB':'CB','SB':'SB','GK':'GK','SW':'SW','WB':'WB','DMF':'DMF','CMF':'CMF','SMF':'SMF','AMF':'AMF'};
+            Object.keys(teamConfigs).forEach(function(teamName) {
+                var cfg = teamConfigs[teamName];
+                cfg.roster.forEach(function(p) {
+                    // Check if player's primary or secondary position matches
+                    // Only match primary position
+                    var primaryPos = p.pos;
+                    var secondaryPositions = (p.pos2 || []).map(function(pp) { return posRemap[pp] || pp; });
+                    if (isAll || positions.indexOf(primaryPos) !== -1) {
+                        var pp = primaryPos;
+                        players.push({
+                            name: p.name,
+                            team: teamName,
+                            pos: pp,
+                            ovr: p.ovr,
+                            speed: p.stats.spd || p.stats.acc || 0,
+                            dribble: p.stats.dri || 0,
+                            shot: p.stats.sht || p.stats.att || 0,
+                            defense: p.stats.def || 0,
+                            heading: p.stats.hea || 0,
+                            gk: p.stats.gk || 0,
+                            technique: p.stats.tec || 0,
+                            s_pass: p.stats.pas || 0,
+                            attack: p.stats.att || 0,
+                            stamina: p.stats.sta || 0,
+                            men: p.stats.men || 0,
+                            res: p.stats.res || 0,
+                            acc: p.stats.acc || 0,
+                            primaryPos: p.pos,
+                            pos2: (p.pos2 || []),
+                            nat: p.nat
+                        });
+                    }
+                });
+            });
+            // Deduplicate by name+team (keep highest OVR entry)
+            var seen = {};
+            players = players.filter(function(p) {
+                var key = p.name + '|' + p.team;
+                if (!seen[key]) { seen[key] = true; return true; }
+                return false;
+            });
+            // Sort merged players by OVR
+            players.sort((a, b) => (b.ovr || 0) - (a.ovr || 0));
+            const isGK = pos === 'GK';
+            const isDef = ['CB', 'SB', 'DMF'].includes(pos);
+            
+            tbody.innerHTML = players.map((p, i) => {
+                // Show adjective derived from skills/stats
+                const playerAdjectives = {
+                    'Cruijff': 'Totale', 'C. Ronaldo': 'Imprendibile', 'Zidane': 'Genio',
+                    'Figo': 'Tocco di prima', 'Raul': 'Imprevedibile', 'Casillas': 'Felino',
+                    'Ramos': 'Mastino', 'Roberto Carlos': 'Incontenibile', 'Marcelo': 'Incontenibile',
+                    'Hierro': 'Scudo', 'Guti': 'Pennellatore', 'Modric': 'Instancabile',
+                    'Kroos': 'Instancabile', 'Hugo Sanchez': 'Cecchino', 'Di Stefano': 'Cecchino',
+                    'Puskas': 'Cecchino', 'Salgado': 'Affidabile', 'Diarra L.': 'Instancabile',
+                    'Van der Sar': 'Para-rigori', 'Krol': 'Elegante', 'Neeskens': 'Tuttocampista',
+                    'Overmars': 'Imprendibile', 'Keizer': 'Saltauomo', 'Litmanen': 'Genio',
+                    'Kluivert': 'Ariete completo', 'Kanu': 'Raffinato', 'Finidi': 'Saltauomo',
+                    'Muhren': 'Visionario', 'De Boer F.': 'Dominante', 'De Boer R.': 'Artista',
+                    'Mido': 'Torre', 'Suurbier': 'Veloce', 'Reiziger': 'Instancabile',
+                    'Trabelsi': 'Veloce', 'Melchiot': 'Veloce', 'Grygera': 'Veloce',
+                    'Van Der Meyde': 'Crossatore',
+                    'Tomasson': 'Fiuto del gol', 'Van Hooijdonk': 'Ariete completo',
+                    'Van Persie': 'Tecnico', 'Kuyt': 'Guerriero', 'Van Bronckhorst': 'Instancabile',
+                    'Van Hanegem': 'Regista arretrato', 'Ono': 'Genio', 'Kalou B.': 'Raffinato',
+                    'Kalou S.': 'Crossatore', 'Rijsbergen': 'Agile', 'De Cler': 'Veloce',
+                    'Bosvelt': 'Distruttore', 'Cisse S.': 'Rapace', 'El Ahmadi': 'Equilibratore',
+                    'Paauwe': 'Equilibratore', 'Rzasa': 'Solido', 'Vlaar': 'Solido',
+                    'Bahia': 'Solido', 'Taument': 'Veloce', 'Jansen W.': 'Motorino',
+                    'Van Breukelen': 'Para-rigori', 'Vanenburg': 'Fantasista', 'Cocu': 'Dinamico',
+                    'Farfan': 'Crossatore', 'Ooijer': 'Agile', 'Vogel': 'Motorino',
+                    'Van Aerle': 'Distruttore', 'Wouters': 'Motorino', 'Koeman E.': 'Dinamico',
+                    'Alex': 'Roccioso', 'Bouma': 'Solido', 'Aissati': 'Artista',
+                    'Diego Tardelli': 'Seconda Punta', 'Bruma': 'Veloce', 'Gakhokidze': 'Esplosivo',
+                    'Isaksson': 'Affidabile'
+                };
+                let stats = playerAdjectives[p.name] || '';
+                // OVR color classes
+                let ovrClass = 'ovr-average';
+                if (p.ovr >= 90) ovrClass = 'ovr-elite';
+                else if (p.ovr >= 85) ovrClass = 'ovr-world';
+                else if (p.ovr >= 80) ovrClass = 'ovr-great';
+                else if (p.ovr >= 75) ovrClass = 'ovr-good';
+                return `
+                    <tr>
+                        <td class="rank ${i < 3 ? 'rank-' + (i+1) : ''}">${i + 1}</td>
+                        <td class="player-name">${p.name}</td>
+                        <td><span class="ovr ${ovrClass}">${p.ovr || '-'}</span></td>
+                        <td style="font-size:0.85em;color:#aaa;">${p.primaryPos}</td>
+                        <td style="font-size:1.1em;">${p.nat || ''}</td>
+                        <td><span class="team-badge">${p.team}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Build rosters dynamically from data.json
+        function buildRostersFromData(data) {
+            if (!data || !data.by_team) return;
+            var teamDataMap = {};
+            data.by_team.forEach(function(t) { teamDataMap[t.team] = t.players; });
+            Object.keys(teamConfigs).forEach(function(teamName) {
+                var players = teamDataMap[teamName];
+                if (!players) { console.warn('No data.json players for team:', teamName); return; }
+                // Sort by OVR descending, assign sequential IDs
+                var sorted = players.slice().sort(function(a, b) { return b.ovr - a.ovr; });
+                var roster = sorted.map(function(p, idx) {
+                    return {
+                        id: idx + 1,
+                        pos: p.pos,
+                        pos2: p.pos2 || [],
+                        name: p.name,
+                        ovr: p.ovr,
+                        nat: p.nat,
+                        foot: p.foot,
+                        age: p.age,
+                        stats: { spd: p.speed, def: p.defense, tec: p.technique }
+                    };
+                });
+                teamConfigs[teamName].roster = roster;
+            });
+        }
+
+        // Resolve name-based _defaultLineupNames to ID-based defaultLineup after rosters are built
+        function resolveDefaultLineups() {
+            Object.keys(teamConfigs).forEach(function(teamName) {
+                var cfg = teamConfigs[teamName];
+                if (!cfg._defaultLineupNames || !cfg.roster || cfg.roster.length === 0) return;
+                var nameToId = {};
+                cfg.roster.forEach(function(p) { nameToId[p.name] = p.id; });
+                cfg.defaultLineup = cfg._defaultLineupNames.map(function(name) {
+                    var id = nameToId[name];
+                    if (id === undefined) console.warn('Player not found in roster:', name, 'team:', teamName);
+                    return id || 1;
+                });
+            });
+        }
+
+        // Team configs - roster, formation, slots, title, subtitle
+        const teamConfigs = {
+            'Juventus': {
+                roster: [],
+                _defaultLineupNames: ['Buffon', 'Zambrotta', 'Scirea', 'Chiellini', 'Cabrini', 'Davids', 'Paulo Sousa', 'Tardelli', 'Del Piero', 'Trezeguet', 'Nedved'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                title: '⚪⚫ Juventus',
+                subtitle: '4-3-1-2, Marcello Lippi',
+                captain: 'Del Piero',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Milan': {
+                roster: [],
+                _defaultLineupNames: ['Dida', 'Tassotti', 'Baresi', 'Thiago Silva', 'Maldini', 'Pirlo', 'Rijkaard', 'Seedorf', 'Gullit', 'Van Basten', 'Weah'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                title: '🔴⚫ Milan',
+                subtitle: '4-1-2-1-2, Carlo Ancelotti',
+                captain: 'Baresi',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row cdm">' + renderSpot(5, 'DM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Inter': {
+                roster: [],
+                _defaultLineupNames: ['Julio Cesar', 'Maicon', 'Samuel', 'Bergomi', 'Facchetti', 'Cambiasso', 'Stankovic', 'Sneijder', 'Ronaldo', 'Klinsmann', 'Adriano'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'AM', 'ST', 'ST', 'ST'],
+                title: '⚫🔵 Inter',
+                subtitle: '4-2-1-3, José Mourinho',
+                captain: 'Zanetti J.',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(8, 'LW') + renderSpot(9, 'ST') + renderSpot(10, 'RW') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(7, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Ajax': {
+                roster: [],
+                _defaultLineupNames: ['Van der Sar', 'Krol', 'De Boer F.', 'Reiziger', 'Trabelsi', 'Neeskens', 'Suurbier', 'Overmars', 'Litmanen', 'Cruijff', 'Kluivert'],
+                defaultLineup: [],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'AM', 'ST', 'ST'],
+                title: '⚪🔴 Ajax',
+                subtitle: '3-4-1-2, Louis Van Gaal',
+                captain: 'Cruijff',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(7, 'LM') + renderSpot(6, 'CM') + renderSpot(5, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Feyenoord': {
+                roster: [],
+                _defaultLineupNames: ['De Goey', 'Van Bronckhorst', 'Rijsbergen', 'Vlaar', 'Rzasa', 'Bosvelt', 'Van Hanegem', 'Ono', 'Van Persie', 'Van Hooijdonk', 'Kalou S.'],
+                defaultLineup: [],
+                slots: ['GK', 'LB', 'CB', 'CB', 'RB', 'CM', 'CM', 'CM', 'LW', 'ST', 'RW'],
+                title: '🔴⚪ Feyenoord',
+                subtitle: '4-3-3, Ernst Happel',
+                captain: 'Van Persie',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(8, 'LW') + renderSpot(9, 'ST') + renderSpot(10, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(1, 'LB') + renderSpot(2, 'CB') + renderSpot(3, 'CB') + renderSpot(4, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Real Madrid': {
+                roster: [],
+                _defaultLineupNames: ['Casillas', 'Salgado', 'Ramos', 'Hierro', 'Marcelo', 'Diarra L.', 'Modric', 'Figo', 'Zidane', 'C. Ronaldo', 'Raul'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'RW', 'AM', 'LW', 'ST'],
+                title: '⚪⚪ Real Madrid',
+                subtitle: '4-2-3-1, Vicente Del Bosque',
+                captain: 'Hierro',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(9, 'LW') + renderSpot(8, 'AM') + renderSpot(7, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(6, 'CM') + renderSpot(5, 'DM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'PSV Eindhoven': {
+                roster: [],
+                _defaultLineupNames: ['Vanenburg', 'Bruma', 'Van Breukelen', 'Alex', 'Koeman E.', 'Wouters', 'Farfan', 'Cocu', 'Van Aerle', 'Vogel', 'Gakhokidze'],
+                defaultLineup: [],
+                slots: ['GK', 'LB', 'CB', 'CB', 'RB', 'DM', 'CM', 'CM', 'RW', 'ST', 'LW'],
+                title: '🔴⚪ PSV Eindhoven',
+                subtitle: '4-3-3, Guus Hiddink',
+                captain: 'Wouters',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(8, 'LW') + renderSpot(9, 'ST') + renderSpot(10, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(6, 'CM') + renderSpot(5, 'DM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(1, 'LB') + renderSpot(2, 'CB') + renderSpot(3, 'CB') + renderSpot(4, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Arsenal': {
+                roster: [],
+                _defaultLineupNames: ['Seaman', 'Lauren', 'Adams', 'Campbell', 'Eboue', 'Ljungberg', 'Vieira', 'Gilberto Silva', 'Fabregas', 'Henry', 'Bergkamp'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'RB', 'RM', 'CM', 'CM', 'LM', 'ST', 'ST'],
+                title: '🔴⚪ Arsenal',
+                subtitle: '4-4-2, Arsène Wenger',
+                captain: 'Adams',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(8, 'LM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(5, 'RM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Genoa': {
+                roster: [],
+                _defaultLineupNames: ['Perin', 'Collovati', 'Signorini', 'Behrami', 'Criscito', 'Rossi M.', 'Onorati', "Van't Schip", 'Skuhravy', 'Branco', 'Aguilera'],
+                defaultLineup: [],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'LWB', 'ST', 'ST'],
+                title: '🔴🔵 Genoa',
+                subtitle: '3-5-2, Franco Scoglio',
+                captain: 'Signorini',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(8, 'LWB') + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Fiorentina': {
+                roster: [],
+                _defaultLineupNames: ['Toldo', 'Ujfalusi', 'Astori', 'Marcio Santos', 'Pasqual', 'Dunga', 'Donadel', 'Rui Costa', 'Antognoni', 'Batistuta', 'Edmundo'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                title: '🟣🟣 Fiorentina',
+                subtitle: '4-3-1-2, Cesare Prandelli',
+                captain: 'Batistuta',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            }
+        };
+        
+        // Current formation state per team
+        let formations = {};
+        
+        function getTeamConfig() {
+            return teamConfigs[currentTeam];
+        }
+        
+        function getFormation() {
+            const cfg = getTeamConfig();
+            if (!cfg) return null;
+            if (!formations[currentTeam]) {
+                // Try load from localStorage
+                const saved = localStorage.getItem('pes_formation_' + currentTeam);
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (Array.isArray(parsed)) {
+                            // Validate all IDs exist in roster
+                            const rosterIds = new Set(cfg.roster.map(function(p) { return p.id; }));
+                            const allValid = parsed.every(function(id) { return rosterIds.has(id); });
+                            if (allValid && parsed.length === cfg.defaultLineup.length) {
+                                formations[currentTeam] = [...parsed];
+                            } else {
+                                // Length changed or invalid IDs — clear stale save
+                                localStorage.removeItem('pes_formation_' + currentTeam);
+                            }
+                        }
+                    } catch(e) {}
+                }
+                if (!formations[currentTeam]) {
+                    formations[currentTeam] = [...cfg.defaultLineup];
+                }
+            }
+            return formations[currentTeam];
+        }
+        
+        function saveFormation() {
+            const lineup = formations[currentTeam];
+            if (lineup) localStorage.setItem('pes_formation_' + currentTeam, JSON.stringify(lineup));
+        }
+        
+        function exportFormation() {
+            const cfg = getTeamConfig();
+            const lineup = getFormation();
+            if (!cfg) return;
+            const data = {
+                team: currentTeam,
+                formation: cfg.subtitle,
+                lineup: lineup.map((id, idx) => {
+                    const p = getPlayerById(id);
+                    return { slot: cfg.slots[idx], player: p ? p.name : '?', ovr: p ? p.ovr : 0 };
+                }),
+                bench: getBench().slice(0, 7).map(p => ({ player: p.name, pos: p.pos, ovr: p.ovr }))
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentTeam.toLowerCase() + '_formation.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function resetFormation() {
+            const cfg = getTeamConfig();
+            if (!cfg) return;
+            if (confirm('Ripristinare la formazione originale?')) {
+                formations[currentTeam] = [...cfg.defaultLineup];
+                saveFormation();
+                renderTeams();
+            }
+        }
+        
+        // Init formations (deferred to after leagues are declared)
+        
+        // League/Team data
+        const leagues = {
+            england: {
+                name: 'Premier League',
+                flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+                teams: ['Arsenal']
+            },
+            netherlands: {
+                name: 'Eredivisie',
+                flag: '🇳🇱',
+                teams: ['Ajax', 'Feyenoord', 'PSV Eindhoven']
+            },
+            spain: {
+                name: 'LaLiga',
+                flag: '🇪🇸',
+                teams: ['Real Madrid']
+            },
+            italy: {
+                name: 'Serie A',
+                flag: '🇮🇹',
+                teams: ['Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Milan']
+            }
+        };
+        
+        let currentLeague = 'italy';
+        let currentTeam = 'Inter';
+        
+        function selectLeague(league) {
+            currentLeague = league;
+            document.querySelectorAll('.league-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            // Switch to first team in the new league
+            var firstTeam = leagues[league].teams[0];
+            currentTeam = firstTeam;
+            localStorage.setItem('pes_current_team', firstTeam);
+            localStorage.setItem('pes_current_section', 'teams');
+            renderTeamSelector();
+            renderTeams();
+        }
+        
+        function selectTeam(team) {
+            currentTeam = team;
+            document.querySelectorAll('.team-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('pes_current_team', team);
+            renderTeams();
+        }
+        
+        function renderTeamSelector() {
+            const selector = document.getElementById('team-selector');
+            const league = leagues[currentLeague];
+            if (!league) return;
+            
+            selector.innerHTML = league.teams.map(team => 
+                '<button class="team-btn ' + (team === currentTeam ? 'active' : '') + '" onclick="selectTeam(\'' + team + '\')">' + team + '</button>'
+            ).join('');
+        }
+        
+        // Restore team on load
+        function restoreTeam() {
+            const saved = localStorage.getItem('pes_current_team');
+            if (saved && teamConfigs[saved]) {
+                currentTeam = saved;
+                // Find which league this team belongs to
+                Object.keys(leagues).forEach(function(lg) {
+                    if (leagues[lg].teams.indexOf(saved) !== -1) {
+                        currentLeague = lg;
+                        // Update league button active state
+                        document.querySelectorAll('.league-btn').forEach(function(btn, idx) {
+                            btn.classList.toggle('active', Object.keys(leagues)[idx] === lg);
+                        });
+                    }
+                });
+            }
+            renderTeamSelector();
+        }
+        
+        // Init all formations - deferred to after data loads (see fetch callback)
+        
+        function getOvrClass(ovr) {
+            if (ovr >= 90) return 'ovr-elite';
+            if (ovr >= 85) return 'ovr-world';
+            if (ovr >= 80) return 'ovr-great';
+            if (ovr >= 75) return 'ovr-good';
+            return 'ovr-average';
+        }
+        
+        function getPlayerById(id) {
+            const cfg = getTeamConfig();
+            return cfg ? cfg.roster.find(p => p.id === id) : null;
+        }
+        
+        function getStartingIds() {
+            const lineup = getFormation();
+            return new Set(lineup || []);
+        }
+        
+        function getBench() {
+            const cfg = getTeamConfig();
+            if (!cfg) return [];
+            const startingIds = getStartingIds();
+            return cfg.roster.filter(p => !startingIds.has(p.id)).sort((a, b) => b.ovr - a.ovr);
+        }
+        
+        let draggedPlayerId = null;
+        let selectedSlot = null;  // For click-to-swap
+        
+        function handleDragStart(e, playerId) {
+            draggedPlayerId = playerId;
+            e.dataTransfer.effectAllowed = 'move';
+            e.target.classList.add('dragging');
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.player-spot').forEach(el => el.classList.remove('drag-over'));
+        }
+        
+        function handleSpotClick(slotIndex) {
+            const lineup = getFormation();
+            if (!lineup) return;
+            
+            if (selectedSlot === null) {
+                // First click: select this slot
+                selectedSlot = slotIndex;
+                document.querySelectorAll('.player-spot').forEach(el => el.classList.remove('selected'));
+                var spot = document.querySelector('.player-spot[data-slot="' + slotIndex + '"]');
+                if (spot) spot.classList.add('selected');
+            } else if (selectedSlot === slotIndex) {
+                // Clicked same slot: deselect
+                selectedSlot = null;
+                document.querySelectorAll('.player-spot').forEach(el => el.classList.remove('selected'));
+            } else {
+                // Second click: swap the two slots
+                var temp = lineup[selectedSlot];
+                lineup[selectedSlot] = lineup[slotIndex];
+                lineup[slotIndex] = temp;
+                selectedSlot = null;
+                saveFormation();
+                renderTeams();
+            }
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+        
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+        
+        function handleDrop(e, slotIndex) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            if (draggedPlayerId === null) return;
+            
+            const lineup = getFormation();
+            if (!lineup) return;
+            
+            // Check if dragged player is already in lineup
+            const existingSlot = lineup.indexOf(draggedPlayerId);
+            if (existingSlot !== -1) {
+                // Swap players
+                const currentPlayer = lineup[slotIndex];
+                lineup[existingSlot] = currentPlayer;
+            }
+            
+            lineup[slotIndex] = draggedPlayerId;
+            draggedPlayerId = null;
+            saveFormation();
+            renderTeams();
+        }
+        
+        function renderPlayerCard(p, inLineup) {
+            let classes = 'selector-player';
+            if (inLineup) classes += ' in-lineup';
+            return '<div class="' + classes + '" draggable="true" ondragstart="handleDragStart(event, ' + p.id + ')" ondragend="handleDragEnd(event)">' +
+                '<span class="nat-flag">' + p.nat + '</span>' +
+                '<span class="pos-badge">' + p.pos + '</span>' +
+                '<span class="sp-name">' + p.name + '</span>' +
+                '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
+                (inLineup ? '<span class="in-xi">⚽</span>' : '') +
+            '</div>';
+        }
+        
+        function renderTeams() {
+            const content = document.getElementById('team-content');
+            const cfg = getTeamConfig();
+            
+            // Check if team has data
+            if (!cfg) {
+                content.innerHTML = '<div style="text-align:center;padding:50px;opacity:0.6;">' +
+                    '<p style="font-size:1.2em;">🚧 ' + currentTeam + '</p>' +
+                    '<p>Coming soon...</p></div>';
+                return;
+            }
+            
+            const lineup = getFormation();
+            const bench = getBench();
+            
+            function getStatsHtml(p) {
+                let html = '<div class="tooltip-stats">';
+                for (let key in p.stats) {
+                    const labels = {gk:'GK',ref:'RIF',jmp:'SAL',hgt:'ALT',def:'DIF',pas:'PAS',spd:'VEL',hea:'TES',att:'ATT',sht:'TIR',dri:'DRI',acc:'ACC',tec:'TEC',sta:'RES'};
+                    html += '<span>' + (labels[key]||key) + ': ' + p.stats[key] + '</span>';
+                }
+                html += '</div>';
+                return html;
+            }
+            
+            function getTooltip(p) {
+                const pos2 = p.pos2 && p.pos2.length > 0 ? p.pos2.join(', ') : '-';
+                const footIcon = p.foot === 'L' ? '🦶⬅️' : (p.foot === 'R' ? '🦶➡️' : '🦶↔️');
+                const footText = p.foot === 'L' ? 'Sinistro' : (p.foot === 'R' ? 'Destro' : 'Ambidestro');
+                return '<div class="player-tooltip">' +
+                    '<div class="tooltip-header">' + p.nat + ' <strong>' + p.name + '</strong></div>' +
+                    '<div class="tooltip-pos">Ruolo: <strong>' + p.pos + '</strong> | Alt: ' + pos2 + '</div>' +
+                    '<div class="tooltip-foot">' + footIcon + ' Piede: <strong>' + footText + '</strong></div>' +
+                    getStatsHtml(p) +
+                '</div>';
+            }
+            
+            function renderSpot(slotIndex, label) {
+                const playerId = lineup[slotIndex];
+                const player = getPlayerById(playerId);
+                if (!player) {
+                    return '<div class="player-spot empty" data-slot="' + slotIndex + '" ' +
+                        'ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ' + slotIndex + ')">' +
+                        '<span class="slot-label">' + label + '</span>' +
+                        '<span class="pname" style="opacity:0.4">Vuoto</span>' +
+                    '</div>';
+                }
+                return '<div class="player-spot" data-slot="' + slotIndex + '" ' +
+                    'draggable="true" ondragstart="handleDragStart(event, ' + playerId + ')" ondragend="handleDragEnd(event)" ' +
+                    'ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ' + slotIndex + ')" ' +
+                    'onclick="handleSpotClick(' + slotIndex + ')">' +
+                    '<span class="slot-label">' + label + '</span>' +
+                    '<span class="ovr ' + getOvrClass(player.ovr) + '">' + player.ovr + '</span>' +
+                    '<span class="pname">' + player.nat + ' ' + player.name + '</span>' +
+                    getTooltip(player) +
+                '</div>';
+            }
+            
+            // Split bench: 7 panchina, rest tribuna
+            const panchina = bench.slice(0, 7);
+            const tribuna = bench.slice(7);
+            
+            let selectorHtml = '<h4>🪑 Panchina (7)</h4><div class="selector-list">';
+            panchina.forEach(function(p) {
+                selectorHtml += renderPlayerCard(p, false);
+            });
+            selectorHtml += '</div>';
+            if (tribuna.length > 0) {
+                selectorHtml += '<h4 style="margin-top:15px;">🏟️ Tribuna</h4><div class="selector-list tribuna">';
+                tribuna.forEach(function(p) {
+                    selectorHtml += renderPlayerCard(p, false);
+                });
+                selectorHtml += '</div>';
+            }
+            
+            // Calculate team OVR (average of full roster)
+            var totalOvr = 0;
+            cfg.roster.forEach(function(p) { totalOvr += p.ovr; });
+            var teamOvr = cfg.roster.length > 0 ? Math.round(totalOvr / cfg.roster.length) : 0;
+            
+            // Build roster-by-role view
+            var rosterByRole = '';
+            var roleOrder = [
+                {key: 'GK', label: '🧤 Portieri'},
+                {key: 'DEF', label: '🛡️ Difensori'},
+                {key: 'MID', label: '⚙️ Centrocampisti'},
+                {key: 'ATT', label: '⚡ Attaccanti'}
+            ];
+            var roleMap = {
+                'GK': 'GK', 'CB': 'DEF', 'SW': 'DEF', 'SB': 'DEF', 'WB': 'DEF',
+                'DMF': 'MID', 'CMF': 'MID', 'SMF': 'MID', 'AMF': 'MID', 'WF': 'MID',
+                'SS': 'ATT', 'CF': 'ATT'
+            };
+            var grouped = {GK: [], DEF: [], MID: [], ATT: []};
+            cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
+                var grp = roleMap[p.pos] || 'MID';
+                grouped[grp].push(p);
+            });
+            roleOrder.forEach(function(role) {
+                var players = grouped[role.key];
+                if (players.length === 0) return;
+                rosterByRole += '<div style="margin-bottom:16px;">';
+                rosterByRole += '<div style="font-weight:bold;font-size:0.95em;color:#aaa;margin-bottom:8px;">' + role.label + ' (' + players.length + ')</div>';
+                players.forEach(function(p) {
+                    var pos2Str = p.pos2 && p.pos2.length > 0 ? ' <span style="color:#666;font-size:0.8em;">(' + p.pos2.join(', ') + ')</span>' : '';
+                    var footIcon = p.foot === 'L' ? '⬅️' : (p.foot === 'R' ? '➡️' : '↔️');
+                    rosterByRole += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
+                    rosterByRole += '<span class="ovr ' + getOvrClass(p.ovr) + '" style="min-width:36px;text-align:center;">' + p.ovr + '</span>';
+                    rosterByRole += '<span style="min-width:40px;color:#888;font-size:0.85em;">' + p.pos + '</span>';
+                    rosterByRole += '<span style="flex:1;">' + p.nat + ' ' + p.name + pos2Str + '</span>';
+                    rosterByRole += '<span style="color:#666;font-size:0.8em;">' + footIcon + '</span>';
+                    rosterByRole += '</div>';
+                });
+                rosterByRole += '</div>';
+            });
+            
+            // View toggle
+            var currentView = localStorage.getItem('pes_team_view_' + currentTeam) || 'formation';
+            
+            var viewToggle = '<div style="display:flex;justify-content:center;gap:8px;margin-bottom:15px;">' +
+                '<button onclick="setTeamView(\'formation\')" style="padding:6px 16px;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;background:' + (currentView === 'formation' ? '#4fc3f7' : '#333') + ';color:' + (currentView === 'formation' ? '#000' : '#aaa') + ';">⚽ Formazione</button>' +
+                '<button onclick="setTeamView(\'roster\')" style="padding:6px 16px;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;background:' + (currentView === 'roster' ? '#4fc3f7' : '#333') + ';color:' + (currentView === 'roster' ? '#000' : '#aaa') + ';">📋 Rosa</button>' +
+            '</div>';
+            
+            var formationView = '<div class="pitch">' + cfg.pitchHtml(renderSpot) + '</div>' +
+                '<div class="player-selector">' + selectorHtml + '</div>' +
+                '<div class="formation-actions" style="display:flex;justify-content:center;gap:10px;margin-top:15px;">' +
+                    '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset Formazione</button>' +
+                    '<button class="action-btn export-btn" onclick="exportFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">📋 Esporta</button>' +
+                '</div>';
+            
+            var rosterView = '<div style="max-width:600px;margin:0 auto;">' + rosterByRole + '</div>';
+            
+            content.innerHTML = 
+                '<div class="team-display">' +
+                    '<p style="text-align:center;margin-bottom:5px;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + ' OVR</span></p>' +
+                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + cfg.subtitle + (cfg.captain ? ' • Ⓒ ' + cfg.captain : '') + '</p>' +
+                    viewToggle +
+                    '<div id="team-view-formation" style="display:' + (currentView === 'formation' ? 'block' : 'none') + ';">' + formationView + '</div>' +
+                    '<div id="team-view-roster" style="display:' + (currentView === 'roster' ? 'block' : 'none') + ';">' + rosterView + '</div>' +
+                '</div>';
+        }
+        function setTeamView(view) {
+            localStorage.setItem('pes_team_view_' + currentTeam, view);
+            renderTeams();
+        }
+    </script>
+</body>
+</html>

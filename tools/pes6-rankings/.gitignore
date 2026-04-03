@@ -1,0 +1,7 @@
+backups/
+data_current.json
+ajax_fixes.py
+dutch_teams_fixes.py
+adjectives.json
+TEAMS_STATUS.md
+.DS_Store
