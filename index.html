@@ -632,7 +632,7 @@
             
             <div class="league-selector">
                 <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.5em;color:#fff;line-height:1;">Premier League</span> <span style="font-size:0.45em;color:#888;">1/18</span></button>
-                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.5em;color:#fff;line-height:1;">Serie A</span> <span style="font-size:0.45em;color:#888;">5/20</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.5em;color:#fff;line-height:1;">Serie A</span> <span style="font-size:0.45em;color:#888;">6/20</span></button>
                 <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.5em;color:#fff;line-height:1;">Eredivisie</span> <span style="font-size:0.45em;color:#888;">3/3</span></button>
                 <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.5em;color:#fff;line-height:1;">LaLiga</span> <span style="font-size:0.45em;color:#888;">1/14</span></button>
             </div>
@@ -1286,6 +1286,22 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
+            'Lazio': {
+                roster: [],
+                _defaultLineupNames: ['Peruzzi', 'Lichtsteiner', 'Nesta', 'Mihajlovic', 'Favalli', 'Almeyda', 'Winter', 'Ledesma C.', 'Veron', 'Boksic', 'Salas M.'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                title: '🔵⚪ Lazio',
+                subtitle: '4-3-1-2, Sven-Göran Eriksson',
+                captain: 'Nesta',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
             'Fiorentina': {
                 roster: [],
                 _defaultLineupNames: ['Toldo', 'Ujfalusi', 'Astori', 'Marcio Santos', 'Pasqual', 'Dunga', 'Donadel', 'Rui Costa', 'Antognoni', 'Batistuta', 'Edmundo'],
@@ -1399,7 +1415,7 @@
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Milan']
+                teams: ['Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Milan']
             }
         };
         
