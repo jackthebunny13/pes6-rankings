@@ -13,10 +13,9 @@
             min-height: 100vh;
         }
         .header {
-            background: linear-gradient(90deg, #0f3460 0%, #533483 100%);
-            padding: 20px;
+            background: transparent;
+            padding: 15px 20px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         .header h1 { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .header p { opacity: 0.8; margin-top: 5px; }
@@ -39,7 +38,7 @@
         }
         .tab:hover { background: rgba(255,255,255,0.2); }
         .tab.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
             box-shadow: 0 4px 15px rgba(233,69,96,0.4);
         }
         .content { padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -135,6 +134,7 @@
             gap: 10px;
             margin-bottom: 15px;
         }
+        .player-spot.captain { }
         .pitch-row.strikers { margin-top: 5px; }
         .pitch-row.cam { margin-bottom: 20px; position: relative; z-index: 1; }
         .pitch-row.cdm { margin-bottom: 20px; position: relative; z-index: 2; }
@@ -339,20 +339,64 @@
             margin-bottom: 15px;
         }
         .league-btn {
-            font-size: 2em;
-            padding: 10px 20px;
+            font-size: 1.4em;
+            padding: 6px 8px;
             background: rgba(255,255,255,0.1);
             border: 2px solid transparent;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 70px;
+            flex: 1;
+            max-width: 100px;
+            text-align: center;
         }
         .league-btn:hover {
             background: rgba(255,255,255,0.2);
         }
         .league-btn.active {
-            border-color: #4ecca3;
-            background: rgba(78, 204, 163, 0.2);
+            border: none;
+            background: linear-gradient(135deg, #e94560, #533483);
+        }
+        .skill-macro {
+            font-size: 0.8em;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .skill-macro:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .skill-macro.active {
+            background: linear-gradient(135deg, #e94560, #533483);
+            border: none;
+            color: #fff;
+        }
+        .skill-pill {
+            font-size: 0.75em;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .skill-pill:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .skill-pill.active {
+            background: linear-gradient(135deg, #e94560, #533483);
+            border: none;
+            color: #fff;
         }
         /* Team Selector */
         #team-selector {
@@ -376,7 +420,7 @@
             background: rgba(255,255,255,0.2);
         }
         .team-btn.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
         }
         /* Player Tooltip */
         .player-tooltip {
@@ -478,7 +522,7 @@
             min-width: 80px;
         }
         .pos-tab:hover { background: rgba(255,255,255,0.2); }
-        .pos-tab.active { background: #e94560; }
+        .pos-tab.active { background: linear-gradient(135deg, #e94560, #533483); border: none; }
         .pos-tab .emoji { margin-right: 5px; }
         .pos-tab .pos-code { font-weight: bold; }
         .pos-tab .pos-name { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
@@ -527,9 +571,12 @@
         .formula-box {
             background: rgba(78, 204, 163, 0.1);
             border-left: 4px solid #4ecca3;
-            padding: 15px 20px;
+            padding: 10px 20px;
             margin-bottom: 20px;
             border-radius: 0 10px 10px 0;
+        }
+        .formula-box:empty {
+            display: none;
         }
         .formula-desc {
             font-size: 1em;
@@ -584,7 +631,7 @@
 <body>
     <div class="header">
         <h1>Project PES6</h1>
-        <div style="font-size:0.7em;color:#555;margin-top:-8px;margin-bottom:8px;">Powered by Zio Tore</div>
+        <div style="font-size:0.65em;color:#aaa;margin-top:6px;margin-bottom:8px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
     </div>
     
     <div class="tabs">
@@ -598,10 +645,11 @@
         <!-- By Position -->
         <div id="positions" class="section active">
             <div class="pos-tabs" id="pos-tabs"></div>
-            <div class="pos-title" id="pos-title"></div>
+            <div class="pos-title" id="pos-title" style="display:none;"></div>
+            <div id="sub-filter-box"></div>
             <div class="formula-box" id="formula-box"></div>
             <table class="ranking-table">
-                <thead>
+                <thead style="display:none;">
                     <tr>
                         <th>#</th>
                         <th>Giocatore</th>
@@ -624,17 +672,17 @@
 
         <!-- Squadre -->
         <div id="skill-rankings" class="section">
-            <div id="skill-filter" style="text-align:center;margin-bottom:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;"></div>
+            <div id="skill-filter" style="text-align:center;margin-bottom:16px;"></div>
             <div id="skill-rankings-content"></div>
         </div>
 
         <div id="teams" class="section">
             
             <div class="league-selector">
-                <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.5em;color:#fff;line-height:1;">Premier League</span> <span style="font-size:0.45em;color:#888;">1/18</span></button>
-                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.5em;color:#fff;line-height:1;">Serie A</span> <span style="font-size:0.45em;color:#888;">6/20</span></button>
-                <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.5em;color:#fff;line-height:1;">Eredivisie</span> <span style="font-size:0.45em;color:#888;">3/3</span></button>
-                <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.5em;color:#fff;line-height:1;">LaLiga</span> <span style="font-size:0.45em;color:#888;">1/14</span></button>
+                <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/18</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">8/20</span></button>
+                <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.55em;color:#fff;line-height:1;">Eredivisie</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/3</span></button>
+                <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.55em;color:#fff;line-height:1;">Liga</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/14</span></button>
             </div>
             <div id="team-selector"></div>
             <div id="team-content"></div>
@@ -656,11 +704,11 @@
         
         // Position merges
         const posMerge = {
-            'CB': ['CB', 'SW'],    // Difensori centrali
+            'CB': ['SW', 'CB'],    // Difensori centrali
             'SB': ['SB', 'WB'],    // Terzini
-            'CMF': ['CMF', 'DMF'], // Centrocampisti (merged)
+            'CMF': ['DMF', 'CMF'], // Centrocampisti (merged)
             'SMF': ['SMF', 'WF'],  // Esterni
-            'CF': ['CF', 'SS']     // Attaccanti (merged)
+            'CF': ['SS', 'CF']     // Attaccanti (merged)
         };
         
         const posMergeNames = {
@@ -712,31 +760,64 @@
         // === SKILL RANKINGS ===
         let currentSkill = 'speed';
         
-        const skillDefs = [
-            { key: 'speed', label: '⚡ Velocità', icon: '⚡' },
-            { key: 'acceleration', label: '💨 Accelerazione', icon: '💨' },
-            { key: 'dribble', label: '🎨 Dribbling', icon: '🎨' },
-            { key: 'dribble_speed', label: '🌀 Vel. Dribbling', icon: '🌀' },
-            { key: 'shot', label: '🎯 Tiro', icon: '🎯' },
-            { key: 'shot_power', label: '💥 Potenza Tiro', icon: '💥' },
-            { key: 'shot_technique', label: '🎳 Tecnica Tiro', icon: '🎳' },
-            { key: 'free_kick', label: '🥅 Punizioni', icon: '🥅' },
-            { key: 'swerve', label: '🔄 Effetto', icon: '🔄' },
-            { key: 'technique', label: '🎩 Tecnica', icon: '🎩' },
-            { key: 's_pass', label: '📐 Pass. Corto', icon: '📐' },
-            { key: 'l_pass', label: '🚀 Pass. Lungo', icon: '🚀' },
-            { key: 'defense', label: '🛡️ Difesa', icon: '🛡️' },
-            { key: 'heading', label: '🗣️ Testa', icon: '🗣️' },
-            { key: 'jump', label: '🦘 Elevazione', icon: '🦘' },
-            { key: 'stamina', label: '🫁 Resistenza', icon: '🫁' },
-            { key: 'agility', label: '🐆 Agilità', icon: '🐆' },
-            { key: 'response', label: '👁️ Reattività', icon: '👁️' },
-            { key: 'balance', label: '⚖️ Equilibrio', icon: '⚖️' },
-            { key: 'aggression', label: '😤 Aggressività', icon: '😤' },
-            { key: 'mentality', label: '🧠 Mentalità', icon: '🧠' },
-            { key: 'teamwork', label: '🤝 Gioco Squadra', icon: '🤝' },
-            { key: 'gk', label: '🧤 Parata', icon: '🧤' }
+        const skillGroups = [
+            { name: '⚡ Velocità', skills: [
+                { key: 'speed', label: 'Velocità' },
+                { key: 'acceleration', label: 'Accelerazione' },
+                { key: 'agility', label: 'Agilità' }
+            ]},
+            { name: '🎨 Tecnica', skills: [
+                { key: 'technique', label: 'Tecnica' },
+                { key: 'dribble', label: 'Dribbling' },
+                { key: 'dribble_speed', label: 'Vel. Dribbling' }
+            ]},
+            { name: '🎯 Attacco & Tiro', skills: [
+                { key: 'attack', label: 'Attacco' },
+                { key: 'shot', label: 'Tiro' },
+                { key: 'shot_power', label: 'Potenza Tiro' },
+                { key: 'shot_technique', label: 'Tecnica Tiro' },
+                { key: 'free_kick', label: 'Punizioni' },
+                { key: 'swerve', label: 'Effetto' }
+            ]},
+            { name: '📐 Passaggio', skills: [
+                { key: 's_pass', label: 'Pass. Corto' },
+                { key: 's_pass_spd', label: 'Vel. Pass. Corto' },
+                { key: 'l_pass', label: 'Pass. Lungo' },
+                { key: 'l_pass_spd', label: 'Vel. Pass. Lungo' }
+            ]},
+            { name: '🛡️ Difesa', skills: [
+                { key: 'defense', label: 'Difesa' },
+                { key: 'heading', label: 'Testa' },
+                { key: 'jump', label: 'Elevazione' }
+            ]},
+            { name: '💪 Fisico', skills: [
+                { key: 'stamina', label: 'Resistenza' },
+                { key: 'balance', label: 'Equilibrio' },
+                { key: 'response', label: 'Reattività' },
+                { key: 'condition', label: 'Condizione' }
+            ]},
+            { name: '🧠 Mente', skills: [
+                { key: 'aggression', label: 'Aggressività' },
+                { key: 'mentality', label: 'Mentalità' },
+                { key: 'teamwork', label: 'Gioco Squadra' },
+                { key: 'consistency', label: 'Costanza' }
+            ]},
+            { name: '🧤 Portiere', skills: [
+                { key: 'gk', label: 'Parata' }
+            ]}
         ];
+        // Flat list for backward compat
+        const skillDefs = skillGroups.flatMap(g => g.skills.map(s => ({ ...s, group: g.name })));
+        
+        function toggleSkillGroup(idx) {
+            var group = skillGroups[idx];
+            // Select first skill in group (or keep current if already in this group)
+            var alreadyInGroup = group.skills.some(function(s) { return s.key === currentSkill; });
+            if (!alreadyInGroup) {
+                currentSkill = group.skills[0].key;
+            }
+            renderSkillRankings();
+        }
         
         function setSkill(skill) {
             currentSkill = skill;
@@ -747,11 +828,58 @@
             var filterDiv = document.getElementById('skill-filter');
             var content = document.getElementById('skill-rankings-content');
             
-            // Render skill buttons
-            var filterHtml = '';
-            skillDefs.forEach(function(s) {
-                filterHtml += '<button class="league-btn' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')" style="min-width:70px;padding:8px 10px;">' + s.icon + '<br><span style="font-size:0.5em;color:#fff;line-height:1.2;">' + s.label.replace(/^[^\s]+ /, '') + '</span></button>';
+            // Render macro-area buttons
+            var filterHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px;">';
+            var activeGroupIdx = 0;
+            skillGroups.forEach(function(group, idx) {
+                var isActive = group.skills.some(function(s) { return s.key === currentSkill; });
+                if (isActive) activeGroupIdx = idx;
+                filterHtml += '<button class="skill-macro' + (isActive ? ' active' : '') + '" onclick="toggleSkillGroup(' + idx + ')">' + group.name + '</button>';
             });
+            filterHtml += '</div>';
+            // Sub-pills for active group
+            filterHtml += '<div id="skill-sub-pills" style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">';
+            skillGroups[activeGroupIdx].skills.forEach(function(s) {
+                filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
+            });
+            filterHtml += '</div>';
+            // Skill descriptions — how each stat affects gameplay in PES6
+            var skillDescs = {
+                'speed': 'Velocità massima in campo aperto. Determina chi vince gli scatti lunghi e le corse sulla fascia. Fondamentale per ali e terzini.',
+                'acceleration': 'Quanto velocemente il giocatore raggiunge la velocità massima. Decisiva nei primi metri, nei cambi di direzione e negli scatti brevi.',
+                'agility': 'Capacità di cambiare direzione rapidamente senza perdere velocità. Influenza la reattività nei movimenti laterali e le finte.',
+                'technique': 'Qualità del primo tocco e controllo palla. Con valori alti il giocatore gestisce palloni difficili senza perdere il possesso.',
+                'dribble': 'Precisione nel dribbling e capacità di superare l\'avversario in 1v1. Valori alti = tocco ravvicinato e finte più efficaci.',
+                'dribble_speed': 'Velocità di corsa mentre si conduce la palla. La differenza tra speed e dribble speed determina quanto il giocatore rallenta col pallone.',
+                'attack': 'Intelligenza offensiva: posizionamento in area, tagli, smarcamenti. Valori alti = il giocatore trova spazi e si propone per il gol.',
+                'shot': 'Precisione del tiro. Determina quanto il pallone va dove il giocatore mira. Fondamentale per attaccanti e trequartisti.',
+                'shot_power': 'Potenza del tiro. Tiri più forti sono più difficili da parare, ma con poca precisione finiscono fuori.',
+                'shot_technique': 'Capacità di calciare in situazioni scomode: al volo, in torsione, in rovesciata. Valori alti = gol spettacolari.',
+                'free_kick': 'Precisione sui calci piazzati: punizioni dirette e calci d\'angolo. Combinata con Effetto determina la traiettoria.',
+                'swerve': 'Effetto impresso al pallone. Influenza curve di tiri, cross e passaggi. Valori alti = traiettorie a banana e punizioni ad effetto.',
+                's_pass': 'Precisione del passaggio corto. Base del gioco di costruzione — valori alti significano meno passaggi sbagliati.',
+                's_pass_spd': 'Velocità del passaggio corto. Passaggi più rapidi sono più difficili da intercettare ma richiedono un buon primo tocco del ricevente.',
+                'l_pass': 'Precisione del passaggio lungo e dei lanci. Fondamentale per cambi di gioco, lanci in profondità e assist dalle retrovie.',
+                'l_pass_spd': 'Velocità del passaggio lungo. Lanci più tesi arrivano prima ma sono più difficili da controllare.',
+                'defense': 'Capacità difensiva: tackle, posizionamento, lettura del gioco. Per i portieri indica le uscite e il comando dell\'area.',
+                'heading': 'Potenza e precisione nel gioco aereo. Influenza colpi di testa in attacco e difesa. Va combinata con Jump.',
+                'jump': 'Elevazione nei contrasti aerei. Determina quanto in alto il giocatore arriva — combinata con Heading per vincere i duelli.',
+                'stamina': 'Resistenza fisica durante la partita. Valori bassi = il giocatore cala nel secondo tempo, perde velocità e precisione.',
+                'balance': 'Equilibrio e forza nei contrasti. Resistenza alle spallate e capacità di restare in piedi sotto pressione.',
+                'response': 'Reattività e prontezza di riflessi. Per i portieri è cruciale sulle parate ravvicinate. Per gli altri influenza i contrasti.',
+                'condition': 'Variabilità della forma fisica tra le partite. Valori alti = prestazioni costanti; bassi = può avere giornate no.',
+                'aggression': 'Intensità nei contrasti e pressione sull\'avversario. Valori alti = pressing aggressivo ma più rischio di falli.',
+                'mentality': 'Concentrazione e costanza durante la partita. Influenza le decisioni nei momenti chiave e la tenuta mentale.',
+                'teamwork': 'Capacità di giocare per la squadra: coperture, movimenti senza palla, rispetto del ruolo tattico.',
+                'consistency': 'Affidabilità generale. Valori alti = prestazioni stabili partita dopo partita. Bassi = giocatore "lunatico".',
+                'gk': 'Abilità di parata del portiere. Determina la qualità degli interventi: tuffi, prese, deviazioni. La stat principale per i GK.'
+            };
+            
+            var desc = skillDescs[currentSkill] || '';
+            if (desc) {
+                filterHtml += '<div style="text-align:center;font-size:0.75em;color:#999;max-width:500px;margin:0 auto 12px;line-height:1.5;font-style:italic;">' + desc + '</div>';
+            }
+            
             filterDiv.innerHTML = filterHtml;
             
             // Get all players from data.json
@@ -767,7 +895,7 @@
             var top = sorted.slice(0, 10);
             
             var html = '<div style="max-width:600px;margin:0 auto;">';
-            html += '<h3 style="text-align:center;margin-bottom:16px;">' + skillInfo.label + ' — Top 10</h3>';
+            // Title removed — already shown in tab button
             
             top.forEach(function(p, idx) {
                 var medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '<span style="color:#888;">' + (idx+1) + '.</span>';
@@ -813,11 +941,11 @@
 
             // Render filter buttons
             var leagueOrder = ['england', 'italy', 'netherlands', 'spain'];
-            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')" style="min-width:60px;">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
                 var l = leagues[lg];
                 if (!l) return;
-                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')" style="min-width:60px;">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
+                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
             filterDiv.innerHTML = filterHtml;
 
@@ -868,7 +996,8 @@
                 // Team info
                 html += '<div style="flex:1;">';
                 html += '<div style="font-size:1.2em;font-weight:bold;">' + team.title + '</div>';
-                html += '<div style="font-size:0.85em;color:#999;margin-top:2px;">' + team.subtitle + '</div>';
+                var coachName = team.subtitle.split(',').slice(1).join(',').trim();
+                html += '<div style="font-size:0.85em;color:#999;margin-top:2px;">' + team.subtitle.split(',')[0].trim() + (coachName ? ' • All. ' + coachName : '') + '</div>';
                 html += '<div style="font-size:0.8em;color:#777;margin-top:4px;">' + team.roster.length + ' giocatori • ⭐ ' + team.bestPlayer.name + ' (' + team.bestPlayer.ovr + ')' + (team.captain ? ' • <span style="color:#777;">Ⓒ ' + team.captain + '</span>' : '') + '</div>';
                 html += '</div>';
                 
@@ -887,6 +1016,39 @@
         }
         
         // Restore last section on load
+        function filterSubPos(subPos, btn) {
+            window._currentSubFilter = subPos;
+            // Update pill styles
+            document.querySelectorAll('#sub-filter-box .sub-pill').forEach(b => {
+                b.style.background = 'transparent';
+                b.style.borderColor = 'rgba(255,255,255,0.08)';
+                b.style.color = '#aaa';
+                b.classList.remove('active');
+            });
+            if (btn) {
+                btn.style.background = 'linear-gradient(135deg, #e94560, #533483)';
+                btn.style.border = 'none';
+                btn.style.color = '#fff';
+                btn.classList.add('active');
+            }
+            // Filter table rows
+            const rows = document.querySelectorAll('#pos-body tr');
+            let rank = 0;
+            rows.forEach(row => {
+                const posCell = row.querySelector('td:nth-child(4)');
+                if (!posCell) return;
+                const rowPos = posCell.textContent.trim();
+                if (!subPos || rowPos === subPos) {
+                    row.style.display = '';
+                    rank++;
+                    const rankCell = row.querySelector('td:first-child');
+                    if (rankCell) rankCell.textContent = rank;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
         function restoreSection() {
             const saved = localStorage.getItem('pes_current_section');
             if (saved && document.getElementById(saved)) {
@@ -894,8 +1056,9 @@
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.getElementById(saved).classList.add('active');
                 document.querySelectorAll('.tab').forEach(t => {
-                    if ((saved === 'positions' && t.textContent.includes('Per Ruolo')) ||
-                        (saved === 'teams' && t.textContent.includes('Squadre')) ||
+                    if ((saved === 'positions' && t.textContent.includes('Ranking Ruoli')) ||
+                        (saved === 'team-rankings' && t.textContent.includes('Ranking Squadre')) ||
+                        (saved === 'teams' && t.textContent.includes('Squadre') && !t.textContent.includes('Ranking')) ||
                         (saved === 'skill-rankings' && t.textContent.includes('Skills'))) {
                         t.classList.add('active');
                     }
@@ -906,9 +1069,9 @@
         // Tab labels for merged positions
         const posTabLabels = {
             'ALL': 'Tutti',
-            'CB': 'CB/SW',
+            'CB': 'SW/CB',
             'SB': 'SB/WB',
-            'CMF': 'CM/DM',
+            'CMF': 'DM/CM',
             'SMF': 'SMF/WF',
             'CF': 'SS/CF'
         };
@@ -925,7 +1088,7 @@
         function renderPosTabs() {
             const tabs = document.getElementById('pos-tabs');
             tabs.innerHTML = posOrder.filter(pos => pos === 'ALL' || data.by_position[pos] || posMerge[pos]).map(pos => `
-                <button class="pos-tab ${pos === currentPos ? 'active' : ''}" onclick="showPos('${pos}')">
+                <button class="pos-tab ${pos === currentPos ? 'active' : ''}" data-pos="${pos}" onclick="showPos('${pos}')">
                     <span class="pos-code">${posEmoji[pos]} ${posTabLabels[pos] || pos}</span>
                     <span class="pos-name">${posTabNames[pos] || data.pos_names[pos] || ''}</span>
                 </button>
@@ -937,7 +1100,8 @@
             currentPos = pos;
             localStorage.setItem('pes_current_pos', pos);
             document.querySelectorAll('.pos-tab').forEach(t => {
-                t.classList.toggle('active', t.textContent.includes(pos));
+                var tabPos = t.getAttribute('data-pos');
+                t.classList.toggle('active', tabPos === pos);
             });
             
             const title = document.getElementById('pos-title');
@@ -948,50 +1112,71 @@
             const formulaBox = document.getElementById('formula-box');
             const ovrFormulas = {
                 'GK': {
-                    desc: 'OVR = GK×45% + Response×25% + Jump×12% + Mentality×10% + Balance×5% + Team Work×3%',
-                    weights: [['Goal Keeping', 45], ['Response', 25], ['Jump', 12], ['Mentality', 10], ['Balance', 5], ['Team Work', 3]]
+                    desc: 'OVR = Parata×45% + Reattività×25% + Elevazione×12% + Mentalità×10% + Equilibrio×5% + Gioco Squadra×3%',
+                    weights: [['Parata', 45], ['Reattività', 25], ['Elevazione', 12], ['Mentalità', 10], ['Equilibrio', 5], ['Gioco Squadra', 3]]
                 },
                 'CB': {
-                    desc: 'OVR = Defense×20% + Heading×12% + Balance×10% + Response×10% + Jump×8% + Stamina×8% + Speed×7% + Short Pass×7% + Aggression×6% + Mentality×6% + Team Work×6%',
-                    weights: [['Defense', 20], ['Heading', 12], ['Balance', 10], ['Response', 10], ['Jump', 8], ['Stamina', 8], ['Speed', 7], ['Short Pass', 7], ['Aggression', 6], ['Mentality', 6], ['Team Work', 6]]
+                    desc: 'OVR = Difesa×20% + Testa×12% + Equilibrio×10% + Reattività×10% + Elevazione×8% + Resistenza×8% + Velocità×7% + Pass. Corto×7% + Aggressività×6% + Mentalità×6% + Gioco Squadra×6%',
+                    weights: [['Difesa', 20], ['Testa', 12], ['Equilibrio', 10], ['Reattività', 10], ['Elevazione', 8], ['Resistenza', 8], ['Velocità', 7], ['Pass. Corto', 7], ['Aggressività', 6], ['Mentalità', 6], ['Gioco Squadra', 6]]
                 },
                 'SB': {
-                    desc: 'OVR = Defense×15% + Speed×12% + Stamina×12% + Long Pass×10% + Acceleration×8% + Dribble×7% + Short Pass×7% + Balance×6% + Response×6% + Agility×5% + Mentality×6% + Team Work×6%',
-                    weights: [['Defense', 15], ['Speed', 12], ['Stamina', 12], ['Long Pass', 10], ['Acceleration', 8], ['Dribble', 7], ['Short Pass', 7], ['Balance', 6], ['Response', 6], ['Agility', 5], ['Mentality', 6], ['Team Work', 6]]
+                    desc: 'OVR = Difesa×15% + Velocità×12% + Resistenza×12% + Pass. Lungo×10% + Accelerazione×8% + Dribbling×7% + Pass. Corto×7% + Equilibrio×6% + Reattività×6% + Agilità×5% + Mentalità×6% + Gioco Squadra×6%',
+                    weights: [['Difesa', 15], ['Velocità', 12], ['Resistenza', 12], ['Pass. Lungo', 10], ['Accelerazione', 8], ['Dribbling', 7], ['Pass. Corto', 7], ['Equilibrio', 6], ['Reattività', 6], ['Agilità', 5], ['Mentalità', 6], ['Gioco Squadra', 6]]
                 },
                 'CMF': {
-                    desc: 'OVR = Short Pass×20% + Defense×18% + Long Pass×15% + Stamina×12% + Mentality×12% + Attack×8% + Dribble×8% + Response×7%',
-                    weights: [['Short Pass', 20], ['Defense', 18], ['Long Pass', 15], ['Stamina', 12], ['Mentality', 12], ['Attack', 8], ['Dribble', 8], ['Response', 7]]
+                    desc: 'OVR = Pass. Corto×20% + Difesa×18% + Pass. Lungo×15% + Resistenza×12% + Mentalità×12% + Attacco×8% + Dribbling×8% + Reattività×7%',
+                    weights: [['Pass. Corto', 20], ['Difesa', 18], ['Pass. Lungo', 15], ['Resistenza', 12], ['Mentalità', 12], ['Attacco', 8], ['Dribbling', 8], ['Reattività', 7]]
                 },
                 'SMF': {
-                    desc: 'Stessa formula di CMF — Short Pass×14% + Technique×12% + Stamina×10% + Dribble×8% + Long Pass×8% + Attack×7% + Speed×6% + Response×6% + Balance×5% + Shot×5% + Agility×5% + Mentality×5% + Team Work×9%',
-                    weights: [['Short Pass', 14], ['Technique', 12], ['Stamina', 10], ['Dribble', 8], ['Long Pass', 8], ['Attack', 7], ['Speed', 6], ['Response', 6], ['Balance', 5], ['Shot', 5], ['Agility', 5], ['Mentality', 5], ['Team Work', 9]]
+                    desc: 'OVR = Pass. Corto×14% + Tecnica×12% + Resistenza×10% + Dribbling×8% + Pass. Lungo×8% + Attacco×7% + Velocità×6% + Reattività×6% + Equilibrio×5% + Tiro×5% + Agilità×5% + Mentalità×5% + Gioco Squadra×9%',
+                    weights: [['Pass. Corto', 14], ['Tecnica', 12], ['Resistenza', 10], ['Dribbling', 8], ['Pass. Lungo', 8], ['Attacco', 7], ['Velocità', 6], ['Reattività', 6], ['Equilibrio', 5], ['Tiro', 5], ['Agilità', 5], ['Mentalità', 5], ['Gioco Squadra', 9]]
                 },
                 'AMF': {
-                    desc: 'OVR = Short Pass×14% + Technique×12% + Dribble×10% + Attack×8% + Long Pass×8% + Shot×7% + Response×6% + Agility×6% + Shot Tech×5% + Swerve×5% + Speed×5% + Mentality×5% + Stamina×9%',
-                    weights: [['Short Pass', 14], ['Technique', 12], ['Dribble', 10], ['Attack', 8], ['Long Pass', 8], ['Shot', 7], ['Response', 6], ['Agility', 6], ['Shot Tech', 5], ['Swerve', 5], ['Speed', 5], ['Mentality', 5], ['Stamina', 9]]
+                    desc: 'OVR = Pass. Corto×14% + Tecnica×12% + Dribbling×10% + Attacco×8% + Pass. Lungo×8% + Tiro×7% + Reattività×6% + Agilità×6% + Tecnica Tiro×5% + Effetto×5% + Velocità×5% + Mentalità×5% + Resistenza×9%',
+                    weights: [['Pass. Corto', 14], ['Tecnica', 12], ['Dribbling', 10], ['Attacco', 8], ['Pass. Lungo', 8], ['Tiro', 7], ['Reattività', 6], ['Agilità', 6], ['Tecnica Tiro', 5], ['Effetto', 5], ['Velocità', 5], ['Mentalità', 5], ['Resistenza', 9]]
                 },
                 'SS': {
-                    desc: 'OVR = Attack×12% + Shot×10% + Technique×10% + Dribble×8% + Short Pass×8% + Response×7% + Speed×7% + Shot Tech×6% + Agility×6% + Acceleration×5% + Heading×5% + Swerve×4% + Mentality×6% + Stamina×6%',
-                    weights: [['Attack', 12], ['Shot', 10], ['Technique', 10], ['Dribble', 8], ['Short Pass', 8], ['Response', 7], ['Speed', 7], ['Shot Tech', 6], ['Agility', 6], ['Acceleration', 5], ['Heading', 5], ['Swerve', 4], ['Mentality', 6], ['Stamina', 6]]
+                    desc: 'OVR = Attacco×12% + Tiro×10% + Tecnica×10% + Dribbling×8% + Pass. Corto×8% + Reattività×7% + Velocità×7% + Tecnica Tiro×6% + Agilità×6% + Accelerazione×5% + Testa×5% + Effetto×4% + Mentalità×6% + Resistenza×6%',
+                    weights: [['Attacco', 12], ['Tiro', 10], ['Tecnica', 10], ['Dribbling', 8], ['Pass. Corto', 8], ['Reattività', 7], ['Velocità', 7], ['Tecnica Tiro', 6], ['Agilità', 6], ['Accelerazione', 5], ['Testa', 5], ['Effetto', 4], ['Mentalità', 6], ['Resistenza', 6]]
                 },
                 'CF': {
-                    desc: 'OVR = Attack×22% + Shot×18% + Heading×10% + Dribble×10% + Speed×10% + Shot Tech×8% + Shot Power×7% + Acceleration×5% + Short Pass×5% + Jump×5%',
-                    weights: [['Attack', 22], ['Shot', 18], ['Heading', 10], ['Dribble', 10], ['Speed', 10], ['Shot Tech', 8], ['Shot Power', 7], ['Acceleration', 5], ['Short Pass', 5], ['Jump', 5]]
+                    desc: 'OVR = Attacco×22% + Tiro×18% + Testa×10% + Dribbling×10% + Velocità×10% + Tecnica Tiro×8% + Potenza Tiro×7% + Accelerazione×5% + Pass. Corto×5% + Elevazione×5%',
+                    weights: [['Attacco', 22], ['Tiro', 18], ['Testa', 10], ['Dribbling', 10], ['Velocità', 10], ['Tecnica Tiro', 8], ['Potenza Tiro', 7], ['Accelerazione', 5], ['Pass. Corto', 5], ['Elevazione', 5]]
                 }
             };
+            // Sub-position filter pills
+            const subFilterBox = document.getElementById('sub-filter-box');
+            const mergedPositions = posMerge[pos];
+            if (mergedPositions && mergedPositions.length > 1) {
+                const subPosLabels = {
+                    'CB': 'Center-Back', 'SW': 'Sweeper', 'SB': 'Side-Back', 'WB': 'Wing-Back',
+                    'DMF': 'Defensive Midfielder', 'CMF': 'Midfielder', 'SMF': 'Side Midfielder', 'WF': 'Winger',
+                    'CF': 'Striker', 'SS': 'Attacker'
+                };
+                subFilterBox.innerHTML = '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">' +
+                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid transparent;background:linear-gradient(135deg, #e94560, #533483);color:#fff;cursor:pointer;">Tutti</button>' +
+                    mergedPositions.map(sp => 
+                        '<button class="sub-pill" onclick="filterSubPos(\'' + sp + '\', this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#aaa;cursor:pointer;">' + (subPosLabels[sp] || sp) + '</button>'
+                    ).join('') + '</div>';
+                subFilterBox.dataset.parentPos = pos;
+            } else {
+                subFilterBox.innerHTML = '';
+                subFilterBox.dataset.parentPos = '';
+            }
+            window._currentSubFilter = null;
+            
             const formula = ovrFormulas[pos];
             if (formula) {
                 formulaBox.innerHTML = `
                     <details>
-                        <summary style="cursor:pointer;color:#aaa;font-size:0.85em;margin-bottom:8px;">📐 Pesi Formula OVR</summary>
+                        <summary style="cursor:pointer;color:#aaa;font-size:0.85em;margin-bottom:0;">📐 Algoritmo OVR di Ruolo</summary>
                         <div class="formula-list">
                             ${formula.weights.map(w => `<span class="formula-tag" style="opacity:${0.5 + w[1]/100}">${w[0]} <b>${w[1]}%</b></span>`).join('')}
                         </div>
                     </details>
                 `;
             } else if (pos === 'ALL') {
-                formulaBox.innerHTML = '<p style="color:#666;font-size:0.85em;font-style:italic;">Seleziona un ruolo specifico per vedere l\'algoritmo OVR</p>';
+                formulaBox.innerHTML = '';
             } else {
                 formulaBox.innerHTML = '';
             }
@@ -1302,6 +1487,22 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
+            'Cagliari': {
+                roster: [],
+                _defaultLineupNames: ['Pascolo', 'Pusceddu', 'Firicano', 'Lopez D.', 'Agostini A.', 'Conti D.', 'Nainggolan', 'Barella', 'Zola', 'Riva', 'Suazo'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                title: '🔴🔵 Cagliari',
+                subtitle: '4-3-1-2, Massimiliano Allegri',
+                captain: 'Zola',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
             'Fiorentina': {
                 roster: [],
                 _defaultLineupNames: ['Toldo', 'Ujfalusi', 'Astori', 'Marcio Santos', 'Pasqual', 'Dunga', 'Donadel', 'Rui Costa', 'Antognoni', 'Batistuta', 'Edmundo'],
@@ -1315,6 +1516,22 @@
                         '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
                         '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Brescia': {
+                roster: [],
+                _defaultLineupNames: ['Castellazzi', 'Diana', 'Adani', 'Martinez G.', 'Bonera', 'Kozminski', 'Tonali', 'Baronio', 'Schopp', 'Baggio R.', 'Hubner'],
+                defaultLineup: [],
+                slots: ['GK', 'RWB', 'CB', 'CB', 'CB', 'LWB', 'CM', 'CM', 'CM', 'AM', 'ST'],
+                title: '🔵⚪ Brescia',
+                subtitle: '5-3-1-1, Carlo Mazzone',
+                captain: 'Baggio R.',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(9, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(8, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(5, 'LWB') + renderSpot(4, 'CB') + renderSpot(2, 'CB') + renderSpot(3, 'CB') + renderSpot(1, 'RWB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             }
@@ -1398,7 +1615,7 @@
         // League/Team data
         const leagues = {
             england: {
-                name: 'Premier League',
+                name: 'Premier',
                 flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
                 teams: ['Arsenal']
             },
@@ -1408,14 +1625,14 @@
                 teams: ['Ajax', 'Feyenoord', 'PSV Eindhoven']
             },
             spain: {
-                name: 'LaLiga',
+                name: 'Liga',
                 flag: '🇪🇸',
                 teams: ['Real Madrid']
             },
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Milan']
+                teams: ['Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Milan']
             }
         };
         
@@ -1572,10 +1789,13 @@
         function renderPlayerCard(p, inLineup) {
             let classes = 'selector-player';
             if (inLineup) classes += ' in-lineup';
+            var teamCfg = getTeamConfig();
+            var isCpt = teamCfg && teamCfg.captain && p.name === teamCfg.captain;
+            var cptBadge = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
             return '<div class="' + classes + '" draggable="true" ondragstart="handleDragStart(event, ' + p.id + ')" ondragend="handleDragEnd(event)">' +
                 '<span class="nat-flag">' + p.nat + '</span>' +
                 '<span class="pos-badge">' + p.pos + '</span>' +
-                '<span class="sp-name">' + p.name + '</span>' +
+                '<span class="sp-name">' + p.name + cptBadge + '</span>' +
                 '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
                 (inLineup ? '<span class="in-xi">⚽</span>' : '') +
             '</div>';
@@ -1628,13 +1848,15 @@
                         '<span class="pname" style="opacity:0.4">Vuoto</span>' +
                     '</div>';
                 }
-                return '<div class="player-spot" data-slot="' + slotIndex + '" ' +
+                var isCaptain = cfg.captain && player.name === cfg.captain;
+                var captainBadge = isCaptain ? '<span style="color:#ffd700;font-size:0.7em;margin-left:2px;">Ⓒ</span>' : '';
+                return '<div class="player-spot' + (isCaptain ? ' captain' : '') + '" data-slot="' + slotIndex + '" ' +
                     'draggable="true" ondragstart="handleDragStart(event, ' + playerId + ')" ondragend="handleDragEnd(event)" ' +
                     'ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ' + slotIndex + ')" ' +
                     'onclick="handleSpotClick(' + slotIndex + ')">' +
                     '<span class="slot-label">' + label + '</span>' +
                     '<span class="ovr ' + getOvrClass(player.ovr) + '">' + player.ovr + '</span>' +
-                    '<span class="pname">' + player.nat + ' ' + player.name + '</span>' +
+                    '<span class="pname">' + player.nat + ' ' + player.name + captainBadge + '</span>' +
                     getTooltip(player) +
                 '</div>';
             }
@@ -1690,7 +1912,9 @@
                     rosterByRole += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
                     rosterByRole += '<span class="ovr ' + getOvrClass(p.ovr) + '" style="min-width:36px;text-align:center;">' + p.ovr + '</span>';
                     rosterByRole += '<span style="min-width:40px;color:#888;font-size:0.85em;">' + p.pos + '</span>';
-                    rosterByRole += '<span style="flex:1;">' + p.nat + ' ' + p.name + pos2Str + '</span>';
+                    var isCpt = cfg.captain && p.name === cfg.captain;
+                    var cptBdg = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
+                    rosterByRole += '<span style="flex:1;">' + p.nat + ' ' + p.name + cptBdg + pos2Str + '</span>';
                     rosterByRole += '<span style="color:#666;font-size:0.8em;">' + footIcon + '</span>';
                     rosterByRole += '</div>';
                 });
@@ -1701,11 +1925,14 @@
             var currentView = localStorage.getItem('pes_team_view_' + currentTeam) || 'formation';
             
             var viewToggle = '<div style="display:flex;justify-content:center;gap:8px;margin-bottom:15px;">' +
-                '<button onclick="setTeamView(\'formation\')" style="padding:6px 16px;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;background:' + (currentView === 'formation' ? '#4fc3f7' : '#333') + ';color:' + (currentView === 'formation' ? '#000' : '#aaa') + ';">⚽ Formazione</button>' +
-                '<button onclick="setTeamView(\'roster\')" style="padding:6px 16px;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;background:' + (currentView === 'roster' ? '#4fc3f7' : '#333') + ';color:' + (currentView === 'roster' ? '#000' : '#aaa') + ';">📋 Rosa</button>' +
+                '<button class="pos-tab' + (currentView === 'formation' ? ' active' : '') + '" onclick="setTeamView(\'formation\')" style="min-width:auto;padding:8px 16px;"><span class="pos-code">⚽ Formazione</span></button>' +
+                '<button class="pos-tab' + (currentView === 'roster' ? ' active' : '') + '" onclick="setTeamView(\'roster\')" style="min-width:auto;padding:8px 16px;"><span class="pos-code">📋 Rosa</span></button>' +
             '</div>';
             
-            var formationView = '<div class="pitch">' + cfg.pitchHtml(renderSpot) + '</div>' +
+            var formationLabel = cfg.subtitle.split(',')[0].trim();
+            var formationView = '<div class="pitch" style="position:relative;">' +
+                '<div style="position:absolute;top:8px;left:10px;font-size:0.75em;color:rgba(255,255,255,0.5);font-weight:bold;z-index:5;">' + formationLabel + '</div>' +
+                cfg.pitchHtml(renderSpot) + '</div>' +
                 '<div class="player-selector">' + selectorHtml + '</div>' +
                 '<div class="formation-actions" style="display:flex;justify-content:center;gap:10px;margin-top:15px;">' +
                     '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset Formazione</button>' +
@@ -1717,7 +1944,7 @@
             content.innerHTML = 
                 '<div class="team-display">' +
                     '<p style="text-align:center;margin-bottom:5px;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + ' OVR</span></p>' +
-                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + cfg.subtitle + (cfg.captain ? ' • Ⓒ ' + cfg.captain : '') + '</p>' +
+                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">All. ' + (cfg.subtitle.split(',').slice(1).join(',').trim() || cfg.subtitle) + '</p>' +
                     viewToggle +
                     '<div id="team-view-formation" style="display:' + (currentView === 'formation' ? 'block' : 'none') + ';">' + formationView + '</div>' +
                     '<div id="team-view-roster" style="display:' + (currentView === 'roster' ? 'block' : 'none') + ';">' + rosterView + '</div>' +
