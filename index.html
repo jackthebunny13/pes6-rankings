@@ -571,7 +571,7 @@
         .formula-box {
             background: rgba(78, 204, 163, 0.1);
             border-left: 4px solid #4ecca3;
-            padding: 15px 20px;
+            padding: 10px 20px;
             margin-bottom: 20px;
             border-radius: 0 10px 10px 0;
         }
@@ -1169,7 +1169,7 @@
             if (formula) {
                 formulaBox.innerHTML = `
                     <details>
-                        <summary style="cursor:pointer;color:#aaa;font-size:0.85em;margin-bottom:8px;">📐 Algoritmo OVR di Ruolo</summary>
+                        <summary style="cursor:pointer;color:#aaa;font-size:0.85em;margin-bottom:0;">📐 Algoritmo OVR di Ruolo</summary>
                         <div class="formula-list">
                             ${formula.weights.map(w => `<span class="formula-tag" style="opacity:${0.5 + w[1]/100}">${w[0]} <b>${w[1]}%</b></span>`).join('')}
                         </div>
