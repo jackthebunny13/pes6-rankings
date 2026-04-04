@@ -1521,15 +1521,15 @@
             },
             'Atalanta': {
                 roster: [],
-                _defaultLineupNames: ['Calderoni', 'Toloi', 'Demiral', 'Rivalta', 'Zenoni C.', 'Stromberg', 'Montolivo', 'Bellini', 'Papu Gomez', 'Caniggia', 'Ilicic'],
+                _defaultLineupNames: ['Calderoni', 'Toloi', 'Demiral', 'Rivalta', 'Zenoni C.', 'Stromberg', 'Montolivo', 'Bellini', 'Papu Gomez', 'Ilicic', 'Caniggia'],
                 defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'SS', 'SS', 'ST'],
                 title: '⚫🔵 Atalanta',
-                subtitle: '3-4-1-2, Gian Piero Gasperini',
+                subtitle: '3-4-2-1, Gian Piero Gasperini',
                 captain: 'Papu Gomez',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'SS') + renderSpot(9, 'SS') + '</div>' +
                         '<div class="pitch-row midfield">' + renderSpot(4, 'RM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'LM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
