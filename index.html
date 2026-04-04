@@ -358,6 +358,26 @@
             border-color: #4ecca3;
             background: rgba(78, 204, 163, 0.2);
         }
+        .skill-pill {
+            font-size: 0.75em;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .skill-pill:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .skill-pill.active {
+            background: rgba(78, 204, 163, 0.2);
+            border-color: #4ecca3;
+            color: #fff;
+        }
         /* Team Selector */
         #team-selector {
             display: flex;
@@ -755,7 +775,8 @@
             // Render skill buttons
             var filterHtml = '';
             skillDefs.forEach(function(s) {
-                filterHtml += '<button class="league-btn' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')" style="min-width:70px;padding:8px 10px;">' + s.icon + '<br><span style="font-size:0.5em;color:#fff;line-height:1.2;">' + s.label.replace(/^[^\s]+ /, '') + '</span></button>';
+                var shortLabel = s.label.replace(/^[^\s]+ /, '');
+                filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + shortLabel + '</button>';
             });
             filterDiv.innerHTML = filterHtml;
             
