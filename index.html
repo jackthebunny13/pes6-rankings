@@ -356,8 +356,8 @@
             background: rgba(255,255,255,0.2);
         }
         .league-btn.active {
-            border-color: #e94560;
-            background: #e94560;
+            border-color: transparent;
+            background: linear-gradient(90deg, #e94560, #533483);
         }
         .skill-macro {
             font-size: 0.8em;
@@ -375,8 +375,8 @@
             color: #fff;
         }
         .skill-macro.active {
-            background: #e94560;
-            border-color: #e94560;
+            background: linear-gradient(90deg, #e94560, #533483);
+            border-color: transparent;
             color: #fff;
         }
         .skill-pill {
@@ -395,8 +395,8 @@
             color: #fff;
         }
         .skill-pill.active {
-            background: #e94560;
-            border-color: #e94560;
+            background: linear-gradient(90deg, #e94560, #533483);
+            border-color: transparent;
             color: #fff;
         }
         /* Team Selector */
@@ -523,7 +523,7 @@
             min-width: 80px;
         }
         .pos-tab:hover { background: rgba(255,255,255,0.2); }
-        .pos-tab.active { background: #e94560; }
+        .pos-tab.active { background: linear-gradient(90deg, #e94560, #533483); }
         .pos-tab .emoji { margin-right: 5px; }
         .pos-tab .pos-code { font-weight: bold; }
         .pos-tab .pos-name { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
@@ -1023,8 +1023,8 @@
                 b.classList.remove('active');
             });
             if (btn) {
-                btn.style.background = '#e94560';
-                btn.style.borderColor = '#e94560';
+                btn.style.background = 'linear-gradient(90deg, #e94560, #533483)';
+                btn.style.borderColor = 'transparent';
                 btn.style.color = '#fff';
                 btn.classList.add('active');
             }
@@ -1150,7 +1150,7 @@
                     'CF': 'CF', 'SS': 'SS'
                 };
                 subFilterBox.innerHTML = '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">' +
-                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid #e94560;background:#e94560;color:#fff;cursor:pointer;">Tutti</button>' +
+                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid transparent;background:linear-gradient(90deg, #e94560, #533483);color:#fff;cursor:pointer;">Tutti</button>' +
                     mergedPositions.map(sp => 
                         '<button class="sub-pill" onclick="filterSubPos(\'' + sp + '\', this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#aaa;cursor:pointer;">' + (subPosLabels[sp] || sp) + '</button>'
                     ).join('') + '</div>';
