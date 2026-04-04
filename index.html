@@ -706,7 +706,7 @@
             'SB': ['SB', 'WB'],    // Terzini
             'CMF': ['DMF', 'CMF'], // Centrocampisti (merged)
             'SMF': ['SMF', 'WF'],  // Esterni
-            'CF': ['CF', 'SS']     // Attaccanti (merged)
+            'CF': ['SS', 'CF']     // Attaccanti (merged)
         };
         
         const posMergeNames = {
@@ -1147,7 +1147,7 @@
                 const subPosLabels = {
                     'CB': 'Center-Back', 'SW': 'Sweeper', 'SB': 'Side-Back', 'WB': 'Wing-Back',
                     'DMF': 'Defensive Midfielder', 'CMF': 'Midfielder', 'SMF': 'SM', 'WF': 'Wing',
-                    'CF': 'CF', 'SS': 'SS'
+                    'CF': 'Striker', 'SS': 'Attacker'
                 };
                 subFilterBox.innerHTML = '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">' +
                     '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid transparent;background:linear-gradient(90deg, #e94560, #533483);color:#fff;cursor:pointer;">Tutti</button>' +
