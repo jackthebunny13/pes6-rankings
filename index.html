@@ -381,8 +381,6 @@
         .skill-pill {
             font-size: 0.75em;
             padding: 6px 14px;
-            width: 180px;
-            text-align: center;
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px;
@@ -837,7 +835,7 @@
             });
             filterHtml += '</div>';
             // Sub-pills for active group
-            filterHtml += '<div id="skill-sub-pills" style="display:flex;flex-direction:column;gap:5px;align-items:center;margin-bottom:8px;">';
+            filterHtml += '<div id="skill-sub-pills" style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">';
             skillGroups[activeGroupIdx].skills.forEach(function(s) {
                 filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
             });
