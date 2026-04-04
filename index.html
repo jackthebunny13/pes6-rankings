@@ -1105,36 +1105,36 @@
             const formulaBox = document.getElementById('formula-box');
             const ovrFormulas = {
                 'GK': {
-                    desc: 'OVR = GK×45% + Response×25% + Jump×12% + Mentality×10% + Balance×5% + Team Work×3%',
-                    weights: [['Goal Keeping', 45], ['Response', 25], ['Jump', 12], ['Mentality', 10], ['Balance', 5], ['Team Work', 3]]
+                    desc: 'OVR = Parata×45% + Reattività×25% + Elevazione×12% + Mentalità×10% + Equilibrio×5% + Gioco Squadra×3%',
+                    weights: [['Parata', 45], ['Reattività', 25], ['Elevazione', 12], ['Mentalità', 10], ['Equilibrio', 5], ['Gioco Squadra', 3]]
                 },
                 'CB': {
-                    desc: 'OVR = Defense×20% + Heading×12% + Balance×10% + Response×10% + Jump×8% + Stamina×8% + Speed×7% + Short Pass×7% + Aggression×6% + Mentality×6% + Team Work×6%',
-                    weights: [['Defense', 20], ['Heading', 12], ['Balance', 10], ['Response', 10], ['Jump', 8], ['Stamina', 8], ['Speed', 7], ['Short Pass', 7], ['Aggression', 6], ['Mentality', 6], ['Team Work', 6]]
+                    desc: 'OVR = Difesa×20% + Testa×12% + Equilibrio×10% + Reattività×10% + Elevazione×8% + Resistenza×8% + Velocità×7% + Pass. Corto×7% + Aggressività×6% + Mentalità×6% + Gioco Squadra×6%',
+                    weights: [['Difesa', 20], ['Testa', 12], ['Equilibrio', 10], ['Reattività', 10], ['Elevazione', 8], ['Resistenza', 8], ['Velocità', 7], ['Pass. Corto', 7], ['Aggressività', 6], ['Mentalità', 6], ['Gioco Squadra', 6]]
                 },
                 'SB': {
-                    desc: 'OVR = Defense×15% + Speed×12% + Stamina×12% + Long Pass×10% + Acceleration×8% + Dribble×7% + Short Pass×7% + Balance×6% + Response×6% + Agility×5% + Mentality×6% + Team Work×6%',
-                    weights: [['Defense', 15], ['Speed', 12], ['Stamina', 12], ['Long Pass', 10], ['Acceleration', 8], ['Dribble', 7], ['Short Pass', 7], ['Balance', 6], ['Response', 6], ['Agility', 5], ['Mentality', 6], ['Team Work', 6]]
+                    desc: 'OVR = Difesa×15% + Velocità×12% + Resistenza×12% + Pass. Lungo×10% + Accelerazione×8% + Dribbling×7% + Pass. Corto×7% + Equilibrio×6% + Reattività×6% + Agilità×5% + Mentalità×6% + Gioco Squadra×6%',
+                    weights: [['Difesa', 15], ['Velocità', 12], ['Resistenza', 12], ['Pass. Lungo', 10], ['Accelerazione', 8], ['Dribbling', 7], ['Pass. Corto', 7], ['Equilibrio', 6], ['Reattività', 6], ['Agilità', 5], ['Mentalità', 6], ['Gioco Squadra', 6]]
                 },
                 'CMF': {
-                    desc: 'OVR = Short Pass×20% + Defense×18% + Long Pass×15% + Stamina×12% + Mentality×12% + Attack×8% + Dribble×8% + Response×7%',
-                    weights: [['Short Pass', 20], ['Defense', 18], ['Long Pass', 15], ['Stamina', 12], ['Mentality', 12], ['Attack', 8], ['Dribble', 8], ['Response', 7]]
+                    desc: 'OVR = Pass. Corto×20% + Difesa×18% + Pass. Lungo×15% + Resistenza×12% + Mentalità×12% + Attacco×8% + Dribbling×8% + Reattività×7%',
+                    weights: [['Pass. Corto', 20], ['Difesa', 18], ['Pass. Lungo', 15], ['Resistenza', 12], ['Mentalità', 12], ['Attacco', 8], ['Dribbling', 8], ['Reattività', 7]]
                 },
                 'SMF': {
-                    desc: 'Stessa formula di CMF — Short Pass×14% + Technique×12% + Stamina×10% + Dribble×8% + Long Pass×8% + Attack×7% + Speed×6% + Response×6% + Balance×5% + Shot×5% + Agility×5% + Mentality×5% + Team Work×9%',
-                    weights: [['Short Pass', 14], ['Technique', 12], ['Stamina', 10], ['Dribble', 8], ['Long Pass', 8], ['Attack', 7], ['Speed', 6], ['Response', 6], ['Balance', 5], ['Shot', 5], ['Agility', 5], ['Mentality', 5], ['Team Work', 9]]
+                    desc: 'OVR = Pass. Corto×14% + Tecnica×12% + Resistenza×10% + Dribbling×8% + Pass. Lungo×8% + Attacco×7% + Velocità×6% + Reattività×6% + Equilibrio×5% + Tiro×5% + Agilità×5% + Mentalità×5% + Gioco Squadra×9%',
+                    weights: [['Pass. Corto', 14], ['Tecnica', 12], ['Resistenza', 10], ['Dribbling', 8], ['Pass. Lungo', 8], ['Attacco', 7], ['Velocità', 6], ['Reattività', 6], ['Equilibrio', 5], ['Tiro', 5], ['Agilità', 5], ['Mentalità', 5], ['Gioco Squadra', 9]]
                 },
                 'AMF': {
-                    desc: 'OVR = Short Pass×14% + Technique×12% + Dribble×10% + Attack×8% + Long Pass×8% + Shot×7% + Response×6% + Agility×6% + Shot Tech×5% + Swerve×5% + Speed×5% + Mentality×5% + Stamina×9%',
-                    weights: [['Short Pass', 14], ['Technique', 12], ['Dribble', 10], ['Attack', 8], ['Long Pass', 8], ['Shot', 7], ['Response', 6], ['Agility', 6], ['Shot Tech', 5], ['Swerve', 5], ['Speed', 5], ['Mentality', 5], ['Stamina', 9]]
+                    desc: 'OVR = Pass. Corto×14% + Tecnica×12% + Dribbling×10% + Attacco×8% + Pass. Lungo×8% + Tiro×7% + Reattività×6% + Agilità×6% + Tecnica Tiro×5% + Effetto×5% + Velocità×5% + Mentalità×5% + Resistenza×9%',
+                    weights: [['Pass. Corto', 14], ['Tecnica', 12], ['Dribbling', 10], ['Attacco', 8], ['Pass. Lungo', 8], ['Tiro', 7], ['Reattività', 6], ['Agilità', 6], ['Tecnica Tiro', 5], ['Effetto', 5], ['Velocità', 5], ['Mentalità', 5], ['Resistenza', 9]]
                 },
                 'SS': {
-                    desc: 'OVR = Attack×12% + Shot×10% + Technique×10% + Dribble×8% + Short Pass×8% + Response×7% + Speed×7% + Shot Tech×6% + Agility×6% + Acceleration×5% + Heading×5% + Swerve×4% + Mentality×6% + Stamina×6%',
-                    weights: [['Attack', 12], ['Shot', 10], ['Technique', 10], ['Dribble', 8], ['Short Pass', 8], ['Response', 7], ['Speed', 7], ['Shot Tech', 6], ['Agility', 6], ['Acceleration', 5], ['Heading', 5], ['Swerve', 4], ['Mentality', 6], ['Stamina', 6]]
+                    desc: 'OVR = Attacco×12% + Tiro×10% + Tecnica×10% + Dribbling×8% + Pass. Corto×8% + Reattività×7% + Velocità×7% + Tecnica Tiro×6% + Agilità×6% + Accelerazione×5% + Testa×5% + Effetto×4% + Mentalità×6% + Resistenza×6%',
+                    weights: [['Attacco', 12], ['Tiro', 10], ['Tecnica', 10], ['Dribbling', 8], ['Pass. Corto', 8], ['Reattività', 7], ['Velocità', 7], ['Tecnica Tiro', 6], ['Agilità', 6], ['Accelerazione', 5], ['Testa', 5], ['Effetto', 4], ['Mentalità', 6], ['Resistenza', 6]]
                 },
                 'CF': {
-                    desc: 'OVR = Attack×22% + Shot×18% + Heading×10% + Dribble×10% + Speed×10% + Shot Tech×8% + Shot Power×7% + Acceleration×5% + Short Pass×5% + Jump×5%',
-                    weights: [['Attack', 22], ['Shot', 18], ['Heading', 10], ['Dribble', 10], ['Speed', 10], ['Shot Tech', 8], ['Shot Power', 7], ['Acceleration', 5], ['Short Pass', 5], ['Jump', 5]]
+                    desc: 'OVR = Attacco×22% + Tiro×18% + Testa×10% + Dribbling×10% + Velocità×10% + Tecnica Tiro×8% + Potenza Tiro×7% + Accelerazione×5% + Pass. Corto×5% + Elevazione×5%',
+                    weights: [['Attacco', 22], ['Tiro', 18], ['Testa', 10], ['Dribbling', 10], ['Velocità', 10], ['Tecnica Tiro', 8], ['Potenza Tiro', 7], ['Accelerazione', 5], ['Pass. Corto', 5], ['Elevazione', 5]]
                 }
             };
             // Sub-position filter pills
