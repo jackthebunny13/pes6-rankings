@@ -340,12 +340,16 @@
         }
         .league-btn {
             font-size: 2em;
-            padding: 10px 20px;
+            padding: 10px 12px;
             background: rgba(255,255,255,0.1);
             border: 2px solid transparent;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 80px;
+            flex: 1;
+            max-width: 120px;
+            text-align: center;
         }
         .league-btn:hover {
             background: rgba(255,255,255,0.2);
@@ -814,11 +818,11 @@
 
             // Render filter buttons
             var leagueOrder = ['england', 'italy', 'netherlands', 'spain'];
-            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')" style="min-width:60px;">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
                 var l = leagues[lg];
                 if (!l) return;
-                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')" style="min-width:60px;">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
+                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
             filterDiv.innerHTML = filterHtml;
 
