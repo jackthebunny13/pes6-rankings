@@ -679,8 +679,8 @@
         <div id="teams" class="section">
             
             <div class="league-selector">
-                <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">2/18</span></button>
                 <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">9/20</span></button>
+                <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">2/18</span></button>
                 <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.55em;color:#fff;line-height:1;">Eredivisie</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/3</span></button>
                 <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.55em;color:#fff;line-height:1;">Liga</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/14</span></button>
             </div>
@@ -940,7 +940,7 @@
             });
 
             // Render filter buttons
-            var leagueOrder = ['england', 'italy', 'netherlands', 'spain'];
+            var leagueOrder = ['italy', 'england', 'netherlands', 'spain'];
             var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
                 var l = leagues[lg];
