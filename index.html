@@ -840,6 +840,43 @@
                 filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
             });
             filterHtml += '</div>';
+            // Skill descriptions — how each stat affects gameplay in PES6
+            var skillDescs = {
+                'speed': 'Velocità massima in campo aperto. Determina chi vince gli scatti lunghi e le corse sulla fascia. Fondamentale per ali e terzini.',
+                'acceleration': 'Quanto velocemente il giocatore raggiunge la velocità massima. Decisiva nei primi metri, nei cambi di direzione e negli scatti brevi.',
+                'agility': 'Capacità di cambiare direzione rapidamente senza perdere velocità. Influenza la reattività nei movimenti laterali e le finte.',
+                'technique': 'Qualità del primo tocco e controllo palla. Con valori alti il giocatore gestisce palloni difficili senza perdere il possesso.',
+                'dribble': 'Precisione nel dribbling e capacità di superare l\'avversario in 1v1. Valori alti = tocco ravvicinato e finte più efficaci.',
+                'dribble_speed': 'Velocità di corsa mentre si conduce la palla. La differenza tra speed e dribble speed determina quanto il giocatore rallenta col pallone.',
+                'attack': 'Intelligenza offensiva: posizionamento in area, tagli, smarcamenti. Valori alti = il giocatore trova spazi e si propone per il gol.',
+                'shot': 'Precisione del tiro. Determina quanto il pallone va dove il giocatore mira. Fondamentale per attaccanti e trequartisti.',
+                'shot_power': 'Potenza del tiro. Tiri più forti sono più difficili da parare, ma con poca precisione finiscono fuori.',
+                'shot_technique': 'Capacità di calciare in situazioni scomode: al volo, in torsione, in rovesciata. Valori alti = gol spettacolari.',
+                'free_kick': 'Precisione sui calci piazzati: punizioni dirette e calci d\'angolo. Combinata con Effetto determina la traiettoria.',
+                'swerve': 'Effetto impresso al pallone. Influenza curve di tiri, cross e passaggi. Valori alti = traiettorie a banana e punizioni ad effetto.',
+                's_pass': 'Precisione del passaggio corto. Base del gioco di costruzione — valori alti significano meno passaggi sbagliati.',
+                's_pass_spd': 'Velocità del passaggio corto. Passaggi più rapidi sono più difficili da intercettare ma richiedono un buon primo tocco del ricevente.',
+                'l_pass': 'Precisione del passaggio lungo e dei lanci. Fondamentale per cambi di gioco, lanci in profondità e assist dalle retrovie.',
+                'l_pass_spd': 'Velocità del passaggio lungo. Lanci più tesi arrivano prima ma sono più difficili da controllare.',
+                'defense': 'Capacità difensiva: tackle, posizionamento, lettura del gioco. Per i portieri indica le uscite e il comando dell\'area.',
+                'heading': 'Potenza e precisione nel gioco aereo. Influenza colpi di testa in attacco e difesa. Va combinata con Jump.',
+                'jump': 'Elevazione nei contrasti aerei. Determina quanto in alto il giocatore arriva — combinata con Heading per vincere i duelli.',
+                'stamina': 'Resistenza fisica durante la partita. Valori bassi = il giocatore cala nel secondo tempo, perde velocità e precisione.',
+                'balance': 'Equilibrio e forza nei contrasti. Resistenza alle spallate e capacità di restare in piedi sotto pressione.',
+                'response': 'Reattività e prontezza di riflessi. Per i portieri è cruciale sulle parate ravvicinate. Per gli altri influenza i contrasti.',
+                'condition': 'Variabilità della forma fisica tra le partite. Valori alti = prestazioni costanti; bassi = può avere giornate no.',
+                'aggression': 'Intensità nei contrasti e pressione sull\'avversario. Valori alti = pressing aggressivo ma più rischio di falli.',
+                'mentality': 'Concentrazione e costanza durante la partita. Influenza le decisioni nei momenti chiave e la tenuta mentale.',
+                'teamwork': 'Capacità di giocare per la squadra: coperture, movimenti senza palla, rispetto del ruolo tattico.',
+                'consistency': 'Affidabilità generale. Valori alti = prestazioni stabili partita dopo partita. Bassi = giocatore "lunatico".',
+                'gk': 'Abilità di parata del portiere. Determina la qualità degli interventi: tuffi, prese, deviazioni. La stat principale per i GK.'
+            };
+            
+            var desc = skillDescs[currentSkill] || '';
+            if (desc) {
+                filterHtml += '<div style="text-align:center;font-size:0.75em;color:#999;max-width:500px;margin:0 auto 12px;line-height:1.5;font-style:italic;">' + desc + '</div>';
+            }
+            
             filterDiv.innerHTML = filterHtml;
             
             // Get all players from data.json
