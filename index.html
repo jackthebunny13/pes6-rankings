@@ -994,7 +994,8 @@
                 // Team info
                 html += '<div style="flex:1;">';
                 html += '<div style="font-size:1.2em;font-weight:bold;">' + team.title + '</div>';
-                html += '<div style="font-size:0.85em;color:#999;margin-top:2px;">' + team.subtitle + '</div>';
+                var coachName = team.subtitle.split(',').slice(1).join(',').trim();
+                html += '<div style="font-size:0.85em;color:#999;margin-top:2px;">' + team.subtitle.split(',')[0].trim() + (coachName ? ' • All. ' + coachName : '') + '</div>';
                 html += '<div style="font-size:0.8em;color:#777;margin-top:4px;">' + team.roster.length + ' giocatori • ⭐ ' + team.bestPlayer.name + ' (' + team.bestPlayer.ovr + ')' + (team.captain ? ' • <span style="color:#777;">Ⓒ ' + team.captain + '</span>' : '') + '</div>';
                 html += '</div>';
                 
