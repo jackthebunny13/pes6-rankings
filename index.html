@@ -1053,8 +1053,9 @@
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.getElementById(saved).classList.add('active');
                 document.querySelectorAll('.tab').forEach(t => {
-                    if ((saved === 'positions' && t.textContent.includes('Per Ruolo')) ||
-                        (saved === 'teams' && t.textContent.includes('Squadre')) ||
+                    if ((saved === 'positions' && t.textContent.includes('Ranking Ruoli')) ||
+                        (saved === 'team-rankings' && t.textContent.includes('Ranking Squadre')) ||
+                        (saved === 'teams' && t.textContent.includes('Squadre') && !t.textContent.includes('Ranking')) ||
                         (saved === 'skill-rankings' && t.textContent.includes('Skills'))) {
                         t.classList.add('active');
                     }
