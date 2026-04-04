@@ -599,6 +599,7 @@
         <div id="positions" class="section active">
             <div class="pos-tabs" id="pos-tabs"></div>
             <div class="pos-title" id="pos-title"></div>
+            <div id="sub-filter-box"></div>
             <div class="formula-box" id="formula-box"></div>
             <table class="ranking-table">
                 <thead>
@@ -887,6 +888,37 @@
         }
         
         // Restore last section on load
+        function filterSubPos(subPos, btn) {
+            window._currentSubFilter = subPos;
+            // Update pill styles
+            document.querySelectorAll('#sub-filter-box .sub-pill').forEach(b => {
+                b.style.background = 'transparent';
+                b.style.color = '#aaa';
+                b.classList.remove('active');
+            });
+            if (btn) {
+                btn.style.background = 'rgba(255,255,255,0.1)';
+                btn.style.color = '#fff';
+                btn.classList.add('active');
+            }
+            // Filter table rows
+            const rows = document.querySelectorAll('#pos-body tr');
+            let rank = 0;
+            rows.forEach(row => {
+                const posCell = row.querySelector('td:nth-child(4)');
+                if (!posCell) return;
+                const rowPos = posCell.textContent.trim();
+                if (!subPos || rowPos === subPos) {
+                    row.style.display = '';
+                    rank++;
+                    const rankCell = row.querySelector('td:first-child');
+                    if (rankCell) rankCell.textContent = rank;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
         function restoreSection() {
             const saved = localStorage.getItem('pes_current_section');
             if (saved && document.getElementById(saved)) {
@@ -980,6 +1012,27 @@
                     weights: [['Attack', 22], ['Shot', 18], ['Heading', 10], ['Dribble', 10], ['Speed', 10], ['Shot Tech', 8], ['Shot Power', 7], ['Acceleration', 5], ['Short Pass', 5], ['Jump', 5]]
                 }
             };
+            // Sub-position filter pills
+            const subFilterBox = document.getElementById('sub-filter-box');
+            const mergedPositions = posMerge[pos];
+            if (mergedPositions && mergedPositions.length > 1) {
+                const subPosLabels = {
+                    'CB': 'CB', 'SW': 'Sweeper', 'SB': 'SB', 'WB': 'Wing-Back',
+                    'CMF': 'CM', 'DMF': 'DM', 'SMF': 'SM', 'WF': 'Wing',
+                    'CF': 'CF', 'SS': 'SS'
+                };
+                subFilterBox.innerHTML = '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">' +
+                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;">Tutti</button>' +
+                    mergedPositions.map(sp => 
+                        '<button class="sub-pill" onclick="filterSubPos(\'' + sp + '\', this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#aaa;cursor:pointer;">' + (subPosLabels[sp] || sp) + '</button>'
+                    ).join('') + '</div>';
+                subFilterBox.dataset.parentPos = pos;
+            } else {
+                subFilterBox.innerHTML = '';
+                subFilterBox.dataset.parentPos = '';
+            }
+            window._currentSubFilter = null;
+            
             const formula = ovrFormulas[pos];
             if (formula) {
                 formulaBox.innerHTML = `
