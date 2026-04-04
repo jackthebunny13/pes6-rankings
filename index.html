@@ -1907,7 +1907,10 @@
                 '<button class="pos-tab' + (currentView === 'roster' ? ' active' : '') + '" onclick="setTeamView(\'roster\')" style="min-width:auto;padding:8px 16px;"><span class="pos-code">📋 Rosa</span></button>' +
             '</div>';
             
-            var formationView = '<div class="pitch">' + cfg.pitchHtml(renderSpot) + '</div>' +
+            var formationLabel = cfg.subtitle.split(',')[0].trim();
+            var formationView = '<div class="pitch" style="position:relative;">' +
+                '<div style="position:absolute;top:8px;left:10px;font-size:0.75em;color:rgba(255,255,255,0.5);font-weight:bold;z-index:5;">' + formationLabel + '</div>' +
+                cfg.pitchHtml(renderSpot) + '</div>' +
                 '<div class="player-selector">' + selectorHtml + '</div>' +
                 '<div class="formation-actions" style="display:flex;justify-content:center;gap:10px;margin-top:15px;">' +
                     '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset Formazione</button>' +
@@ -1919,7 +1922,7 @@
             content.innerHTML = 
                 '<div class="team-display">' +
                     '<p style="text-align:center;margin-bottom:5px;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + ' OVR</span></p>' +
-                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + cfg.subtitle + '</p>' +
+                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + (cfg.subtitle.split(',').slice(1).join(',').trim() || cfg.subtitle) + '</p>' +
                     viewToggle +
                     '<div id="team-view-formation" style="display:' + (currentView === 'formation' ? 'block' : 'none') + ';">' + formationView + '</div>' +
                     '<div id="team-view-roster" style="display:' + (currentView === 'roster' ? 'block' : 'none') + ';">' + rosterView + '</div>' +
