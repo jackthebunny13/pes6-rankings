@@ -1081,7 +1081,7 @@
         function renderPosTabs() {
             const tabs = document.getElementById('pos-tabs');
             tabs.innerHTML = posOrder.filter(pos => pos === 'ALL' || data.by_position[pos] || posMerge[pos]).map(pos => `
-                <button class="pos-tab ${pos === currentPos ? 'active' : ''}" onclick="showPos('${pos}')">
+                <button class="pos-tab ${pos === currentPos ? 'active' : ''}" data-pos="${pos}" onclick="showPos('${pos}')">
                     <span class="pos-code">${posEmoji[pos]} ${posTabLabels[pos] || pos}</span>
                     <span class="pos-name">${posTabNames[pos] || data.pos_names[pos] || ''}</span>
                 </button>
@@ -1093,7 +1093,8 @@
             currentPos = pos;
             localStorage.setItem('pes_current_pos', pos);
             document.querySelectorAll('.pos-tab').forEach(t => {
-                t.classList.toggle('active', t.textContent.includes(pos));
+                var tabPos = t.getAttribute('data-pos');
+                t.classList.toggle('active', tabPos === pos);
             });
             
             const title = document.getElementById('pos-title');
