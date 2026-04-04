@@ -737,31 +737,54 @@
         // === SKILL RANKINGS ===
         let currentSkill = 'speed';
         
-        const skillDefs = [
-            { key: 'speed', label: '⚡ Velocità', icon: '⚡' },
-            { key: 'acceleration', label: '💨 Accelerazione', icon: '💨' },
-            { key: 'dribble', label: '🎨 Dribbling', icon: '🎨' },
-            { key: 'dribble_speed', label: '🌀 Vel. Dribbling', icon: '🌀' },
-            { key: 'shot', label: '🎯 Tiro', icon: '🎯' },
-            { key: 'shot_power', label: '💥 Potenza Tiro', icon: '💥' },
-            { key: 'shot_technique', label: '🎳 Tecnica Tiro', icon: '🎳' },
-            { key: 'free_kick', label: '🥅 Punizioni', icon: '🥅' },
-            { key: 'swerve', label: '🔄 Effetto', icon: '🔄' },
-            { key: 'technique', label: '🎩 Tecnica', icon: '🎩' },
-            { key: 's_pass', label: '📐 Pass. Corto', icon: '📐' },
-            { key: 'l_pass', label: '🚀 Pass. Lungo', icon: '🚀' },
-            { key: 'defense', label: '🛡️ Difesa', icon: '🛡️' },
-            { key: 'heading', label: '🗣️ Testa', icon: '🗣️' },
-            { key: 'jump', label: '🦘 Elevazione', icon: '🦘' },
-            { key: 'stamina', label: '🫁 Resistenza', icon: '🫁' },
-            { key: 'agility', label: '🐆 Agilità', icon: '🐆' },
-            { key: 'response', label: '👁️ Reattività', icon: '👁️' },
-            { key: 'balance', label: '⚖️ Equilibrio', icon: '⚖️' },
-            { key: 'aggression', label: '😤 Aggressività', icon: '😤' },
-            { key: 'mentality', label: '🧠 Mentalità', icon: '🧠' },
-            { key: 'teamwork', label: '🤝 Gioco Squadra', icon: '🤝' },
-            { key: 'gk', label: '🧤 Parata', icon: '🧤' }
+        const skillGroups = [
+            { name: '⚡ Velocità', skills: [
+                { key: 'speed', label: 'Velocità' },
+                { key: 'acceleration', label: 'Accelerazione' },
+                { key: 'agility', label: 'Agilità' }
+            ]},
+            { name: '🎨 Tecnica', skills: [
+                { key: 'technique', label: 'Tecnica' },
+                { key: 'dribble', label: 'Dribbling' },
+                { key: 'dribble_speed', label: 'Vel. Dribbling' }
+            ]},
+            { name: '🎯 Attacco & Tiro', skills: [
+                { key: 'attack', label: 'Attacco' },
+                { key: 'shot', label: 'Tiro' },
+                { key: 'shot_power', label: 'Potenza Tiro' },
+                { key: 'shot_technique', label: 'Tecnica Tiro' },
+                { key: 'free_kick', label: 'Punizioni' },
+                { key: 'swerve', label: 'Effetto' }
+            ]},
+            { name: '📐 Passaggio', skills: [
+                { key: 's_pass', label: 'Pass. Corto' },
+                { key: 's_pass_spd', label: 'Vel. Pass. Corto' },
+                { key: 'l_pass', label: 'Pass. Lungo' },
+                { key: 'l_pass_spd', label: 'Vel. Pass. Lungo' }
+            ]},
+            { name: '🛡️ Difesa', skills: [
+                { key: 'defense', label: 'Difesa' },
+                { key: 'heading', label: 'Testa' },
+                { key: 'jump', label: 'Elevazione' }
+            ]},
+            { name: '💪 Fisico', skills: [
+                { key: 'stamina', label: 'Resistenza' },
+                { key: 'balance', label: 'Equilibrio' },
+                { key: 'response', label: 'Reattività' },
+                { key: 'condition', label: 'Condizione' }
+            ]},
+            { name: '🧠 Mente', skills: [
+                { key: 'aggression', label: 'Aggressività' },
+                { key: 'mentality', label: 'Mentalità' },
+                { key: 'teamwork', label: 'Gioco Squadra' },
+                { key: 'consistency', label: 'Costanza' }
+            ]},
+            { name: '🧤 Portiere', skills: [
+                { key: 'gk', label: 'Parata' }
+            ]}
         ];
+        // Flat list for backward compat
+        const skillDefs = skillGroups.flatMap(g => g.skills.map(s => ({ ...s, group: g.name })));
         
         function setSkill(skill) {
             currentSkill = skill;
@@ -772,11 +795,15 @@
             var filterDiv = document.getElementById('skill-filter');
             var content = document.getElementById('skill-rankings-content');
             
-            // Render skill buttons
+            // Render skill buttons grouped by macro-area
             var filterHtml = '';
-            skillDefs.forEach(function(s) {
-                var shortLabel = s.label.replace(/^[^\s]+ /, '');
-                filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + shortLabel + '</button>';
+            skillGroups.forEach(function(group) {
+                filterHtml += '<div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center;margin-bottom:6px;">';
+                filterHtml += '<span style="font-size:0.7em;color:#888;min-width:fit-content;margin-right:4px;">' + group.name + '</span>';
+                group.skills.forEach(function(s) {
+                    filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
+                });
+                filterHtml += '</div>';
             });
             filterDiv.innerHTML = filterHtml;
             
