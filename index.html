@@ -358,6 +358,26 @@
             border-color: #4ecca3;
             background: rgba(78, 204, 163, 0.2);
         }
+        .skill-macro {
+            font-size: 0.8em;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .skill-macro:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .skill-macro.active {
+            background: rgba(78, 204, 163, 0.15);
+            border-color: #4ecca3;
+            color: #fff;
+        }
         .skill-pill {
             font-size: 0.75em;
             padding: 6px 14px;
@@ -786,6 +806,16 @@
         // Flat list for backward compat
         const skillDefs = skillGroups.flatMap(g => g.skills.map(s => ({ ...s, group: g.name })));
         
+        function toggleSkillGroup(idx) {
+            var group = skillGroups[idx];
+            // Select first skill in group (or keep current if already in this group)
+            var alreadyInGroup = group.skills.some(function(s) { return s.key === currentSkill; });
+            if (!alreadyInGroup) {
+                currentSkill = group.skills[0].key;
+            }
+            renderSkillRankings();
+        }
+        
         function setSkill(skill) {
             currentSkill = skill;
             renderSkillRankings();
@@ -795,16 +825,21 @@
             var filterDiv = document.getElementById('skill-filter');
             var content = document.getElementById('skill-rankings-content');
             
-            // Render skill buttons grouped by macro-area
-            var filterHtml = '';
-            skillGroups.forEach(function(group) {
-                filterHtml += '<div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center;margin-bottom:6px;">';
-                filterHtml += '<span style="font-size:0.7em;color:#888;min-width:fit-content;margin-right:4px;">' + group.name + '</span>';
-                group.skills.forEach(function(s) {
-                    filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
-                });
-                filterHtml += '</div>';
+            // Render macro-area buttons
+            var filterHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px;">';
+            var activeGroupIdx = 0;
+            skillGroups.forEach(function(group, idx) {
+                var isActive = group.skills.some(function(s) { return s.key === currentSkill; });
+                if (isActive) activeGroupIdx = idx;
+                filterHtml += '<button class="skill-macro' + (isActive ? ' active' : '') + '" onclick="toggleSkillGroup(' + idx + ')">' + group.name + '</button>';
             });
+            filterHtml += '</div>';
+            // Sub-pills for active group
+            filterHtml += '<div id="skill-sub-pills" style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">';
+            skillGroups[activeGroupIdx].skills.forEach(function(s) {
+                filterHtml += '<button class="skill-pill' + (currentSkill === s.key ? ' active' : '') + '" onclick="setSkill(\'' + s.key + '\')">' + s.label + '</button>';
+            });
+            filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
             
             // Get all players from data.json
