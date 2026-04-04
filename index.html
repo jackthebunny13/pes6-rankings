@@ -135,6 +135,7 @@
             gap: 10px;
             margin-bottom: 15px;
         }
+        .player-spot.captain { border: 1px solid rgba(255,215,0,0.4); }
         .pitch-row.strikers { margin-top: 5px; }
         .pitch-row.cam { margin-bottom: 20px; position: relative; z-index: 1; }
         .pitch-row.cdm { margin-bottom: 20px; position: relative; z-index: 2; }
@@ -1766,10 +1767,13 @@
         function renderPlayerCard(p, inLineup) {
             let classes = 'selector-player';
             if (inLineup) classes += ' in-lineup';
+            var teamCfg = getTeamConfig();
+            var isCpt = teamCfg && teamCfg.captain && p.name === teamCfg.captain;
+            var cptBadge = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
             return '<div class="' + classes + '" draggable="true" ondragstart="handleDragStart(event, ' + p.id + ')" ondragend="handleDragEnd(event)">' +
                 '<span class="nat-flag">' + p.nat + '</span>' +
                 '<span class="pos-badge">' + p.pos + '</span>' +
-                '<span class="sp-name">' + p.name + '</span>' +
+                '<span class="sp-name">' + p.name + cptBadge + '</span>' +
                 '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
                 (inLineup ? '<span class="in-xi">⚽</span>' : '') +
             '</div>';
@@ -1822,13 +1826,15 @@
                         '<span class="pname" style="opacity:0.4">Vuoto</span>' +
                     '</div>';
                 }
-                return '<div class="player-spot" data-slot="' + slotIndex + '" ' +
+                var isCaptain = cfg.captain && player.name === cfg.captain;
+                var captainBadge = isCaptain ? '<span style="color:#ffd700;font-size:0.7em;margin-left:2px;">Ⓒ</span>' : '';
+                return '<div class="player-spot' + (isCaptain ? ' captain' : '') + '" data-slot="' + slotIndex + '" ' +
                     'draggable="true" ondragstart="handleDragStart(event, ' + playerId + ')" ondragend="handleDragEnd(event)" ' +
                     'ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ' + slotIndex + ')" ' +
                     'onclick="handleSpotClick(' + slotIndex + ')">' +
                     '<span class="slot-label">' + label + '</span>' +
                     '<span class="ovr ' + getOvrClass(player.ovr) + '">' + player.ovr + '</span>' +
-                    '<span class="pname">' + player.nat + ' ' + player.name + '</span>' +
+                    '<span class="pname">' + player.nat + ' ' + player.name + captainBadge + '</span>' +
                     getTooltip(player) +
                 '</div>';
             }
@@ -1911,7 +1917,7 @@
             content.innerHTML = 
                 '<div class="team-display">' +
                     '<p style="text-align:center;margin-bottom:5px;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + ' OVR</span></p>' +
-                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + cfg.subtitle + (cfg.captain ? ' • Ⓒ ' + cfg.captain : '') + '</p>' +
+                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">' + cfg.subtitle + '</p>' +
                     viewToggle +
                     '<div id="team-view-formation" style="display:' + (currentView === 'formation' ? 'block' : 'none') + ';">' + formationView + '</div>' +
                     '<div id="team-view-roster" style="display:' + (currentView === 'roster' ? 'block' : 'none') + ';">' + rosterView + '</div>' +
