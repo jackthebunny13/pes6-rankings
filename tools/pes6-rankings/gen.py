@@ -320,11 +320,11 @@ for p in raw:
         'Russia':'🇷🇺','Ukraine':'🇺🇦','Czech':'🇨🇿','Serbia and Montenegro':'🇷🇸',
         'Bosnia-Herzegovina':'🇧🇦','Slovenia':'🇸🇮','Slovakia':'🇸🇰','Hungary':'🇭🇺',
         'Bulgaria':'🇧🇬','Israel':'🇮🇱','South Korea':'🇰🇷','Australia':'🇦🇺',
-        'USA':'🇺🇸','Canada':'🇨🇦','Costa Rica':'🇨🇷','Honduras':'🇭🇳','Ecuador':'🇪🇨',
+        'USA':'🇺🇸','Canada':'🇨🇦','Costa Rica':'🇨🇷','Honduras':'🇭🇳','Panama':'🇵🇦','Ecuador':'🇪🇨',
         'Venezuela':'🇻🇪','Bolivia':'🇧🇴','South Africa':'🇿🇦','Egypt':'🇪🇬','Mali':'🇲🇱',
         'Guinea':'🇬🇳','DR Congo':'🇨🇩','Congo':'🇨🇬','Gabon':'🇬🇦','Togo':'🇹🇬',
         'Burkina Faso':'🇧🇫','China':'🇨🇳','Iran':'🇮🇷','Iraq':'🇮🇶','Saudi Arabia':'🇸🇦',
-        'Jamaica':'🇯🇲','Trinidad and Tobago':'🇹🇹','Albania':'🇦🇱','Georgia':'🇬🇪',
+        'Liberia':'🇱🇷','Jamaica':'🇯🇲','Trinidad and Tobago':'🇹🇹','Albania':'🇦🇱','Georgia':'🇬🇪',
         'Iceland':'🇮🇸','Luxembourg':'🇱🇺','Zambia':'🇿🇲','Zimbabwe':'🇿🇼',
     }
     nat = p.get('NATIONALITY', '')
@@ -357,8 +357,11 @@ for p in raw:
         'jump': g(p, 'JUMP'),
         'gk': g(p, 'GOAL KEEPING'),
         'technique': g(p, 'TECHNIQUE'),
+        'attack': g(p, 'ATTACK'),
         's_pass': g(p, 'SHORT PASS ACCURACY'),
+        's_pass_spd': g(p, 'SHORT PASS SPEED'),
         'l_pass': g(p, 'LONG PASS ACCURACY'),
+        'l_pass_spd': g(p, 'LONG PASS SPEED'),
         'stamina': g(p, 'STAMINA'),
         'balance': g(p, 'BALANCE'),
         'response': g(p, 'RESPONSE'),
@@ -366,6 +369,8 @@ for p in raw:
         'aggression': g(p, 'AGGRESSION'),
         'mentality': g(p, 'MENTALITY'),
         'teamwork': g(p, 'TEAM WORK'),
+        'consistency': g(p, 'CONSISTENCY'),
+        'condition': g(p, 'CONDITION / FITNESS'),
     })
 
 # By position (sorted by legacy score for differentiation)
@@ -378,14 +383,14 @@ for pos in bypos:
 # Overall top 100 (sorted by NEW OVR)
 top100 = sorted([p.copy() for p in proc], key=lambda x: x['ovr'], reverse=True)[:100]
 
-# By team (average OVR)
+# By team (average OVR) — only from SITE_TEAMS to avoid unworked teams flooding the list
 byteam_d = defaultdict(list)
 for p in proc:
     if p['team']:
         byteam_d[p['team']].append(p)
 
 # All players from WORKED site teams only (for skill rankings)
-SITE_TEAMS = {'Arsenal', 'Ajax', 'Feyenoord', 'PSV Eindhoven', 'Real Madrid', 'Inter', 'Milan', 'Juventus', 'Fiorentina', 'Genoa', 'Lazio'}
+SITE_TEAMS = {'Arsenal', 'Ajax', 'Feyenoord', 'PSV Eindhoven', 'Real Madrid', 'Inter', 'Milan', 'Juventus', 'Fiorentina', 'Genoa', 'Lazio', 'Cagliari'}
 all_site_players = sorted([p.copy() for p in proc if p['team'] in SITE_TEAMS], key=lambda x: x['ovr'], reverse=True)
 byteam = []
 for t, ps in byteam_d.items():
@@ -396,7 +401,11 @@ for t, ps in byteam_d.items():
             'avg_score': int(avg),
             'players': sorted(ps, key=lambda x: x['ovr'], reverse=True)
         })
-byteam = sorted(byteam, key=lambda x: x['avg_score'], reverse=True)[:50]
+# Ensure all SITE_TEAMS are included, then fill up to 50 with others
+site_byteam = [bt for bt in byteam if bt['team'] in SITE_TEAMS]
+other_byteam = sorted([bt for bt in byteam if bt['team'] not in SITE_TEAMS], key=lambda x: x['avg_score'], reverse=True)
+remaining = max(0, 50 - len(site_byteam))
+byteam = sorted(site_byteam + other_byteam[:remaining], key=lambda x: x['avg_score'], reverse=True)
 
 # Output
 out = {
