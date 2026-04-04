@@ -39,7 +39,7 @@
         }
         .tab:hover { background: rgba(255,255,255,0.2); }
         .tab.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
             box-shadow: 0 4px 15px rgba(233,69,96,0.4);
         }
         .content { padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -357,7 +357,7 @@
         }
         .league-btn.active {
             border-color: transparent;
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
         }
         .skill-macro {
             font-size: 0.8em;
@@ -375,7 +375,7 @@
             color: #fff;
         }
         .skill-macro.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
             border-color: transparent;
             color: #fff;
         }
@@ -395,7 +395,7 @@
             color: #fff;
         }
         .skill-pill.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
             border-color: transparent;
             color: #fff;
         }
@@ -421,7 +421,7 @@
             background: rgba(255,255,255,0.2);
         }
         .team-btn.active {
-            background: linear-gradient(90deg, #e94560, #533483);
+            background: linear-gradient(135deg, #e94560, #533483);
         }
         /* Player Tooltip */
         .player-tooltip {
@@ -523,7 +523,7 @@
             min-width: 80px;
         }
         .pos-tab:hover { background: rgba(255,255,255,0.2); }
-        .pos-tab.active { background: linear-gradient(90deg, #e94560, #533483); }
+        .pos-tab.active { background: linear-gradient(135deg, #e94560, #533483); }
         .pos-tab .emoji { margin-right: 5px; }
         .pos-tab .pos-code { font-weight: bold; }
         .pos-tab .pos-name { font-size: 0.7em; opacity: 0.8; margin-top: 2px; }
@@ -1024,7 +1024,7 @@
                 b.classList.remove('active');
             });
             if (btn) {
-                btn.style.background = 'linear-gradient(90deg, #e94560, #533483)';
+                btn.style.background = 'linear-gradient(135deg, #e94560, #533483)';
                 btn.style.borderColor = 'transparent';
                 btn.style.color = '#fff';
                 btn.classList.add('active');
@@ -1151,7 +1151,7 @@
                     'CF': 'Striker', 'SS': 'Attacker'
                 };
                 subFilterBox.innerHTML = '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">' +
-                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid transparent;background:linear-gradient(90deg, #e94560, #533483);color:#fff;cursor:pointer;">Tutti</button>' +
+                    '<button class="sub-pill active" onclick="filterSubPos(null, this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid transparent;background:linear-gradient(135deg, #e94560, #533483);color:#fff;cursor:pointer;">Tutti</button>' +
                     mergedPositions.map(sp => 
                         '<button class="sub-pill" onclick="filterSubPos(\'' + sp + '\', this)" style="font-size:0.75em;padding:4px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#aaa;cursor:pointer;">' + (subPosLabels[sp] || sp) + '</button>'
                     ).join('') + '</div>';
