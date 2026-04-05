@@ -1505,16 +1505,16 @@
             },
             'Fiorentina': {
                 roster: [],
-                _defaultLineupNames: ['Toldo', 'Ujfalusi', 'Astori', 'Marcio Santos', 'Pasqual', 'Dunga', 'Donadel', 'Rui Costa', 'Antognoni', 'Batistuta', 'Edmundo'],
+                _defaultLineupNames: ['Toldo', 'Heinrich', 'Marcio Santos', 'Rodriguez G.', 'Pasqual', 'Dunga', 'Amrabat', 'Chiesa F.', 'Rui Costa', 'Gonzalez N.', 'Batistuta'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'RM', 'AM', 'LM', 'ST'],
                 title: '🟣🟣 Fiorentina',
-                subtitle: '4-3-1-2, Cesare Prandelli',
+                subtitle: '4-2-3-1, Giovanni Trapattoni',
                 captain: 'Batistuta',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(7, 'RM') + renderSpot(8, 'AM') + renderSpot(9, 'LM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
