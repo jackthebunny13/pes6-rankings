@@ -1537,16 +1537,16 @@
             },
             'Bari': {
                 roster: [],
-                _defaultLineupNames: ['Mancini F.', 'Doudou', 'Neqrouz', 'De Rosa', 'Jarni', "D'Agostino", 'Platt', 'Andersson D.', 'Forestieri', 'Cassano', 'Tovalieri'],
+                _defaultLineupNames: ['Mancini F.', 'Doudou', 'Neqrouz', 'De Rosa', 'Jarni', 'Andersson D.', 'Platt', "D'Agostino", 'Cassano', 'Tovalieri', 'Ventola'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'RM', 'CM', 'CM', 'LM', 'SS', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
                 title: '🔴⚪ Bari',
-                subtitle: "4-4-1-1, Eugenio Fascetti",
+                subtitle: "4-3-1-2, Eugenio Fascetti",
                 captain: 'Tovalieri',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(9, 'SS') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(8, 'LM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(5, 'RM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
