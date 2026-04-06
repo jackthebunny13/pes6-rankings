@@ -1765,10 +1765,22 @@
         let currentLeague = 'italy';
         let currentTeam = 'Inter';
         
+        function syncLeagueButtons() {
+            document.querySelectorAll('#team-leagues .league-btn').forEach(function(btn) {
+                var lg = btn.getAttribute('data-league') || btn.getAttribute('onclick');
+                if (lg) {
+                    // Extract league name from onclick="selectLeague('xxx')"
+                    var m = lg.match(/selectLeague\('(\w+)'\)/);
+                    if (m) btn.setAttribute('data-league', m[1]);
+                    var dlg = btn.getAttribute('data-league');
+                    btn.classList.toggle('active', dlg === currentLeague);
+                }
+            });
+        }
+        
         function selectLeague(league) {
             currentLeague = league;
-            document.querySelectorAll('.league-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            syncLeagueButtons();
             // Switch to first team in the new league
             var firstTeam = leagues[league].teams[0];
             currentTeam = firstTeam;
@@ -1780,8 +1792,17 @@
         
         function selectTeam(team) {
             currentTeam = team;
-            document.querySelectorAll('.team-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            // Sync league to match the team
+            Object.keys(leagues).forEach(function(lg) {
+                if (leagues[lg].teams.indexOf(team) !== -1 && lg !== currentLeague) {
+                    currentLeague = lg;
+                    syncLeagueButtons();
+                    renderTeamSelector();
+                }
+            });
+            document.querySelectorAll('.team-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === team);
+            });
             localStorage.setItem('pes_current_team', team);
             renderTeams();
         }
@@ -1805,12 +1826,9 @@
                 Object.keys(leagues).forEach(function(lg) {
                     if (leagues[lg].teams.indexOf(saved) !== -1) {
                         currentLeague = lg;
-                        // Update league button active state
-                        document.querySelectorAll('.league-btn').forEach(function(btn, idx) {
-                            btn.classList.toggle('active', Object.keys(leagues)[idx] === lg);
-                        });
                     }
                 });
+                syncLeagueButtons();
             }
             renderTeamSelector();
         }
