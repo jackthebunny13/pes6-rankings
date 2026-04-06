@@ -1731,6 +1731,7 @@
             if (confirm('Ripristinare la formazione originale?')) {
                 formations[currentTeam] = [...cfg.defaultLineup];
                 saveFormation();
+                localStorage.removeItem('pes_bench_' + currentTeam);
                 renderTeams();
             }
         }
@@ -1838,11 +1839,64 @@
             const cfg = getTeamConfig();
             if (!cfg) return [];
             const startingIds = getStartingIds();
-            return cfg.roster.filter(p => !startingIds.has(p.id)).sort((a, b) => b.ovr - a.ovr);
+            var benchPlayers = cfg.roster.filter(p => !startingIds.has(p.id));
+            // Check for saved bench order
+            var savedOrder = localStorage.getItem('pes_bench_' + currentTeam);
+            if (savedOrder) {
+                try {
+                    var order = JSON.parse(savedOrder);
+                    if (Array.isArray(order)) {
+                        var idToPlayer = {};
+                        benchPlayers.forEach(function(p) { idToPlayer[p.id] = p; });
+                        var ordered = order.filter(function(id) { return idToPlayer[id]; }).map(function(id) { return idToPlayer[id]; });
+                        // Add any new bench players not in saved order
+                        benchPlayers.forEach(function(p) { if (!order.includes(p.id)) ordered.push(p); });
+                        if (ordered.length === benchPlayers.length) return ordered;
+                    }
+                } catch(e) {}
+            }
+            return benchPlayers.sort((a, b) => b.ovr - a.ovr);
+        }
+        
+        function saveBenchOrder() {
+            var bench = getBench();
+            localStorage.setItem('pes_bench_' + currentTeam, JSON.stringify(bench.map(function(p) { return p.id; })));
         }
         
         let draggedPlayerId = null;
         let selectedSlot = null;  // For click-to-swap
+        let draggedBenchIdx = null;  // For bench reorder
+        
+        function handleBenchDragStart(e, benchIdx, playerId) {
+            draggedBenchIdx = benchIdx;
+            draggedPlayerId = playerId;
+            e.dataTransfer.effectAllowed = 'move';
+            e.target.classList.add('dragging');
+        }
+        
+        function handleBenchDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+        
+        function handleBenchDrop(e, targetIdx) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            if (draggedBenchIdx === null || draggedBenchIdx === targetIdx) { draggedBenchIdx = null; return; }
+            
+            // Swap positions in bench order
+            var bench = getBench();
+            if (draggedBenchIdx < bench.length && targetIdx < bench.length) {
+                var temp = bench[draggedBenchIdx];
+                bench[draggedBenchIdx] = bench[targetIdx];
+                bench[targetIdx] = temp;
+                // Save new order
+                localStorage.setItem('pes_bench_' + currentTeam, JSON.stringify(bench.map(function(p) { return p.id; })));
+            }
+            draggedBenchIdx = null;
+            draggedPlayerId = null;
+            renderTeams();
+        }
         
         function handleDragStart(e, playerId) {
             draggedPlayerId = playerId;
@@ -1990,15 +2044,30 @@
             const panchina = bench.slice(0, 7);
             const tribuna = bench.slice(7);
             
+            function benchCard(p, benchIdx) {
+                var teamCfg = getTeamConfig();
+                var isCpt = teamCfg && teamCfg.captain && p.name === teamCfg.captain;
+                var cptBadge = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
+                var inLineup = false;
+                return '<div class="selector-player" draggable="true" data-bench-idx="' + benchIdx + '" ' +
+                    'ondragstart="handleBenchDragStart(event, ' + benchIdx + ', ' + p.id + ')" ondragend="handleDragEnd(event)" ' +
+                    'ondragover="handleBenchDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleBenchDrop(event, ' + benchIdx + ')">' +
+                    '<span class="nat-flag">' + p.nat + '</span>' +
+                    '<span class="pos-badge">' + p.pos + '</span>' +
+                    '<span class="sp-name">' + p.name + cptBadge + '</span>' +
+                    '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
+                '</div>';
+            }
+            
             let selectorHtml = '<h4>🪑 Panchina (7)</h4><div class="selector-list">';
-            panchina.forEach(function(p) {
-                selectorHtml += renderPlayerCard(p, false);
+            panchina.forEach(function(p, i) {
+                selectorHtml += benchCard(p, i);
             });
             selectorHtml += '</div>';
             if (tribuna.length > 0) {
                 selectorHtml += '<h4 style="margin-top:15px;">🏟️ Tribuna</h4><div class="selector-list tribuna">';
-                tribuna.forEach(function(p) {
-                    selectorHtml += renderPlayerCard(p, false);
+                tribuna.forEach(function(p, i) {
+                    selectorHtml += benchCard(p, 7 + i);
                 });
                 selectorHtml += '</div>';
             }
