@@ -957,6 +957,15 @@
                 var allOvrs = roster.map(function(p) { return p.ovr; });
                 var avgOvr = Math.round(allOvrs.reduce(function(a,b){return a+b;}, 0) / allOvrs.length);
                 
+                // OVR11: average of starting XI only
+                var ovr11 = 0;
+                if (cfg._defaultLineupNames && cfg._defaultLineupNames.length > 0) {
+                    var nameToOvr = {};
+                    roster.forEach(function(p) { nameToOvr[p.name] = p.ovr; });
+                    var xiOvrs = cfg._defaultLineupNames.map(function(n) { return nameToOvr[n] || 0; }).filter(function(v) { return v > 0; });
+                    if (xiOvrs.length > 0) ovr11 = Math.round(xiOvrs.reduce(function(a,b){return a+b;}, 0) / xiOvrs.length);
+                }
+                
                 // Sort all by OVR
                 var sorted = roster.slice().sort(function(a,b){return b.ovr - a.ovr;});
                 var bestPlayer = sorted[0];
@@ -969,6 +978,7 @@
                     roster: roster,
                     sorted: sorted,
                     avgOvr: avgOvr,
+                    ovr11: ovr11,
                     bestPlayer: bestPlayer,
                     flag: teamLeague[teamName] ? teamLeague[teamName].flag : '🏳️'
                 });
@@ -981,8 +991,8 @@
                 });
             }
             
-            // Sort by avg OVR
-            teamData.sort(function(a,b){ return b.avgOvr - a.avgOvr; });
+            // Sort by OVR11 first, then avgOvr as tiebreaker
+            teamData.sort(function(a,b){ return (b.ovr11 || b.avgOvr) - (a.ovr11 || a.avgOvr) || b.avgOvr - a.avgOvr; });
             
             var html = '<div style="max-width:800px;margin:0 auto;">';
             teamData.forEach(function(team, idx) {
@@ -1001,11 +1011,20 @@
                 html += '<div style="font-size:0.8em;color:#777;margin-top:4px;">' + team.roster.length + ' giocatori • ⭐ ' + team.bestPlayer.name + ' (' + team.bestPlayer.ovr + ')' + (team.captain ? ' • <span style="color:#777;">Ⓒ ' + team.captain + '</span>' : '') + '</div>';
                 html += '</div>';
                 
-                // OVR Badge
+                // OVR Badges
                 var ovrClass = team.avgOvr >= 87 ? '#e6c619' : team.avgOvr >= 83 ? '#4fc3f7' : team.avgOvr >= 79 ? '#81c784' : '#bbb';
+                var ovr11Class = team.ovr11 >= 87 ? '#e6c619' : team.ovr11 >= 83 ? '#4fc3f7' : team.ovr11 >= 79 ? '#81c784' : '#bbb';
+                html += '<div style="display:flex;gap:16px;align-items:center;">';
+                if (team.ovr11) {
+                    html += '<div style="text-align:center;">';
+                    html += '<div style="font-size:2em;font-weight:bold;color:' + ovr11Class + ';">' + team.ovr11 + '</div>';
+                    html += '<div style="font-size:0.7em;color:#999;">XI</div>';
+                    html += '</div>';
+                }
                 html += '<div style="text-align:center;">';
-                html += '<div style="font-size:2em;font-weight:bold;color:' + ovrClass + ';">' + team.avgOvr + '</div>';
-                html += '<div style="font-size:0.7em;color:#999;">OVR</div>';
+                html += '<div style="font-size:1.4em;font-weight:bold;color:' + ovrClass + ';">' + team.avgOvr + '</div>';
+                html += '<div style="font-size:0.7em;color:#999;">ROSA</div>';
+                html += '</div>';
                 html += '</div>';
                 
                 html += '</div>';
