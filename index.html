@@ -1766,14 +1766,11 @@
         let currentTeam = 'Inter';
         
         function syncLeagueButtons() {
-            document.querySelectorAll('#team-leagues .league-btn').forEach(function(btn) {
-                var lg = btn.getAttribute('data-league') || btn.getAttribute('onclick');
-                if (lg) {
-                    // Extract league name from onclick="selectLeague('xxx')"
-                    var m = lg.match(/selectLeague\('(\w+)'\)/);
-                    if (m) btn.setAttribute('data-league', m[1]);
-                    var dlg = btn.getAttribute('data-league');
-                    btn.classList.toggle('active', dlg === currentLeague);
+            document.querySelectorAll('.league-selector .league-btn').forEach(function(btn) {
+                var onclick = btn.getAttribute('onclick') || '';
+                var m = onclick.match(/selectLeague\('(\w+)'\)/);
+                if (m) {
+                    btn.classList.toggle('active', m[1] === currentLeague);
                 }
             });
         }
