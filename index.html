@@ -1585,16 +1585,15 @@
             },
             'Bologna': {
                 roster: [],
-                _defaultLineupNames: ['Skorupski', 'Medel', 'Mangone', 'Paramatti', 'Saelemaekers', 'Marocchi', 'Ferguson L.', 'Guglielminpietro', 'Diamanti', 'Palacio', 'Di Vaio'],
+                _defaultLineupNames: ['Skorupski', 'Medel', 'Mangone', 'Paramatti', 'Saelemaekers', 'Marocchi', 'Ferguson L.', 'Diamanti', 'Guglielminpietro', 'Palacio', 'Di Vaio'],
                 defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'CM', 'LM', 'ST', 'ST'],
                 title: '🔴🔵 Bologna',
                 subtitle: '3-5-2, Carlo Mazzone',
                 captain: 'Marocchi',
                 pitchHtml: function(renderSpot) {
                     return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(8, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(4, 'RM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
