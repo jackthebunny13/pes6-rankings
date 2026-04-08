@@ -1755,6 +1755,24 @@
                 renderTeams();
             }
         }
+        function getReadyTeams() {
+            try {
+                return JSON.parse(localStorage.getItem('pes_ready_teams') || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+        function isTeamReady(team) {
+            return !!getReadyTeams()[team];
+        }
+        function toggleTeamReady() {
+            var readyTeams = getReadyTeams();
+            readyTeams[currentTeam] = !readyTeams[currentTeam];
+            if (!readyTeams[currentTeam]) delete readyTeams[currentTeam];
+            localStorage.setItem('pes_ready_teams', JSON.stringify(readyTeams));
+            renderTeamSelector();
+            renderTeams();
+        }
         
         // Init formations (deferred to after leagues are declared)
         
@@ -1831,7 +1849,8 @@
             
             var breakAfter = Math.ceil(league.teams.length / 2);
             selector.innerHTML = league.teams.map(function(team, idx) {
-                var btn = '<button class="team-btn ' + (team === currentTeam ? 'active' : '') + '" onclick="selectTeam(\'' + team + '\')">' + team + '</button>';
+                var readyFlag = isTeamReady(team) ? ' <span style="color:#7dff9b;">✅</span>' : '';
+                var btn = '<button class="team-btn ' + (team === currentTeam ? 'active' : '') + '" onclick="selectTeam(\'' + team + '\')">' + team + readyFlag + '</button>';
                 if (idx === breakAfter - 1 && idx !== league.teams.length - 1) btn += '<div style="flex-basis:100%;height:0;"></div>';
                 return btn;
             }).join('');
@@ -2202,6 +2221,7 @@
                 '<div class="player-selector">' + selectorHtml + '</div>' +
                 '<div class="formation-actions" style="display:flex;justify-content:center;gap:10px;margin-top:15px;">' +
                     '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset</button>' +
+                    '<button class="action-btn" onclick="toggleTeamReady()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;background:' + (isTeamReady(currentTeam) ? '#1f7a3f' : '#2a2a2a') + ';color:#fff;">' + (isTeamReady(currentTeam) ? '✅ Squadra Pronta' : '🏁 Squadra Pronta') + '</button>' +
                 '</div>';
             
             var rosterView = '<div style="max-width:600px;margin:0 auto;">' + rosterByRole + '</div>';
