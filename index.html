@@ -679,7 +679,7 @@
         <div id="teams" class="section">
             
             <div class="league-selector">
-                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">12/20</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">13/20</span></button>
                 <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/18</span></button>
                 <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.55em;color:#fff;line-height:1;">Eredivisie</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/3</span></button>
                 <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.55em;color:#fff;line-height:1;">Liga</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/14</span></button>
@@ -1583,6 +1583,22 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
+            'Bologna': {
+                roster: [],
+                _defaultLineupNames: ['Skorupski', 'Medel', 'Mangone', 'Paramatti', 'Saelemaekers', 'Nervo', 'Ferguson L.', 'Guglielminpietro', 'Diamanti', 'Palacio', 'Di Vaio'],
+                defaultLineup: [],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'AM', 'ST', 'ST'],
+                title: '🔴🔵 Bologna',
+                subtitle: '3-4-1-2, Carlo Mazzone',
+                captain: 'Di Vaio',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
             'Brescia': {
                 roster: [],
                 _defaultLineupNames: ['Castellazzi', 'Diana', 'Adani', 'Martinez G.', 'Bonera', 'Kozminski', 'Tonali', 'Baronio', 'Schopp', 'Baggio R.', 'Hubner'],
@@ -1758,7 +1774,7 @@
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Atalanta', 'Bari', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Roma']
+                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Roma']
             }
         };
         
