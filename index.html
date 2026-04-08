@@ -2079,13 +2079,14 @@
                 var isCpt = teamCfg && teamCfg.captain && p.name === teamCfg.captain;
                 var cptBadge = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
                 var inLineup = false;
-                return '<div class="selector-player" draggable="true" data-bench-idx="' + benchIdx + '" ' +
+                return '<div class="selector-player player-spot" draggable="true" data-bench-idx="' + benchIdx + '" ' +
                     'ondragstart="handleBenchDragStart(event, ' + benchIdx + ', ' + p.id + ')" ondragend="handleDragEnd(event)" ' +
                     'ondragover="handleBenchDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleBenchDrop(event, ' + benchIdx + ')">' +
                     '<span class="nat-flag">' + p.nat + '</span>' +
                     '<span class="pos-badge">' + p.pos + '</span>' +
                     '<span class="sp-name">' + p.name + cptBadge + '</span>' +
                     '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
+                    getTooltip(p) +
                 '</div>';
             }
             
