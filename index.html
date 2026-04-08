@@ -2149,14 +2149,16 @@
                 rosterByRole += '<div style="font-weight:bold;font-size:0.95em;color:#aaa;margin-bottom:8px;">' + role.label + ' (' + players.length + ')</div>';
                 players.forEach(function(p) {
                     var pos2Str = p.pos2 && p.pos2.length > 0 ? ' <span style="color:#666;font-size:0.8em;">(' + p.pos2.join(', ') + ')</span>' : '';
-                    var footIcon = p.foot === 'L' ? '⬅️' : (p.foot === 'R' ? '➡️' : '↔️');
+                    var footText = p.foot === 'L' ? 'SX' : (p.foot === 'R' ? 'DX' : 'AMB');
+                    var footBg = p.foot === 'L' ? 'rgba(80,160,255,0.18)' : (p.foot === 'R' ? 'rgba(255,180,80,0.18)' : 'rgba(180,180,180,0.18)');
+                    var footColor = p.foot === 'L' ? '#7db7ff' : (p.foot === 'R' ? '#ffbf69' : '#d0d0d0');
                     rosterByRole += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
                     rosterByRole += '<span class="ovr ' + getOvrClass(p.ovr) + '" style="min-width:36px;text-align:center;">' + p.ovr + '</span>';
                     rosterByRole += '<span style="min-width:40px;color:#888;font-size:0.85em;">' + p.pos + '</span>';
                     var isCpt = cfg.captain && p.name === cfg.captain;
                     var cptBdg = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
                     rosterByRole += '<span style="flex:1;">' + p.nat + ' ' + p.name + cptBdg + pos2Str + '</span>';
-                    rosterByRole += '<span style="color:#666;font-size:0.8em;">' + footIcon + '</span>';
+                    rosterByRole += '<span style="min-width:42px;text-align:center;font-size:0.72em;font-weight:700;color:' + footColor + ';background:' + footBg + ';border:1px solid rgba(255,255,255,0.08);padding:3px 8px;border-radius:999px;">' + footText + '</span>';
                     rosterByRole += '</div>';
                 });
                 rosterByRole += '</div>';
