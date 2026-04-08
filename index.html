@@ -1490,15 +1490,15 @@
             },
             'Genoa': {
                 roster: [],
-                _defaultLineupNames: ['Perin', 'Collovati', 'Signorini', 'Behrami', 'Criscito', 'Rossi M.', 'Onorati', "Van't Schip", 'Skuhravy', 'Branco', 'Aguilera'],
+                _defaultLineupNames: ['Perin', 'Collovati', 'Signorini', 'Behrami', 'Rossi M.', 'Onorati', 'Branco', 'Criscito', "Van't Schip", 'Skuhravy', 'Aguilera'],
                 defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'LWB', 'ST', 'ST'],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'RW', 'ST', 'LW'],
                 title: '🔴🔵 Genoa',
-                subtitle: '3-5-2, Franco Scoglio',
+                subtitle: '3-4-3, Franco Scoglio',
                 captain: 'Signorini',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(8, 'LWB') + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
