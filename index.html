@@ -2157,7 +2157,7 @@
             if (currentRosterSort === 'ovr') {
                 rosterByRole += '<div style="margin-bottom:12px;display:flex;justify-content:flex-end;gap:8px;">';
                 rosterByRole += '<button class="pos-tab active" onclick="setRosterSort(\'ovr\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">OVR</span></button>';
-                rosterByRole += '<button class="pos-tab" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruolo</span></button>';
+                rosterByRole += '<button class="pos-tab" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruoli</span></button>';
                 rosterByRole += '</div>';
                 cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
                     rosterByRole += renderRosterRow(p);
@@ -2165,7 +2165,7 @@
             } else {
                 rosterByRole += '<div style="margin-bottom:12px;display:flex;justify-content:flex-end;gap:8px;">';
                 rosterByRole += '<button class="pos-tab" onclick="setRosterSort(\'ovr\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">OVR</span></button>';
-                rosterByRole += '<button class="pos-tab active" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruolo</span></button>';
+                rosterByRole += '<button class="pos-tab active" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruoli</span></button>';
                 rosterByRole += '</div>';
                 var grouped = {GK: [], DEF: [], MID: [], ATT: []};
                 cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
