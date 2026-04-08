@@ -2127,9 +2127,10 @@
             // Build roster views
             function renderRosterRow(p) {
                 var pos2Str = p.pos2 && p.pos2.length > 0 ? ' <span style="color:#666;font-size:0.8em;">(' + p.pos2.join(', ') + ')</span>' : '';
-                var footText = p.foot === 'L' ? 'SX' : (p.foot === 'R' ? 'DX' : 'AMB');
-                var footBg = p.foot === 'L' ? 'rgba(255,120,100,0.18)' : (p.foot === 'R' ? 'rgba(255,180,80,0.18)' : 'rgba(180,180,180,0.18)');
-                var footColor = p.foot === 'L' ? '#ff8f7a' : (p.foot === 'R' ? '#ffbf69' : '#d0d0d0');
+                var isAx = (p.weak_acc >= 7 && p.weak_freq >= 7);
+                var footText = isAx ? 'AX' : (p.foot === 'L' ? 'SX' : (p.foot === 'R' ? 'DX' : 'AMB'));
+                var footBg = isAx ? 'rgba(90,150,255,0.18)' : (p.foot === 'L' ? 'rgba(255,120,100,0.18)' : (p.foot === 'R' ? 'rgba(255,180,80,0.18)' : 'rgba(180,180,180,0.18)'));
+                var footColor = isAx ? '#7db7ff' : (p.foot === 'L' ? '#ff8f7a' : (p.foot === 'R' ? '#ffbf69' : '#d0d0d0'));
                 var isCpt = cfg.captain && p.name === cfg.captain;
                 var cptBdg = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
                 var row = '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
