@@ -231,19 +231,20 @@
         }
         .selector-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 6px;
         }
         .selector-player {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
+            gap: 5px;
+            padding: 4px 8px;
             background: rgba(255,255,255,0.08);
-            border-radius: 8px;
+            border-radius: 7px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.9em;
+            font-size: 0.82em;
+            line-height: 1.1;
         }
         .selector-player:hover {
             background: rgba(255,255,255,0.15);
@@ -261,6 +262,10 @@
         }
         .selector-player .sp-name {
             flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .selector-player .in-xi {
             font-size: 0.8em;
@@ -280,7 +285,7 @@
             background: rgba(233, 69, 96, 0.5);
         }
         .nat-flag {
-            font-size: 1.1em;
+            font-size: 1em;
         }
         /* Drag and Drop */
         .dragging {
