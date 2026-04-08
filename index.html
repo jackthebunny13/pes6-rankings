@@ -1521,16 +1521,16 @@
             },
             'Cagliari': {
                 roster: [],
-                _defaultLineupNames: ['Pascolo', 'Pusceddu', 'Firicano', 'Lopez D.', 'Agostini A.', 'Conti D.', 'Nainggolan', 'Barella', 'Zola', 'Riva', 'Suazo'],
+                _defaultLineupNames: ['Pascolo', 'Pusceddu', 'Firicano', 'Lopez D.', 'Agostini A.', 'Conti D.', 'Nainggolan', 'Zola', 'Barella', 'Riva', 'Suazo'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DMF', 'DMF', 'AM', 'RW', 'ST', 'LW'],
                 title: '🔴🔵 Cagliari',
-                subtitle: '4-3-1-2, Massimiliano Allegri',
+                subtitle: '4-2-1-3, Massimiliano Allegri',
                 captain: 'Zola',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(7, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DMF') + renderSpot(6, 'DMF') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
