@@ -1601,15 +1601,15 @@
             },
             'Lecce': {
                 roster: [],
-                _defaultLineupNames: ['Lorieri', 'Cassetti', 'Stovini', 'Tonetto', 'Moriero', 'Giacomazzi', 'Mazinho', 'Miccoli', 'Chevanton', 'Vucinic', 'Bojinov'],
+                _defaultLineupNames: ['Falcone', 'Dorgu', 'Lucioni', 'Tonetto', 'Rullo', 'Moriero', 'Giacomazzi', 'Tachtsidis', 'Chevanton', 'Miccoli', 'Vucinic'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DMF', 'CM', 'AMF', 'RW', 'LW', 'CF'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'RW', 'CM', 'CM', 'LW', 'ST', 'ST'],
                 title: '🟡🔴 Lecce',
                 subtitle: '4-3-3, Delio Rossi',
                 captain: 'Giacomazzi',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(8, 'RW') + renderSpot(10, 'CF') + renderSpot(9, 'LW') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'DMF') + renderSpot(6, 'CM') + renderSpot(7, 'AMF') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(8, 'LW') + renderSpot(9, 'ST') + renderSpot(10, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
