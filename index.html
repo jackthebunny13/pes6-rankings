@@ -231,20 +231,19 @@
         }
         .selector-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 6px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
         }
         .selector-player {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 8px;
+            gap: 6px;
+            padding: 6px 10px;
             background: rgba(255,255,255,0.08);
-            border-radius: 7px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.82em;
-            line-height: 1.1;
+            font-size: 0.9em;
         }
         .selector-player:hover {
             background: rgba(255,255,255,0.15);
@@ -262,10 +261,6 @@
         }
         .selector-player .sp-name {
             flex: 1;
-            min-width: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .selector-player .in-xi {
             font-size: 0.8em;
@@ -285,7 +280,7 @@
             background: rgba(233, 69, 96, 0.5);
         }
         .nat-flag {
-            font-size: 1em;
+            font-size: 1.1em;
         }
         /* Drag and Drop */
         .dragging {
@@ -684,7 +679,7 @@
         <div id="teams" class="section">
             
             <div class="league-selector">
-                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">13/20</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">12/20</span></button>
                 <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/18</span></button>
                 <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.55em;color:#fff;line-height:1;">Eredivisie</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/3</span></button>
                 <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.55em;color:#fff;line-height:1;">Liga</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/14</span></button>
@@ -1040,7 +1035,7 @@
                 if (team.ovr11) {
                     html += '<div style="text-align:center;">';
                     html += '<div style="font-size:2em;font-weight:bold;color:' + ovr11Class + ';">' + team.ovr11 + '</div>';
-                    html += '<div style="font-size:0.7em;color:#999;">TITOLARI</div>';
+                    html += '<div style="font-size:0.7em;color:#999;">XI</div>';
                     html += '</div>';
                 }
                 html += '</div>';
@@ -1369,12 +1364,12 @@
         const teamConfigs = {
             'Juventus': {
                 roster: [],
-                _defaultLineupNames: ['Buffon', 'Zambrotta', 'Scirea', 'Chiellini', 'Cabrini', 'Davids', 'Paulo Sousa', 'Nedved', 'Del Piero', 'Trezeguet', 'Inzaghi F.'],
+                _defaultLineupNames: ['Buffon', 'Zambrotta', 'Scirea', 'Chiellini', 'Cabrini', 'Davids', 'Paulo Sousa', 'Tardelli', 'Del Piero', 'Trezeguet', 'Nedved'],
                 defaultLineup: [],
                 slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
                 title: '⚪⚫ Juventus',
                 subtitle: '4-3-1-2, Marcello Lippi',
-                captain: 'Scirea',
+                captain: 'Del Piero',
                 pitchHtml: function(renderSpot) {
                     return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
                         '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
@@ -1495,15 +1490,15 @@
             },
             'Genoa': {
                 roster: [],
-                _defaultLineupNames: ['Perin', 'Collovati', 'Signorini', 'Behrami', 'Rossi M.', 'Onorati', 'Branco', 'Criscito', "Van't Schip", 'Skuhravy', 'Aguilera'],
+                _defaultLineupNames: ['Perin', 'Collovati', 'Signorini', 'Behrami', 'Criscito', 'Rossi M.', 'Onorati', "Van't Schip", 'Skuhravy', 'Branco', 'Aguilera'],
                 defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'RW', 'ST', 'LW'],
+                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'LWB', 'ST', 'ST'],
                 title: '🔴🔵 Genoa',
-                subtitle: '3-4-3, Franco Scoglio',
+                subtitle: '3-5-2, Franco Scoglio',
                 captain: 'Signorini',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(8, 'LWB') + renderSpot(7, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(4, 'RM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
@@ -1526,39 +1521,39 @@
             },
             'Cagliari': {
                 roster: [],
-                _defaultLineupNames: ['Pascolo', 'Pusceddu', 'Firicano', 'Lopez D.', 'Agostini A.', 'Conti D.', 'Nainggolan', 'Zola', 'Barella', 'Riva', 'Suazo'],
+                _defaultLineupNames: ['Pascolo', 'Pusceddu', 'Firicano', 'Lopez D.', 'Agostini A.', 'Conti D.', 'Nainggolan', 'Barella', 'Zola', 'Riva', 'Suazo'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DMF', 'DMF', 'AM', 'RW', 'ST', 'LW'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
                 title: '🔴🔵 Cagliari',
-                subtitle: '4-2-1-3, Massimiliano Allegri',
+                subtitle: '4-3-1-2, Massimiliano Allegri',
                 captain: 'Zola',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(7, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'DMF') + renderSpot(6, 'DMF') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
             'Fiorentina': {
                 roster: [],
-                _defaultLineupNames: ['Toldo', 'Pasqual', 'Marcio Santos', 'Rodriguez G.', 'Heinrich', 'Dunga', 'Amrabat', 'Rui Costa', 'Chiesa F.', 'Batistuta', 'Gonzalez N.'],
+                _defaultLineupNames: ['Toldo', 'Pasqual', 'Marcio Santos', 'Rodriguez G.', 'Heinrich', 'Dunga', 'Amrabat', 'Chiesa F.', 'Rui Costa', 'Gonzalez N.', 'Batistuta'],
                 defaultLineup: [],
-                slots: ['GK', 'LB', 'CB', 'CB', 'RB', 'DMF', 'DMF', 'AM', 'RW', 'ST', 'LW'],
+                slots: ['GK', 'LB', 'CB', 'CB', 'RB', 'CM', 'CM', 'RM', 'AM', 'LM', 'ST'],
                 title: '🟣🟣 Fiorentina',
-                subtitle: '4-2-1-3, Cesare Prandelli',
+                subtitle: '4-2-3-1, Cesare Prandelli',
                 captain: 'Batistuta',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(7, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'DMF') + renderSpot(6, 'DMF') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(9, 'LM') + renderSpot(8, 'AM') + renderSpot(7, 'RM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(1, 'LB') + renderSpot(2, 'CB') + renderSpot(3, 'CB') + renderSpot(4, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
             'Atalanta': {
                 roster: [],
-                _defaultLineupNames: ['Ferron', 'Toloi', 'Demiral', 'Carrera', 'Zenoni C.', 'Stromberg', 'De Roon', 'Ruggeri M.', 'Papu Gomez', 'Ilicic', 'Denis'],
+                _defaultLineupNames: ['Musso', 'Toloi', 'Demiral', 'Carrera', 'Zenoni C.', 'Stromberg', 'De Roon', 'Ruggeri', 'Papu Gomez', 'Ilicic', 'Muriel'],
                 defaultLineup: [],
                 slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'LM', 'SS', 'SS', 'ST'],
                 title: '⚫🔵 Atalanta',
@@ -1588,48 +1583,33 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
-            'Bologna': {
-                roster: [],
-                _defaultLineupNames: ['Skorupski', 'Medel', 'Mangone', 'Paramatti', 'Saelemaekers', 'Marocchi', 'Ferguson L.', 'Diamanti', 'Guly', 'Palacio', 'Di Vaio'],
-                defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'RM', 'CM', 'CM', 'CM', 'LM', 'ST', 'ST'],
-                title: '🔴🔵 Bologna',
-                subtitle: '3-5-2, Renzo Ulivieri',
-                captain: 'Marocchi',
-                pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(8, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(4, 'RM') + '</div>' +
-                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
-                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
-                }
-            },
             'Brescia': {
                 roster: [],
-                _defaultLineupNames: ['Castellazzi', 'Diana', 'Adani', 'Martinez G.', 'Bonera', 'Tonali', 'Baronio', 'Schopp', 'Baggio R.', 'Hubner', 'Caracciolo'],
+                _defaultLineupNames: ['Castellazzi', 'Diana', 'Adani', 'Martinez G.', 'Bonera', 'Kozminski', 'Tonali', 'Baronio', 'Schopp', 'Baggio R.', 'Hubner'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'RWB', 'CB', 'CB', 'CB', 'LWB', 'CM', 'CM', 'CM', 'AM', 'ST'],
                 title: '🔵⚪ Brescia',
-                subtitle: '4-3-1-2, Carlo Mazzone',
+                subtitle: '5-3-1-1, Carlo Mazzone',
                 captain: 'Baggio R.',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
-                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(9, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(8, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(5, 'LWB') + renderSpot(4, 'CB') + renderSpot(2, 'CB') + renderSpot(3, 'CB') + renderSpot(1, 'RWB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
             'Lecce': {
                 roster: [],
-                _defaultLineupNames: ['Falcone', 'Dorgu', 'Lucioni', 'Tonetto', 'Rullo', 'Moriero', 'Giacomazzi', 'Tachtsidis', 'Chevanton', 'Miccoli', 'Vucinic'],
+                _defaultLineupNames: ['Lorieri', 'Cassetti', 'Stovini', 'Tonetto', 'Moriero', 'Giacomazzi', 'Mazinho', 'Miccoli', 'Chevanton', 'Vucinic', 'Bojinov'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'RW', 'CM', 'CM', 'LW', 'ST', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DMF', 'CM', 'AMF', 'RW', 'LW', 'CF'],
                 title: '🟡🔴 Lecce',
                 subtitle: '4-3-3, Delio Rossi',
                 captain: 'Giacomazzi',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(8, 'LW') + renderSpot(9, 'ST') + renderSpot(10, 'RW') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(8, 'RW') + renderSpot(10, 'CF') + renderSpot(9, 'LW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DMF') + renderSpot(6, 'CM') + renderSpot(7, 'AMF') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
@@ -1755,24 +1735,6 @@
                 renderTeams();
             }
         }
-        function getReadyTeams() {
-            try {
-                return JSON.parse(localStorage.getItem('pes_ready_teams') || '{}');
-            } catch (e) {
-                return {};
-            }
-        }
-        function isTeamReady(team) {
-            return !!getReadyTeams()[team];
-        }
-        function toggleTeamReady() {
-            var readyTeams = getReadyTeams();
-            readyTeams[currentTeam] = !readyTeams[currentTeam];
-            if (!readyTeams[currentTeam]) delete readyTeams[currentTeam];
-            localStorage.setItem('pes_ready_teams', JSON.stringify(readyTeams));
-            renderTeamSelector();
-            renderTeams();
-        }
         
         // Init formations (deferred to after leagues are declared)
         
@@ -1796,7 +1758,7 @@
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Roma']
+                teams: ['Atalanta', 'Bari', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Roma']
             }
         };
         
@@ -1847,13 +1809,9 @@
             const league = leagues[currentLeague];
             if (!league) return;
             
-            var breakAfter = Math.ceil(league.teams.length / 2);
-            selector.innerHTML = league.teams.map(function(team, idx) {
-                var readyFlag = isTeamReady(team) ? ' <span style="color:#7dff9b;">✅</span>' : '';
-                var btn = '<button class="team-btn ' + (team === currentTeam ? 'active' : '') + '" onclick="selectTeam(\'' + team + '\')">' + team + readyFlag + '</button>';
-                if (idx === breakAfter - 1 && idx !== league.teams.length - 1) btn += '<div style="flex-basis:100%;height:0;"></div>';
-                return btn;
-            }).join('');
+            selector.innerHTML = league.teams.map(team => 
+                '<button class="team-btn ' + (team === currentTeam ? 'active' : '') + '" onclick="selectTeam(\'' + team + '\')">' + team + '</button>'
+            ).join('');
         }
         
         // Restore team on load
@@ -2106,14 +2064,13 @@
                 var isCpt = teamCfg && teamCfg.captain && p.name === teamCfg.captain;
                 var cptBadge = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
                 var inLineup = false;
-                return '<div class="selector-player player-spot" draggable="true" data-bench-idx="' + benchIdx + '" ' +
+                return '<div class="selector-player" draggable="true" data-bench-idx="' + benchIdx + '" ' +
                     'ondragstart="handleBenchDragStart(event, ' + benchIdx + ', ' + p.id + ')" ondragend="handleDragEnd(event)" ' +
                     'ondragover="handleBenchDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleBenchDrop(event, ' + benchIdx + ')">' +
                     '<span class="nat-flag">' + p.nat + '</span>' +
                     '<span class="pos-badge">' + p.pos + '</span>' +
                     '<span class="sp-name">' + p.name + cptBadge + '</span>' +
                     '<span class="ovr ' + getOvrClass(p.ovr) + '" style="font-size:0.9em;padding:2px 8px;">' + p.ovr + '</span>' +
-                    getTooltip(p) +
                 '</div>';
             }
             
@@ -2146,25 +2103,7 @@
                 if (xiCount > 0) xiOvr = Math.round(xiTotal / xiCount);
             }
             
-            // Build roster views
-            function renderRosterRow(p) {
-                var pos2Str = p.pos2 && p.pos2.length > 0 ? ' <span style="color:#666;font-size:0.8em;">(' + p.pos2.join(', ') + ')</span>' : '';
-                var isAx = (p.weak_acc >= 7 && p.weak_freq >= 7);
-                var footText = isAx ? 'AX' : (p.foot === 'L' ? 'SX' : (p.foot === 'R' ? 'DX' : 'AMB'));
-                var footBg = isAx ? 'rgba(90,150,255,0.18)' : (p.foot === 'L' ? 'rgba(255,120,100,0.18)' : (p.foot === 'R' ? 'rgba(255,180,80,0.18)' : 'rgba(180,180,180,0.18)'));
-                var footColor = isAx ? '#7db7ff' : (p.foot === 'L' ? '#ff8f7a' : (p.foot === 'R' ? '#ffbf69' : '#d0d0d0'));
-                var isCpt = cfg.captain && p.name === cfg.captain;
-                var cptBdg = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
-                var row = '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
-                row += '<span class="ovr ' + getOvrClass(p.ovr) + '" style="min-width:36px;text-align:center;">' + p.ovr + '</span>';
-                row += '<span style="min-width:40px;color:#888;font-size:0.85em;">' + p.pos + '</span>';
-                row += '<span style="flex:1;">' + p.nat + ' ' + p.name + cptBdg + pos2Str + '</span>';
-                row += '<span style="min-width:42px;text-align:center;font-size:0.72em;font-weight:700;color:' + footColor + ';background:' + footBg + ';border:1px solid rgba(255,255,255,0.08);padding:3px 8px;border-radius:999px;">' + footText + '</span>';
-                row += '</div>';
-                return row;
-            }
-            var currentView = localStorage.getItem('pes_team_view_' + currentTeam) || 'formation';
-            var currentRosterSort = localStorage.getItem('pes_roster_sort_' + currentTeam) || 'role';
+            // Build roster-by-role view
             var rosterByRole = '';
             var roleOrder = [
                 {key: 'GK', label: '🧤 Portieri'},
@@ -2177,37 +2116,33 @@
                 'DMF': 'MID', 'CMF': 'MID', 'SMF': 'MID', 'AMF': 'MID', 'WF': 'MID',
                 'SS': 'ATT', 'CF': 'ATT'
             };
-            if (currentRosterSort === 'ovr') {
-                rosterByRole += '<div style="margin-bottom:12px;display:flex;justify-content:flex-end;gap:8px;">';
-                rosterByRole += '<button class="pos-tab active" onclick="setRosterSort(\'ovr\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">OVR</span></button>';
-                rosterByRole += '<button class="pos-tab" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruoli</span></button>';
-                rosterByRole += '</div>';
-                cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
-                    rosterByRole += renderRosterRow(p);
-                });
-            } else {
-                rosterByRole += '<div style="margin-bottom:12px;display:flex;justify-content:flex-end;gap:8px;">';
-                rosterByRole += '<button class="pos-tab" onclick="setRosterSort(\'ovr\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">OVR</span></button>';
-                rosterByRole += '<button class="pos-tab active" onclick="setRosterSort(\'role\')" style="min-width:auto;padding:6px 12px;"><span class="pos-code">Ruoli</span></button>';
-                rosterByRole += '</div>';
-                var grouped = {GK: [], DEF: [], MID: [], ATT: []};
-                cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
-                    var grp = roleMap[p.pos] || 'MID';
-                    grouped[grp].push(p);
-                });
-                roleOrder.forEach(function(role) {
-                    var players = grouped[role.key];
-                    if (players.length === 0) return;
-                    rosterByRole += '<div style="margin-bottom:16px;">';
-                    rosterByRole += '<div style="font-weight:bold;font-size:0.95em;color:#aaa;margin-bottom:8px;">' + role.label + ' (' + players.length + ')</div>';
-                    players.forEach(function(p) {
-                        rosterByRole += renderRosterRow(p);
-                    });
+            var grouped = {GK: [], DEF: [], MID: [], ATT: []};
+            cfg.roster.slice().sort(function(a,b){ return b.ovr - a.ovr; }).forEach(function(p) {
+                var grp = roleMap[p.pos] || 'MID';
+                grouped[grp].push(p);
+            });
+            roleOrder.forEach(function(role) {
+                var players = grouped[role.key];
+                if (players.length === 0) return;
+                rosterByRole += '<div style="margin-bottom:16px;">';
+                rosterByRole += '<div style="font-weight:bold;font-size:0.95em;color:#aaa;margin-bottom:8px;">' + role.label + ' (' + players.length + ')</div>';
+                players.forEach(function(p) {
+                    var pos2Str = p.pos2 && p.pos2.length > 0 ? ' <span style="color:#666;font-size:0.8em;">(' + p.pos2.join(', ') + ')</span>' : '';
+                    var footIcon = p.foot === 'L' ? '⬅️' : (p.foot === 'R' ? '➡️' : '↔️');
+                    rosterByRole += '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:4px;">';
+                    rosterByRole += '<span class="ovr ' + getOvrClass(p.ovr) + '" style="min-width:36px;text-align:center;">' + p.ovr + '</span>';
+                    rosterByRole += '<span style="min-width:40px;color:#888;font-size:0.85em;">' + p.pos + '</span>';
+                    var isCpt = cfg.captain && p.name === cfg.captain;
+                    var cptBdg = isCpt ? '<span style="color:#ffd700;font-size:0.8em;margin-left:3px;">Ⓒ</span>' : '';
+                    rosterByRole += '<span style="flex:1;">' + p.nat + ' ' + p.name + cptBdg + pos2Str + '</span>';
+                    rosterByRole += '<span style="color:#666;font-size:0.8em;">' + footIcon + '</span>';
                     rosterByRole += '</div>';
                 });
-            }
+                rosterByRole += '</div>';
+            });
             
             // View toggle
+            var currentView = localStorage.getItem('pes_team_view_' + currentTeam) || 'formation';
             
             var viewToggle = '<div style="display:flex;justify-content:center;gap:8px;margin-bottom:15px;">' +
                 '<button class="pos-tab' + (currentView === 'formation' ? ' active' : '') + '" onclick="setTeamView(\'formation\')" style="min-width:auto;padding:8px 16px;"><span class="pos-code">⚽ Formazione</span></button>' +
@@ -2220,8 +2155,8 @@
                 cfg.pitchHtml(renderSpot) + '</div>' +
                 '<div class="player-selector">' + selectorHtml + '</div>' +
                 '<div class="formation-actions" style="display:flex;justify-content:center;gap:10px;margin-top:15px;">' +
-                    '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset</button>' +
-                    '<button class="action-btn" onclick="toggleTeamReady()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;background:' + (isTeamReady(currentTeam) ? '#1f7a3f' : '#2a2a2a') + ';color:#fff;">' + (isTeamReady(currentTeam) ? '✅ Squadra Pronta' : '🏁 Squadra Pronta') + '</button>' +
+                    '<button class="action-btn reset-btn" onclick="resetFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">🔄 Reset Formazione</button>' +
+                    '<button class="action-btn export-btn" onclick="exportFormation()" style="padding:8px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9em;">📋 Esporta</button>' +
                 '</div>';
             
             var rosterView = '<div style="max-width:600px;margin:0 auto;">' + rosterByRole + '</div>';
@@ -2230,9 +2165,9 @@
                 '<div class="team-display">' +
                     '<div style="display:flex;justify-content:center;gap:20px;align-items:center;margin-bottom:5px;">' +
                         '<div style="text-align:center;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + '</span><div style="font-size:0.7em;color:#999;margin-top:2px;">ROSA</div></div>' +
-                        (xiOvr ? '<div style="text-align:center;"><span class="ovr ' + getOvrClass(xiOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + xiOvr + '</span><div style="font-size:0.7em;color:#999;margin-top:2px;">TITOLARI</div></div>' : '') +
+                        (xiOvr ? '<div style="text-align:center;"><span class="ovr ' + getOvrClass(xiOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + xiOvr + '</span><div style="font-size:0.7em;color:#999;margin-top:2px;">XI</div></div>' : '') +
                     '</div>' +
-                    '<p style="text-align:center;color:#999;font-size:0.88em;line-height:1.35;padding-top:10px;margin:0 0 18px 0;">All. ' + (cfg.subtitle.split(',').slice(1).join(',').trim() || cfg.subtitle) + '</p>' +
+                    '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">All. ' + (cfg.subtitle.split(',').slice(1).join(',').trim() || cfg.subtitle) + '</p>' +
                     viewToggle +
                     '<div id="team-view-formation" style="display:' + (currentView === 'formation' ? 'block' : 'none') + ';">' + formationView + '</div>' +
                     '<div id="team-view-roster" style="display:' + (currentView === 'roster' ? 'block' : 'none') + ';">' + rosterView + '</div>' +
@@ -2240,10 +2175,6 @@
         }
         function setTeamView(view) {
             localStorage.setItem('pes_team_view_' + currentTeam, view);
-            renderTeams();
-        }
-        function setRosterSort(mode) {
-            localStorage.setItem('pes_roster_sort_' + currentTeam, mode);
             renderTeams();
         }
     </script>
