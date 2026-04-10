@@ -1361,7 +1361,27 @@
                         foot: p.foot,
                         side: p.side,
                         age: p.age,
-                        stats: { spd: p.speed, def: p.defense, tec: p.technique }
+                        stats: {
+                            spd: p.speed,
+                            acc: p.acceleration,
+                            dri: p.dribble,
+                            sht: p.shot,
+                            pas: p.s_pass,
+                            lpa: p.l_pass,
+                            def: p.defense,
+                            hea: p.heading,
+                            jmp: p.jump,
+                            gk: p.gk,
+                            tec: p.technique,
+                            att: p.attack,
+                            sta: p.stamina,
+                            bal: p.balance,
+                            res: p.response,
+                            agi: p.agility,
+                            agr: p.aggression,
+                            men: p.mentality,
+                            twk: p.teamwork
+                        }
                     };
                 });
                 teamConfigs[teamName].roster = roster;
@@ -2143,10 +2163,14 @@
             
             function getStatsHtml(p) {
                 let html = '<div class="tooltip-stats">';
-                for (let key in p.stats) {
-                    const labels = {gk:'GK',ref:'RIF',jmp:'SAL',hgt:'ALT',def:'DIF',pas:'PAS',spd:'VEL',hea:'TES',att:'ATT',sht:'TIR',dri:'DRI',acc:'ACC',tec:'TEC',sta:'RES'};
-                    html += '<span>' + (labels[key]||key) + ': ' + p.stats[key] + '</span>';
-                }
+                const labels = {gk:'GK', jmp:'SAL', def:'DIF', pas:'PAS', lpa:'LPA', spd:'VEL', hea:'TES', att:'ATT', sht:'TIR', dri:'DRI', acc:'ACC', tec:'TEC', sta:'RES', bal:'EQU', res:'REA', agi:'AGI', agr:'AGR', men:'MEN', twk:'TMW'};
+                const best = Object.entries(p.stats || {})
+                    .filter(function(entry) { return entry[1] !== undefined && entry[1] !== null && entry[1] !== ''; })
+                    .sort(function(a, b) { return Number(b[1]) - Number(a[1]); })
+                    .slice(0, 3);
+                best.forEach(function(entry) {
+                    html += '<span>' + (labels[entry[0]] || entry[0].toUpperCase()) + ': ' + entry[1] + '</span>';
+                });
                 html += '</div>';
                 return html;
             }
