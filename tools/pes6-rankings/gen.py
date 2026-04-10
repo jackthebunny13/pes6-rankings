@@ -341,6 +341,7 @@ for p in raw:
         'nat': nat_flag,
         'nat_name': nat,
         'foot': foot,
+        'side': p.get('FAVOURED SIDE', ''),
         'age': age,
         'score': legacy_score,  # Legacy for position rankings
         'speed': g(p, 'TOP SPEED'),

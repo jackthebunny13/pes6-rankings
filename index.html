@@ -764,6 +764,7 @@
 
         // === SKILL RANKINGS ===
         let currentSkill = 'speed';
+        let currentTeamRankingSort = 'roster';
         
         const skillGroups = [
             { name: '⚡ Velocità', skills: [
@@ -929,6 +930,11 @@
             renderTeamRankings();
         }
         
+        function setTeamRankingSort(mode) {
+            currentTeamRankingSort = mode || 'roster';
+            renderTeamRankings();
+        }
+
         function renderTeamRankings() {
             var container = document.getElementById('team-rankings-content');
             var filterDiv = document.getElementById('team-rankings-filter');
@@ -952,6 +958,12 @@
                 if (!l) return;
                 filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
+            filterHtml += '<div style="flex-basis:100%;height:0;"></div>';
+            filterHtml += '<div style="display:flex;gap:8px;justify-content:center;align-items:center;width:100%;margin-top:8px;">';
+            filterHtml += '<span style="font-size:0.85em;color:#999;">Ordina per:</span>';
+            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'roster' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'roster\')">📋<br><span style="font-size:0.5em;color:#fff;">Rosa</span></button>';
+            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'starters' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'starters\')">🧩<br><span style="font-size:0.5em;color:#fff;">Titolari</span></button>';
+            filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
 
             Object.keys(teamConfigs).forEach(function(teamName) {
@@ -1009,8 +1021,13 @@
                 });
             }
             
-            // Sort by avg OVR (rosa)
-            teamData.sort(function(a,b){ return b.avgOvr - a.avgOvr; });
+            // Sort by selected mode, default full roster
+            teamData.sort(function(a,b){
+                var aVal = currentTeamRankingSort === 'starters' ? (a.ovr11 || 0) : a.avgOvr;
+                var bVal = currentTeamRankingSort === 'starters' ? (b.ovr11 || 0) : b.avgOvr;
+                if (bVal !== aVal) return bVal - aVal;
+                return b.avgOvr - a.avgOvr;
+            });
             
             var html = '<div style="max-width:800px;margin:0 auto;">';
             teamData.forEach(function(team, idx) {
@@ -1342,6 +1359,7 @@
                         ovr: p.ovr,
                         nat: p.nat,
                         foot: p.foot,
+                        side: p.side,
                         age: p.age,
                         stats: { spd: p.speed, def: p.defense, tec: p.technique }
                     };
@@ -2137,10 +2155,12 @@
                 const pos2 = p.pos2 && p.pos2.length > 0 ? p.pos2.join(', ') : '-';
                 const footIcon = p.foot === 'L' ? '🦶⬅️' : (p.foot === 'R' ? '🦶➡️' : '🦶↔️');
                 const footText = p.foot === 'L' ? 'Sinistro' : (p.foot === 'R' ? 'Destro' : 'Ambidestro');
+                const sideText = p.side === 'L' ? 'Sinistra' : (p.side === 'R' ? 'Destra' : (p.side === 'B' ? 'Entrambe' : '-'));
                 return '<div class="player-tooltip">' +
                     '<div class="tooltip-header">' + p.nat + ' <strong>' + p.name + '</strong></div>' +
                     '<div class="tooltip-pos">Ruolo: <strong>' + p.pos + '</strong> | Alt: ' + pos2 + '</div>' +
                     '<div class="tooltip-foot">' + footIcon + ' Piede: <strong>' + footText + '</strong></div>' +
+                    '<div class="tooltip-foot">↔️ Lato pref.: <strong>' + sideText + '</strong></div>' +
                     getStatsHtml(p) +
                 '</div>';
             }
