@@ -1470,6 +1470,23 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
+            'Palermo': {
+                roster: [],
+                _defaultLineupNames: ['Sirigu', 'Cassani', 'Zaccardo', 'Barzagli', 'Grosso', 'Migliaccio', 'Corini', 'Bresciano', 'Pastore', 'Dybala', 'Toni'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'AM', 'AM', 'SS', 'ST'],
+                title: '🩷🖤 Palermo',
+                subtitle: '4-2-3-1, Francesco Guidolin',
+                captain: 'Corini',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row wings">' + renderSpot(8, 'AM') + renderSpot(9, 'SS') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(7, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
             'Ajax': {
                 roster: [],
                 _defaultLineupNames: ['Van der Sar', 'Krol', 'De Boer F.', 'Reiziger', 'Trabelsi', 'Neeskens', 'Suurbier', 'Overmars', 'Litmanen', 'Cruijff', 'Kluivert'],
