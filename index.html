@@ -638,7 +638,6 @@
         <h1>Project PES6</h1>
         <div style="font-size:0.65em;color:#aaa;margin-top:6px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
         <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Release Minotti 2</div>
-        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Release Minotti 2</div>
     </div>
     
     <div class="tabs">
@@ -766,7 +765,7 @@
 
         // === SKILL RANKINGS ===
         let currentSkill = 'speed';
-        let currentTeamRankingSort = 'roster';
+        let currentTeamRankingSort = 'squad';
         
         const skillGroups = [
             { name: '⚡ Velocità', skills: [
@@ -954,7 +953,8 @@
 
             // Render filter buttons
             var leagueOrder = ['italy', 'england', 'netherlands', 'spain'];
-            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            var filterHtml = '<div class="league-selector" style="justify-content:center;">';
+            filterHtml += '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
                 var l = leagues[lg];
                 if (!l) return;
@@ -963,8 +963,10 @@
             filterHtml += '<div style="flex-basis:100%;height:0;"></div>';
             filterHtml += '<div style="display:flex;gap:8px;justify-content:center;align-items:center;width:100%;margin-top:8px;">';
             filterHtml += '<span style="font-size:0.85em;color:#999;">Ordina per:</span>';
+            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'squad' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'squad\')">🏟️<br><span style="font-size:0.5em;color:#fff;">Squadra</span></button>';
             filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'roster' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'roster\')">📋<br><span style="font-size:0.5em;color:#fff;">Rosa</span></button>';
             filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'starters' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'starters\')">🧩<br><span style="font-size:0.5em;color:#fff;">Titolari</span></button>';
+            filterHtml += '</div>';
             filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
 
@@ -1025,12 +1027,12 @@
                 });
             }
             
-            // Sort by selected mode, default full roster
+            // Sort by selected mode, default squad OVR
             teamData.sort(function(a,b){
-                var aVal = currentTeamRankingSort === 'starters' ? (a.ovr11 || 0) : a.avgOvr;
-                var bVal = currentTeamRankingSort === 'starters' ? (b.ovr11 || 0) : b.avgOvr;
+                var aVal = currentTeamRankingSort === 'starters' ? (a.ovr11 || 0) : (currentTeamRankingSort === 'roster' ? a.avgOvr : a.squadOvr);
+                var bVal = currentTeamRankingSort === 'starters' ? (b.ovr11 || 0) : (currentTeamRankingSort === 'roster' ? b.avgOvr : b.squadOvr);
                 if (bVal !== aVal) return bVal - aVal;
-                return b.avgOvr - a.avgOvr;
+                return b.squadOvr - a.squadOvr;
             });
             
             var html = '<div style="max-width:800px;margin:0 auto;">';
