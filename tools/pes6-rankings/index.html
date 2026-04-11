@@ -1833,6 +1833,14 @@
                 formations[team] = [...cfg.defaultLineup];
                 return;
             }
+            if (saved.rosterFingerprint !== currentFingerprint) {
+                formations[team] = [...(cfg.defaultLineup || [])];
+                localStorage.setItem('pes_bench_' + team, JSON.stringify([]));
+                const readyTeams = getReadyTeams();
+                delete readyTeams[team];
+                localStorage.setItem('pes_ready_teams', JSON.stringify(readyTeams));
+                return;
+            }
             const validSavedLineup = Array.isArray(saved.lineup)
                 ? saved.lineup.filter(function(id) { return rosterIds.has(id); })
                 : [];
