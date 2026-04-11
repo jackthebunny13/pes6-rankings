@@ -1914,7 +1914,13 @@
             if (confirm('Ripristinare la formazione originale?')) {
                 formations[currentTeam] = [...cfg.defaultLineup];
                 localStorage.removeItem('pes_bench_' + currentTeam);
-                saveCurrentTeamState();
+                localStorage.removeItem('pes_formation_' + currentTeam);
+                const store = getTeamStateStore();
+                delete store[currentTeam];
+                saveTeamStateStore(store);
+                const readyTeams = getReadyTeams();
+                delete readyTeams[currentTeam];
+                localStorage.setItem('pes_ready_teams', JSON.stringify(readyTeams));
                 renderTeams();
             }
         }
