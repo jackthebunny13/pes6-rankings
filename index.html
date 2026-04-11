@@ -637,7 +637,7 @@
     <div class="header">
         <h1>Project PES6</h1>
         <div style="font-size:0.65em;color:#aaa;margin-top:6px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
-        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Roma 10</div>
+        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Roma 11</div>
     </div>
     
     <div class="tabs">
@@ -1351,7 +1351,10 @@
                 var players = teamDataMap[teamName];
                 if (!players) { console.warn('No data.json players for team:', teamName); return; }
                 // Sort by OVR descending, assign sequential IDs
-                var sorted = players.slice().sort(function(a, b) { return b.ovr - a.ovr; });
+                var filteredPlayers = players.filter(function(p) {
+                    return p && p.name && p.name !== '000';
+                });
+                var sorted = filteredPlayers.slice().sort(function(a, b) { return b.ovr - a.ovr; });
                 var roster = sorted.map(function(p, idx) {
                     return {
                         id: idx + 1,
@@ -1752,7 +1755,7 @@
             },
             'Roma': {
                 roster: [],
-                _defaultLineupNames: ['Doni', 'Aldair', 'Manolas !', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Panucci', 'Totti', 'Voller', 'Balbo'],
+                _defaultLineupNames: ['Doni', 'Aldair', 'Mexes', 'Panucci', 'Candela', 'Emerson', 'De Rossi', 'Conti B.', 'Totti', 'Voller', 'Balbo'],
                 defaultLineup: [],
                 slots: ['GK', 'CB', 'CB', 'CB', 'LM', 'CM', 'CM', 'RM', 'AM', 'ST', 'ST'],
                 title: '🟡🔴 Roma',
