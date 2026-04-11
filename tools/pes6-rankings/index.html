@@ -637,7 +637,7 @@
     <div class="header">
         <h1>Project PES6</h1>
         <div style="font-size:0.65em;color:#aaa;margin-top:6px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
-        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Roma 8</div>
+        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Roma 9</div>
     </div>
     
     <div class="tabs">
@@ -1503,22 +1503,6 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
-            'Roma': {
-                roster: [],
-                _defaultLineupNames: ['Doni', 'Aldair', 'Manolas !', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Panucci', 'Totti', 'Voller', 'Balbo'],
-                defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'LM', 'CM', 'CM', 'RM', 'AM', 'ST', 'ST'],
-                title: '🟡🔴 Roma',
-                subtitle: '3-4-1-2, Fabio Capello',
-                captain: 'Totti',
-                pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(4, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'RM') + '</div>' +
-                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
-                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
-                }
-            },
             'Ajax': {
                 roster: [],
                 _defaultLineupNames: ['Van der Sar', 'Krol', 'De Boer F.', 'Reiziger', 'Trabelsi', 'Neeskens', 'Suurbier', 'Overmars', 'Litmanen', 'Cruijff', 'Kluivert'],
@@ -1766,6 +1750,22 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
+            'Roma': {
+                roster: [],
+                _defaultLineupNames: ['Doni', 'Aldair', 'Manolas !', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Panucci', 'Totti', 'Voller', 'Balbo'],
+                defaultLineup: [],
+                slots: ['GK', 'CB', 'CB', 'CB', 'LM', 'CM', 'CM', 'RM', 'AM', 'ST', 'ST'],
+                title: '🟡🔴 Roma',
+                subtitle: '3-4-1-2, Fabio Capello',
+                captain: 'Totti',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(4, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'RM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            }
         };
         
         // Current formation state per team
@@ -1970,7 +1970,7 @@
                 teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma']
             }
         };
-
+        
         let currentLeague = 'italy';
         let currentTeam = 'Inter';
         
