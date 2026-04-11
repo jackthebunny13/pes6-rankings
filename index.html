@@ -973,12 +973,9 @@
                 // OVR11: average of starting XI (dynamic from saved formation or default)
                 var ovr11 = 0;
                 var activeLineup = null;
-                var savedFormation = localStorage.getItem('pes_formation_' + teamName);
-                if (savedFormation) {
-                    try {
-                        var parsed = JSON.parse(savedFormation);
-                        if (Array.isArray(parsed)) activeLineup = parsed;
-                    } catch(e) {}
+                var savedState = getSavedTeamState(teamName);
+                if (savedState && savedState.rosterFingerprint === getRosterFingerprint(teamName) && Array.isArray(savedState.lineup)) {
+                    activeLineup = savedState.lineup;
                 }
                 if (activeLineup && activeLineup.length > 0) {
                     var idToOvr = {};
