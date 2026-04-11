@@ -984,8 +984,6 @@
                 var sorted = roster.slice().sort(function(a,b){return b.ovr - a.ovr;});
                 var bestPlayer = sorted[0];
                 
-                var squadOvr = ovr11 ? Math.round((avgOvr + ovr11) / 2) : avgOvr;
-
                 teamData.push({
                     name: teamName,
                     title: cfg.title,
@@ -995,7 +993,6 @@
                     sorted: sorted,
                     avgOvr: avgOvr,
                     ovr11: ovr11,
-                    squadOvr: squadOvr,
                     bestPlayer: bestPlayer,
                     flag: teamLeague[teamName] ? teamLeague[teamName].flag : '🏳️'
                 });
@@ -1008,11 +1005,8 @@
                 });
             }
             
-            // Sort by squad OVR, then roster OVR
-            teamData.sort(function(a,b){
-                if ((b.squadOvr || 0) !== (a.squadOvr || 0)) return (b.squadOvr || 0) - (a.squadOvr || 0);
-                return b.avgOvr - a.avgOvr;
-            });
+            // Sort by avg OVR (rosa)
+            teamData.sort(function(a,b){ return b.avgOvr - a.avgOvr; });
             
             var html = '<div style="max-width:800px;margin:0 auto;">';
             teamData.forEach(function(team, idx) {
@@ -1032,26 +1026,19 @@
                 html += '</div>';
                 
                 // OVR Badges
-                var squadClass = team.squadOvr >= 87 ? '#e6c619' : team.squadOvr >= 83 ? '#4fc3f7' : team.squadOvr >= 79 ? '#81c784' : '#bbb';
                 var ovrClass = team.avgOvr >= 87 ? '#e6c619' : team.avgOvr >= 83 ? '#4fc3f7' : team.avgOvr >= 79 ? '#81c784' : '#bbb';
                 var ovr11Class = team.ovr11 >= 87 ? '#e6c619' : team.ovr11 >= 83 ? '#4fc3f7' : team.ovr11 >= 79 ? '#81c784' : '#bbb';
                 html += '<div style="display:flex;gap:16px;align-items:center;">';
-                html += '<div style="text-align:center;min-width:72px;">';
-                html += '<div style="font-size:2.5em;line-height:1;font-weight:bold;color:' + squadClass + ';">' + team.squadOvr + '</div>';
-                html += '<div style="font-size:0.76em;color:#ddd;font-weight:700;letter-spacing:0.4px;">SQUADRA</div>';
-                html += '</div>';
-                html += '<div style="display:flex;flex-direction:column;gap:8px;align-items:center;">';
                 html += '<div style="text-align:center;">';
-                html += '<div style="font-size:1.35em;font-weight:bold;color:' + ovrClass + ';">' + team.avgOvr + '</div>';
-                html += '<div style="font-size:0.68em;color:#999;">ROSA</div>';
+                html += '<div style="font-size:2em;font-weight:bold;color:' + ovrClass + ';">' + team.avgOvr + '</div>';
+                html += '<div style="font-size:0.7em;color:#999;">ROSA</div>';
                 html += '</div>';
                 if (team.ovr11) {
                     html += '<div style="text-align:center;">';
-                    html += '<div style="font-size:1.35em;font-weight:bold;color:' + ovr11Class + ';">' + team.ovr11 + '</div>';
-                    html += '<div style="font-size:0.68em;color:#999;">XI</div>';
+                    html += '<div style="font-size:2em;font-weight:bold;color:' + ovr11Class + ';">' + team.ovr11 + '</div>';
+                    html += '<div style="font-size:0.7em;color:#999;">XI</div>';
                     html += '</div>';
                 }
-                html += '</div>';
                 html += '</div>';
                 
                 html += '</div>';
@@ -2148,7 +2135,6 @@
                 });
                 if (xiCount > 0) xiOvr = Math.round(xiTotal / xiCount);
             }
-            var squadOvr = xiOvr ? Math.round((teamOvr + xiOvr) / 2) : teamOvr;
             
             // Build roster-by-role view
             var rosterByRole = '';
@@ -2211,11 +2197,8 @@
             content.innerHTML = 
                 '<div class="team-display">' +
                     '<div style="display:flex;justify-content:center;gap:20px;align-items:center;margin-bottom:5px;">' +
-                        '<div style="text-align:center;"><span class="ovr ' + getOvrClass(squadOvr) + '" style="font-size:1.9em;padding:8px 18px;">' + squadOvr + '</span><div style="font-size:0.78em;color:#ddd;margin-top:3px;font-weight:700;">SQUADRA</div></div>' +
-                        '<div style="display:flex;gap:14px;align-items:center;">' +
-                            '<div style="text-align:center;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.15em;padding:5px 13px;">' + teamOvr + '</span><div style="font-size:0.66em;color:#999;margin-top:2px;">ROSA</div></div>' +
-                            (xiOvr ? '<div style="text-align:center;"><span class="ovr ' + getOvrClass(xiOvr) + '" style="font-size:1.15em;padding:5px 13px;">' + xiOvr + '</span><div style="font-size:0.66em;color:#999;margin-top:2px;">XI</div></div>' : '') +
-                        '</div>' +
+                        '<div style="text-align:center;"><span class="ovr ' + getOvrClass(teamOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + teamOvr + '</span><div style="font-size:0.7em;color:#999;margin-top:2px;">ROSA</div></div>' +
+                        (xiOvr ? '<div style="text-align:center;"><span class="ovr ' + getOvrClass(xiOvr) + '" style="font-size:1.4em;padding:6px 16px;">' + xiOvr + '</span><div style="font-size:0.7em;color:#999;margin-top:2px;">XI</div></div>' : '') +
                     '</div>' +
                     '<p style="text-align:center;color:#999;font-size:0.85em;margin-bottom:15px;">All. ' + (cfg.subtitle.split(',').slice(1).join(',').trim() || cfg.subtitle) + '</p>' +
                     viewToggle +
