@@ -1808,7 +1808,7 @@
             return cfg.roster
                 .map(function(p) {
                     const pos2 = (p.pos2 || []).slice().sort().join('|');
-                    return [p.name, p.pos, pos2].join('::');
+                    return [p.id, p.name, p.pos, pos2].join('::');
                 })
                 .sort()
                 .join('##');
