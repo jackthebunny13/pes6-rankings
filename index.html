@@ -960,12 +960,6 @@
                 filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
             filterHtml += '<div style="flex-basis:100%;height:0;"></div>';
-            filterHtml += '<div style="display:flex;gap:8px;justify-content:center;align-items:center;width:100%;margin-top:8px;">';
-            filterHtml += '<span style="font-size:0.85em;color:#999;">Ordina per:</span>';
-            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'squad' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'squad\')">🏟️<br><span style="font-size:0.5em;color:#fff;">Squadra</span></button>';
-            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'roster' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'roster\')">📋<br><span style="font-size:0.5em;color:#fff;">Rosa</span></button>';
-            filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'starters' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'starters\')">🧩<br><span style="font-size:0.5em;color:#fff;">Titolari</span></button>';
-            filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
 
             Object.keys(teamConfigs).forEach(function(teamName) {
@@ -2225,7 +2219,7 @@
                 const best = Object.entries(p.stats || {})
                     .filter(function(entry) { return entry[1] !== undefined && entry[1] !== null && entry[1] !== ''; })
                     .sort(function(a, b) { return Number(b[1]) - Number(a[1]); })
-                    .slice(0, 3);
+                    .slice(0, 4);
                 best.forEach(function(entry) {
                     html += '<span>' + (labels[entry[0]] || entry[0].toUpperCase()) + ': ' + entry[1] + '</span>';
                 });
