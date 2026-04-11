@@ -1800,7 +1800,6 @@
         }
         
         function getSavedTeamState(team) {
-            if (team === 'Roma') return null;
             const store = getTeamStateStore();
             return store[team] || null;
         }
@@ -1824,15 +1823,6 @@
         function restoreTeamState(team) {
             const cfg = teamConfigs[team];
             if (!cfg) return;
-            if (team === 'Roma') {
-                formations[team] = [...(cfg.defaultLineup || [])].filter(function(id) { return id !== undefined && id !== null; });
-                localStorage.removeItem('pes_bench_' + team);
-                localStorage.removeItem('pes_formation_' + team);
-                const readyTeams = getReadyTeams();
-                delete readyTeams[team];
-                localStorage.setItem('pes_ready_teams', JSON.stringify(readyTeams));
-                return;
-            }
             const saved = getSavedTeamState(team);
             const currentFingerprint = getRosterFingerprint(team);
             const rosterIds = new Set(cfg.roster.map(function(p) { return p.id; }));
@@ -1891,7 +1881,6 @@
         function saveFormation() {
             const lineup = formations[currentTeam];
             if (!lineup) return;
-            if (currentTeam === 'Roma') return;
             localStorage.setItem('pes_formation_' + currentTeam, JSON.stringify(lineup));
             saveCurrentTeamState();
         }
@@ -2077,9 +2066,6 @@
             if (!cfg) return [];
             const startingIds = getStartingIds();
             var benchPlayers = cfg.roster.filter(p => !startingIds.has(p.id));
-            if (currentTeam === 'Roma') {
-                return benchPlayers.sort((a, b) => b.ovr - a.ovr);
-            }
             const savedState = getSavedTeamState(currentTeam);
             const currentFingerprint = getRosterFingerprint(currentTeam);
             if (!savedState || savedState.rosterFingerprint !== currentFingerprint) {
@@ -2104,7 +2090,6 @@
         }
         
         function saveBenchOrder() {
-            if (currentTeam === 'Roma') return;
             var bench = getBench();
             localStorage.setItem('pes_bench_' + currentTeam, JSON.stringify(bench.map(function(p) { return p.id; })));
             saveCurrentTeamState();
