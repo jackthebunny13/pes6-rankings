@@ -2061,6 +2061,11 @@
             if (!cfg) return [];
             const startingIds = getStartingIds();
             var benchPlayers = cfg.roster.filter(p => !startingIds.has(p.id));
+            const savedState = getSavedTeamState(currentTeam);
+            const currentFingerprint = getRosterFingerprint(currentTeam);
+            if (!savedState || savedState.rosterFingerprint !== currentFingerprint) {
+                return benchPlayers.sort((a, b) => b.ovr - a.ovr);
+            }
             // Check for saved bench order
             var savedOrder = localStorage.getItem('pes_bench_' + currentTeam);
             if (savedOrder) {
