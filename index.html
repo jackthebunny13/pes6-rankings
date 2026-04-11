@@ -637,7 +637,7 @@
     <div class="header">
         <h1>Project PES6</h1>
         <div style="font-size:0.65em;color:#aaa;margin-top:6px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
-        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Release Minotti 2</div>
+        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Ranking Fix</div>
     </div>
     
     <div class="tabs">
@@ -953,12 +953,12 @@
 
             // Render filter buttons
             var leagueOrder = ['italy', 'england', 'netherlands', 'spain'];
-            var filterHtml = '<div class="league-selector" style="justify-content:center;">';
-            filterHtml += '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            var filterHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;">';
+            filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" data-ranking-filter="all">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
                 var l = leagues[lg];
                 if (!l) return;
-                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
+                filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" data-ranking-filter="' + lg + '">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
             filterHtml += '<div style="flex-basis:100%;height:0;"></div>';
             filterHtml += '<div style="display:flex;gap:8px;justify-content:center;align-items:center;width:100%;margin-top:8px;">';
@@ -969,6 +969,11 @@
             filterHtml += '</div>';
             filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
+            filterDiv.querySelectorAll('[data-ranking-filter]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    setRankingFilter(btn.getAttribute('data-ranking-filter'));
+                });
+            });
 
             Object.keys(teamConfigs).forEach(function(teamName) {
                 var cfg = teamConfigs[teamName];
