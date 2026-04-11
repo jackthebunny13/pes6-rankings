@@ -1752,17 +1752,17 @@
             },
             'Roma': {
                 roster: [],
-                _defaultLineupNames: ['Doni', 'Aldair', 'Manolas', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Panucci', 'Totti', 'Voller', 'Balbo'],
+                _defaultLineupNames: ['Doni', 'Panucci', 'Aldair', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Conti B.', 'Totti', 'Voller', 'Balbo'],
                 defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'LM', 'CM', 'CM', 'RM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'CM', 'AM', 'ST', 'ST'],
                 title: '🟡🔴 Roma',
-                subtitle: '3-4-1-2, Fabio Capello',
+                subtitle: '4-3-1-2, Fabio Capello',
                 captain: 'Totti',
                 pitchHtml: function(renderSpot) {
                     return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
                         '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(4, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'RM') + '</div>' +
-                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             }
