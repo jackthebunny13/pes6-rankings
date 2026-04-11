@@ -1765,6 +1765,21 @@
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
+            },
+            'Sampdoria': {
+                roster: [],
+                _defaultLineupNames: ['Sereni', 'Mannini', 'Gastaldello', 'Vierchowod', 'Balleri', 'Karembeu !', 'Cerezo', 'Jugovic !', 'Mancini R.', 'Vialli', 'Flachi'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'CM', 'RW', 'ST', 'LW'],
+                title: '🔵⚪ Sampdoria',
+                subtitle: '4-3-3, Vujadin Boskov',
+                captain: 'Mancini R.',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
             }
         };
         
@@ -1965,7 +1980,7 @@
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma']
+                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma', 'Sampdoria']
             }
         };
         
