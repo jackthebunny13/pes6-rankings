@@ -319,7 +319,7 @@ for p in raw:
         'Ireland':'🇮🇪','Scotland':'🏴󠁧󠁢󠁳󠁣󠁴󠁿','Wales':'🏴󠁧󠁢󠁷󠁬󠁳󠁿','Northern Ireland':'🇬🇧','Norway':'🇳🇴','Finland':'🇫🇮',
         'Russia':'🇷🇺','Ukraine':'🇺🇦','Czech':'🇨🇿','Serbia and Montenegro':'🇷🇸',
         'Bosnia-Herzegovina':'🇧🇦','Slovenia':'🇸🇮','Slovakia':'🇸🇰','Hungary':'🇭🇺',
-        'Bulgaria':'🇧🇬','Israel':'🇮🇱','South Korea':'🇰🇷','Australia':'🇦🇺',
+        'Bulgaria':'🇧🇬','Israel':'🇮🇱','South Korea':'🇰🇷','Australia':'🇦🇺','Armenia':'🇦🇲',
         'USA':'🇺🇸','Canada':'🇨🇦','Costa Rica':'🇨🇷','Honduras':'🇭🇳','Panama':'🇵🇦','Ecuador':'🇪🇨',
         'Venezuela':'🇻🇪','Bolivia':'🇧🇴','South Africa':'🇿🇦','Egypt':'🇪🇬','Mali':'🇲🇱',
         'Guinea':'🇬🇳','DR Congo':'🇨🇩','Congo':'🇨🇬','Gabon':'🇬🇦','Togo':'🇹🇬',
