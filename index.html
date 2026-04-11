@@ -941,12 +941,18 @@
             var filterDiv = document.getElementById('team-rankings-filter');
             var teamData = [];
             
-            // League info for flags
+            // League info for filters, kept local so ranking does not depend on section init order
+            var rankingLeagues = {
+                italy: { name: 'Serie A', flag: '🇮🇹', teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma'] },
+                england: { name: 'Premier', flag: '🏴', teams: ['Arsenal', 'Liverpool', 'Manchester United'] },
+                netherlands: { name: 'Eredivisie', flag: '🇳🇱', teams: ['Ajax', 'Feyenoord', 'PSV Eindhoven'] },
+                spain: { name: 'Liga', flag: '🇪🇸', teams: ['Real Madrid'] }
+            };
             var teamLeague = {};
             var teamLeagueKey = {};
-            Object.keys(leagues).forEach(function(lg) {
-                leagues[lg].teams.forEach(function(t) {
-                    teamLeague[t] = leagues[lg];
+            Object.keys(rankingLeagues).forEach(function(lg) {
+                rankingLeagues[lg].teams.forEach(function(t) {
+                    teamLeague[t] = rankingLeagues[lg];
                     teamLeagueKey[t] = lg;
                 });
             });
@@ -956,7 +962,7 @@
             var filterHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;">';
             filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" data-ranking-filter="all">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
-                var l = leagues[lg];
+                var l = rankingLeagues[lg];
                 if (!l) return;
                 filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" data-ranking-filter="' + lg + '">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
