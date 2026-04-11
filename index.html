@@ -1750,22 +1750,6 @@
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
             },
-            'Roma': {
-                roster: [],
-                _defaultLineupNames: ['Doni', 'Aldair', 'Manolas !', 'Mexes', 'Candela', 'Emerson', 'De Rossi', 'Panucci', 'Totti', 'Voller', 'Balbo'],
-                defaultLineup: [],
-                slots: ['GK', 'CB', 'CB', 'CB', 'LM', 'CM', 'CM', 'RM', 'AM', 'ST', 'ST'],
-                title: '🟡🔴 Roma',
-                subtitle: '3-4-1-2, Fabio Capello',
-                captain: 'Totti',
-                pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
-                        '<div class="pitch-row midfield">' + renderSpot(4, 'LM') + renderSpot(5, 'CM') + renderSpot(6, 'CM') + renderSpot(7, 'RM') + '</div>' +
-                        '<div class="pitch-row defense">' + renderSpot(3, 'CB') + renderSpot(1, 'CB') + renderSpot(2, 'CB') + '</div>' +
-                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
-                }
-            }
         };
         
         // Current formation state per team
@@ -1967,7 +1951,7 @@
             italy: {
                 name: 'Serie A',
                 flag: '🇮🇹',
-                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma']
+                teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma']
             }
         };
         
