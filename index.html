@@ -637,7 +637,7 @@
     <div class="header">
         <h1>Project PES6</h1>
         <div style="font-size:0.65em;color:#aaa;margin-top:6px;letter-spacing:1px;font-weight:300;">Powered by Zio Tore 🦜</div>
-        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">League Filter</div>
+        <div style="font-size:0.58em;color:#8f8f8f;margin-top:2px;margin-bottom:8px;letter-spacing:0.6px;font-weight:300;">Bologna Back</div>
     </div>
     
     <div class="tabs">
@@ -924,7 +924,7 @@
         }
         
         // === TEAM RANKINGS ===
-                let currentRankingFilter = 'all';
+        let currentRankingFilter = 'all';
         
         function setRankingFilter(filter) {
             currentRankingFilter = filter;
@@ -932,7 +932,7 @@
         }
         
         function setTeamRankingSort(mode) {
-            currentTeamRankingSort = mode || 'roster';
+            currentTeamRankingSort = mode || 'squad';
             renderTeamRankings();
         }
 
@@ -941,30 +941,23 @@
             var filterDiv = document.getElementById('team-rankings-filter');
             var teamData = [];
             
-            // League info for filters, kept local so ranking does not depend on section init order
-            var rankingLeagues = {
-                italy: { name: 'Serie A', flag: '🇮🇹', teams: ['Atalanta', 'Bari', 'Bologna', 'Brescia', 'Cagliari', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio', 'Lecce', 'Milan', 'Napoli', 'Palermo', 'Parma', 'Roma'] },
-                england: { name: 'Premier', flag: '🏴', teams: ['Arsenal', 'Liverpool', 'Manchester United'] },
-                netherlands: { name: 'Eredivisie', flag: '🇳🇱', teams: ['Ajax', 'Feyenoord', 'PSV Eindhoven'] },
-                spain: { name: 'Liga', flag: '🇪🇸', teams: ['Real Madrid'] }
-            };
+            // League info for flags
             var teamLeague = {};
             var teamLeagueKey = {};
-            Object.keys(rankingLeagues).forEach(function(lg) {
-                rankingLeagues[lg].teams.forEach(function(t) {
-                    teamLeague[t] = rankingLeagues[lg];
+            Object.keys(leagues).forEach(function(lg) {
+                leagues[lg].teams.forEach(function(t) {
+                    teamLeague[t] = leagues[lg];
                     teamLeagueKey[t] = lg;
                 });
             });
 
             // Render filter buttons
             var leagueOrder = ['italy', 'england', 'netherlands', 'spain'];
-            var filterHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;">';
-            filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" data-ranking-filter="all">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
+            var filterHtml = '<button class="league-btn' + (currentRankingFilter === 'all' ? ' active' : '') + '" onclick="setRankingFilter(\'all\')">🌍<br><span style="font-size:0.5em;color:#fff;">Tutte</span></button>';
             leagueOrder.forEach(function(lg) {
-                var l = rankingLeagues[lg];
+                var l = leagues[lg];
                 if (!l) return;
-                filterHtml += '<button type="button" class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" data-ranking-filter="' + lg + '">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
+                filterHtml += '<button class="league-btn' + (currentRankingFilter === lg ? ' active' : '') + '" onclick="setRankingFilter(\'' + lg + '\')">' + l.flag + '<br><span style="font-size:0.5em;color:#fff;">' + l.name + '</span></button>';
             });
             filterHtml += '<div style="flex-basis:100%;height:0;"></div>';
             filterHtml += '<div style="display:flex;gap:8px;justify-content:center;align-items:center;width:100%;margin-top:8px;">';
@@ -973,13 +966,7 @@
             filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'roster' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'roster\')">📋<br><span style="font-size:0.5em;color:#fff;">Rosa</span></button>';
             filterHtml += '<button class="league-btn' + (currentTeamRankingSort === 'starters' ? ' active' : '') + '" style="min-width:90px;" onclick="setTeamRankingSort(\'starters\')">🧩<br><span style="font-size:0.5em;color:#fff;">Titolari</span></button>';
             filterHtml += '</div>';
-            filterHtml += '</div>';
             filterDiv.innerHTML = filterHtml;
-            filterDiv.querySelectorAll('[data-ranking-filter]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    setRankingFilter(btn.getAttribute('data-ranking-filter'));
-                });
-            });
 
             Object.keys(teamConfigs).forEach(function(teamName) {
                 var cfg = teamConfigs[teamName];
@@ -1014,8 +1001,8 @@
                 // Sort all by OVR
                 var sorted = roster.slice().sort(function(a,b){return b.ovr - a.ovr;});
                 var bestPlayer = sorted[0];
-                
                 var squadOvr = ovr11 ? Math.round((avgOvr + ovr11) / 2) : avgOvr;
+                
                 teamData.push({
                     name: teamName,
                     title: cfg.title,
@@ -1038,12 +1025,12 @@
                 });
             }
             
-            // Sort by selected mode, default squad OVR
+            // Sort by selected mode
             teamData.sort(function(a,b){
-                var aVal = currentTeamRankingSort === 'starters' ? (a.ovr11 || 0) : (currentTeamRankingSort === 'roster' ? a.avgOvr : a.squadOvr);
-                var bVal = currentTeamRankingSort === 'starters' ? (b.ovr11 || 0) : (currentTeamRankingSort === 'roster' ? b.avgOvr : b.squadOvr);
+                var aVal = currentTeamRankingSort === 'starters' ? (a.ovr11 || 0) : (currentTeamRankingSort === 'squad' ? a.squadOvr : a.avgOvr);
+                var bVal = currentTeamRankingSort === 'starters' ? (b.ovr11 || 0) : (currentTeamRankingSort === 'squad' ? b.squadOvr : b.avgOvr);
                 if (bVal !== aVal) return bVal - aVal;
-                return b.squadOvr - a.squadOvr;
+                return b.avgOvr - a.avgOvr;
             });
             
             var html = '<div style="max-width:800px;margin:0 auto;">';
