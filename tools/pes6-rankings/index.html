@@ -1400,8 +1400,8 @@
                 cfg.defaultLineup = cfg._defaultLineupNames.map(function(name) {
                     var id = nameToId[name];
                     if (id === undefined) console.warn('Player not found in roster:', name, 'team:', teamName);
-                    return id || 1;
-                });
+                    return id;
+                }).filter(function(id) { return id !== undefined && id !== null; });
             });
         }
 
