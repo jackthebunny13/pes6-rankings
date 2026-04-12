@@ -684,7 +684,7 @@
         <div id="teams" class="section">
             
             <div class="league-selector">
-                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">17/20</span></button>
+                <button class="league-btn active" onclick="selectLeague('italy')">🇮🇹<br><span style="font-size:0.55em;color:#fff;line-height:1;">Serie A</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">20/20</span></button>
                 <button class="league-btn" onclick="selectLeague('england')">🏴󠁧󠁢󠁥󠁮󠁧󠁿<br><span style="font-size:0.55em;color:#fff;line-height:1;">Premier</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/18</span></button>
                 <button class="league-btn" onclick="selectLeague('netherlands')">🇳🇱<br><span style="font-size:0.55em;color:#fff;line-height:1;">Eredivisie</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">3/3</span></button>
                 <button class="league-btn" onclick="selectLeague('spain')">🇪🇸<br><span style="font-size:0.55em;color:#fff;line-height:1;">Liga</span><br><span style="font-size:0.5em;color:rgba(255,255,255,0.6);">1/14</span></button>
@@ -1345,7 +1345,11 @@
         function buildRostersFromData(data) {
             if (!data || !data.by_team) return;
             var teamDataMap = {};
-            data.by_team.forEach(function(t) { teamDataMap[t.team] = t.players; });
+            if (Array.isArray(data.by_team)) {
+                data.by_team.forEach(function(t) { teamDataMap[t.team] = t.players; });
+            } else {
+                teamDataMap = data.by_team;
+            }
             Object.keys(teamConfigs).forEach(function(teamName) {
                 var players = teamDataMap[teamName];
                 if (!players) { console.warn('No data.json players for team:', teamName); return; }
@@ -1806,6 +1810,21 @@
                 pitchHtml: function(renderSpot) {
                     return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
                         '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
+                        '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
+                        '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
+                }
+            },
+            'Torino': {
+                roster: [],
+                _defaultLineupNames: ['Marchegiani', 'Darmian', 'Glik', 'Buongiorno', 'Balzaretti', 'Fuser', 'Scifo', 'Mazzola V.', 'Lentini', 'Graziani', 'Belotti'],
+                defaultLineup: [],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'RM', 'CM', 'CM', 'LM', 'ST', 'ST'],
+                title: '🟤 Torino',
+                subtitle: '4-4-2, Emiliano Mondonico',
+                captain: 'Belotti',
+                pitchHtml: function(renderSpot) {
+                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
+                        '<div class="pitch-row midfield">' + renderSpot(8, 'LM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + renderSpot(5, 'RM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
                 }
