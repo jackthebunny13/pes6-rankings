@@ -1800,13 +1800,12 @@
                 roster: [],
                 _defaultLineupNames: ['Silvestri', 'Oddo', 'Laursen', 'Siviglia', 'Dimarco', 'Jorginho', 'Tommasi', 'Brocchi', 'Mutu', 'Pazzini', 'Elkjaer'],
                 defaultLineup: [],
-                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'CM', 'AM', 'ST', 'ST'],
+                slots: ['GK', 'RB', 'CB', 'CB', 'LB', 'DM', 'CM', 'CM', 'RW', 'ST', 'LW'],
                 title: '🟡🔵 Verona',
-                subtitle: '4-3-1-2, Osvaldo Bagnoli',
-                captain: 'Elkjaer',
+                subtitle: '4-3-3, Alberto Malesani',
+                captain: 'Tommasi',
                 pitchHtml: function(renderSpot) {
-                    return '<div class="pitch-row strikers">' + renderSpot(9, 'ST') + renderSpot(10, 'ST') + '</div>' +
-                        '<div class="pitch-row cam">' + renderSpot(8, 'AM') + '</div>' +
+                    return '<div class="pitch-row strikers">' + renderSpot(10, 'LW') + renderSpot(9, 'ST') + renderSpot(8, 'RW') + '</div>' +
                         '<div class="pitch-row midfield">' + renderSpot(5, 'DM') + renderSpot(6, 'CM') + renderSpot(7, 'CM') + '</div>' +
                         '<div class="pitch-row defense">' + renderSpot(4, 'LB') + renderSpot(3, 'CB') + renderSpot(2, 'CB') + renderSpot(1, 'RB') + '</div>' +
                         '<div class="pitch-row gk">' + renderSpot(0, 'GK') + '</div>';
