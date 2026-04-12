@@ -326,6 +326,7 @@ for p in raw:
         'Burkina Faso':'🇧🇫','China':'🇨🇳','Iran':'🇮🇷','Iraq':'🇮🇶','Saudi Arabia':'🇸🇦',
         'Liberia':'🇱🇷','Jamaica':'🇯🇲','Trinidad and Tobago':'🇹🇹','Albania':'🇦🇱','Georgia':'🇬🇪',
         'Iceland':'🇮🇸','Luxembourg':'🇱🇺','Zambia':'🇿🇲','Zimbabwe':'🇿🇼','Gambia':'🇬🇲',
+        'Lithuania':'🇱🇹',
     }
     nat = p.get('NATIONALITY', '')
     nat_flag = nat_flags.get(nat, '🏳️')
